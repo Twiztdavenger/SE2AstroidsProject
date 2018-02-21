@@ -13,7 +13,7 @@ public class PlayerMovement : MonoBehaviour {
 
     // Booleans to determine if the ship can rotate/move or not
     public bool canRotate = true;
-    public bool canMove = true;
+    public bool canMove = false;
 
     // Floats to control fire delay
     private float fireDelay = 0.25f;
