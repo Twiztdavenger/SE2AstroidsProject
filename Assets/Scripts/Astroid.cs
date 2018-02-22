@@ -46,12 +46,13 @@ public class Astroid : MonoBehaviour {
 
     void OnTriggerEnter2D () {
         // When we enter a collision (astroid), destroy this projectile
-        // Destroy (gameObject);
+        Destroy (gameObject);
+        /*
         Vector3 pos = transform.position;
         float screenRatio = (float) Screen.width / (float) Screen.height;
         float widthOrtho = Camera.main.orthographicSize * screenRatio;
         pos.x = -widthOrtho - 1f;
-        transform.position = pos;
+        transform.position = pos;*/
 
     }
 }
