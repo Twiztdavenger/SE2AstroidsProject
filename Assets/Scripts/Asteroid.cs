@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Astroid : MonoBehaviour {
+public class Asteroid : MonoBehaviour {
 
     public bool rotation = false;
     public float rotationSpeed = -180f;
-    public float movementSpeed = 1.5f;
+    public float movementSpeedX= 1.5f;
+    public float movementSpeedY = 1.5f;
     // Use this for initialization
     void Start () {
 
@@ -15,16 +16,11 @@ public class Astroid : MonoBehaviour {
     // Update is called once per frame
     void Update () {
         Vector3 pos = transform.position;
-
-        pos += new Vector3 (movementSpeed * Time.deltaTime, 0, 0);
-
+        pos += new Vector3 (movementSpeedX * Time.deltaTime, movementSpeedY * Time.deltaTime, 0);
         Quaternion rot = transform.rotation;
-
         float z = rot.eulerAngles.z;
-
         // Change z angle based on input
         z -= rotationSpeed * Time.deltaTime;
-
         if (rotation) {
             // Recreate quaternion
             rot = Quaternion.Euler (0, 0, z);
@@ -41,18 +37,13 @@ public class Astroid : MonoBehaviour {
         }
 
         transform.position = pos;
-
     }
 
-    void OnTriggerEnter2D () {
-        // When we enter a collision (astroid), destroy this projectile
-        Destroy (gameObject);
-        /*
-        Vector3 pos = transform.position;
-        float screenRatio = (float) Screen.width / (float) Screen.height;
-        float widthOrtho = Camera.main.orthographicSize * screenRatio;
-        pos.x = -widthOrtho - 1f;
-        transform.position = pos;*/
-
+    void OnTriggerEnter2D (Collider2D col) {
+        // When we enter a collision with missile, destroy this asteroid
+        Debug.Log(col.ToString());
+        if (col.gameObject.name == "missile(Clone)") {
+            Destroy (gameObject);
+        }
     }
 }

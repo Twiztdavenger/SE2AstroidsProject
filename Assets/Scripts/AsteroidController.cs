@@ -11,7 +11,9 @@ public class AsteroidController : MonoBehaviour {
     public Vector3 spawnPoint = new Vector3(-10, 99, 0);
 
     public float rotationSpeed = 360f;
-    public float movementSpeed = 1.5f;
+    public float movementSpeedX = 1.5f;
+
+    public float movementSpeedY = 1.5f;
 
     // Use this for initialization
     void Start () {
@@ -36,9 +38,10 @@ public class AsteroidController : MonoBehaviour {
 
             GameObject tempAstroid = asteroidPrefab;
 
-            tempAstroid.GetComponent<Astroid>().rotationSpeed = rotationSpeed;
-            tempAstroid.GetComponent<Astroid>().movementSpeed = movementSpeed;
-            tempAstroid.GetComponent<Astroid>().rotation = true;
+            tempAstroid.GetComponent<Asteroid>().rotationSpeed = rotationSpeed;
+            tempAstroid.GetComponent<Asteroid>().movementSpeedX = movementSpeedX;
+            tempAstroid.GetComponent<Asteroid>().movementSpeedY = movementSpeedY;
+            tempAstroid.GetComponent<Asteroid>().rotation = true;
 
             Instantiate(tempAstroid, spawnPoint, transform.rotation);
         }
