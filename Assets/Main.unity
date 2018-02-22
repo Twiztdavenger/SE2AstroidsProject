@@ -142,7 +142,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   asteroidPrefab: {fileID: 1659785828572672, guid: 7ea208e93106ff646bb259504240fe90,
     type: 2}
-  spawnPoint: {x: 0, y: -5, z: 0}
+  spawnPoint: {x: -5, y: 1, z: 0}
 --- !u!4 &921191318
 Transform:
   m_ObjectHideFlags: 0
@@ -423,6 +423,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6372e94aa7b1354abc010a837d10b43, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxSpeed: 3.5
+  rotSpeed: 180
+  projSpeed: 5
   canRotate: 0
   canMove: 0
   missilePrefab: {fileID: 1701654778135870, guid: 5e8a31018d1bdcd4697aba7f9e2f1a43,

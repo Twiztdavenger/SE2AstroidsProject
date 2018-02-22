@@ -5,8 +5,9 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour {
 
     // Variables for speed
-    float maxSpeed = 3.5f;
-    float rotSpeed = 180f;
+    public float maxSpeed = 3.5f;
+    public float rotSpeed = 180f;
+    public float projSpeed = 5f;
 
     // Float for determining if ship is out of bounds or not
     float shipBoundaryRadius = 0.152f;
@@ -103,6 +104,9 @@ public class PlayerMovement : MonoBehaviour {
         // If we are pressing a fire button and our cooldown is 0
         if(Input.GetButton("Fire1") && coolDownTimer <= 0)
         {
+            //So we can change values in the inspector to match the speed of the projectile
+            missilePrefab.GetComponent<Projectile>().maxSpeed = projSpeed;
+
             // Set a spawn point to our objects rotation * .35 pixels above our origin point
             Vector3 offset = transform.rotation * new Vector3(0, .35f, 0);
 

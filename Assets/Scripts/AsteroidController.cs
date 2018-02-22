@@ -10,9 +10,14 @@ public class AsteroidController : MonoBehaviour {
 
     public Vector3 spawnPoint = new Vector3(-10, 99, 0);
 
-	// Use this for initialization
-	void Start () {
+    public float rotationSpeed = 360f;
+    public float movementSpeed = 1.5f;
+
+    // Use this for initialization
+    void Start () {
         
+        // BUG: For some reason this object is passing as a null object returning a null error
+        //      Might be fixed when we have the XML document up and running
 
         //AsteroidList.Enqueue(asteroidPrefab);
 
@@ -23,8 +28,7 @@ public class AsteroidController : MonoBehaviour {
 	void Update () {
 
         // For testing purposes
-        float rotationSpeed = 180f;
-        float movementSpeed = 1.5f;
+        
 
         if (Input.GetKeyDown(KeyCode.LeftControl))
         {
@@ -36,7 +40,7 @@ public class AsteroidController : MonoBehaviour {
             tempAstroid.GetComponent<Astroid>().movementSpeed = movementSpeed;
             tempAstroid.GetComponent<Astroid>().rotation = true;
 
-            Instantiate(tempAstroid, new Vector3(-3, 1, 0), transform.rotation);
+            Instantiate(tempAstroid, spawnPoint, transform.rotation);
         }
 	}
 }
