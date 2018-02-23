@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class AsteroidController : MonoBehaviour {
 
-    Queue<GameObject> AsteroidList;
+    Queue<GameObject> AsteroidList = new Queue<GameObject>();
 
     public GameObject asteroidPrefab;
 
@@ -18,8 +18,7 @@ public class AsteroidController : MonoBehaviour {
     // Use this for initialization
     void Start () {
         
-        // BUG: For some reason this object is passing as a null object returning a null error
-        //      Might be fixed when we have the XML document up and running
+        // ToDo:   
 
         //AsteroidList.Enqueue(asteroidPrefab);
 
