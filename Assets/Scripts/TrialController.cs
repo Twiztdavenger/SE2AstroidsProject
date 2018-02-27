@@ -37,17 +37,15 @@ public class TrialController : MonoBehaviour {
         tempTrial.GetComponent<Trial>().shipSpawn = new Vector3(0f, -2.5f, 0f);
         tempTrial.GetComponent<Trial>().AsteroidMovementX = 1f;
 
-        if (Input.GetKeyDown(KeyCode.Space) && trialStart != true)
+        if (Input.GetKeyDown(KeyCode.Z) && trialStart != true)
         {
+            /// If 'Z' is pressed, the engine spawns a new trial object
+            /// The trial object will then take cover 
+
             trialStart = true;
             var createTrial = Instantiate(tempTrial, transform.position, transform.rotation);
 
             createTrial.transform.parent = gameObject.transform;
-        }
-
-        if(trialStart)
-        {
-            
         }
     }
 
