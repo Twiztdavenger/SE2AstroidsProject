@@ -111,7 +111,9 @@ public class PlayerMovement : MonoBehaviour {
             Vector3 offset = transform.rotation * new Vector3(0, .35f, 0);
 
             // Shoots a missile at our position plus the offset facing the angle of our rotation
-            Instantiate(missilePrefab, transform.position + offset, transform.rotation);
+            var projectile = Instantiate(missilePrefab, transform.position + offset, transform.rotation);
+            projectile.transform.parent = gameObject.transform;
+
 
             // Resets our cooldown timer
             coolDownTimer = fireDelay;

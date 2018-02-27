@@ -2,9 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Trial : MonoBehaviour {
+public class Trial : MonoBehaviour
+{
+    public bool asteroidDone = false;
 
-    
+    public GameObject shipPrefab;
+
+    public GameObject parentController;
 
     // Ship attributes
     public Vector3 shipSpawn = new Vector3(0, 0, 0);
@@ -15,7 +19,7 @@ public class Trial : MonoBehaviour {
     public float shipMoveSpeed = 1.5f;
     public float shipRotateSpeed = 180f;
 
-    
+
 
     // Asteroid Object
     public GameObject asteroidPrefab;
@@ -26,15 +30,11 @@ public class Trial : MonoBehaviour {
     public float AsteroidRotation = 180f;
 
     public Vector3 AsteroidSpawn = new Vector3(0, 0, 0);
-    
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Use this for initialization
+    void Start()
+    {
         //GameObject tempAstroid = AsteroidList.Dequeue();
 
         GameObject tempAstroid = asteroidPrefab;
@@ -44,6 +44,29 @@ public class Trial : MonoBehaviour {
         tempAstroid.GetComponent<Asteroid>().movementSpeedY = AsteroidMovementY;
         tempAstroid.GetComponent<Asteroid>().rotation = true;
 
-        Instantiate(tempAstroid, AsteroidSpawn, transform.rotation);
+        var createAsteroid = Instantiate(tempAstroid, AsteroidSpawn, transform.rotation);
+        createAsteroid.transform.parent = gameObject.transform;
+
+        var createShip = Instantiate(shipPrefab, shipSpawn, transform.rotation);
+        createShip.transform.parent = gameObject.transform;
+
+
+        
+
+
+
     }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if(asteroidDone == true)
+        {
+            gameObject.transform.parent.GetComponent<TrialController>().trialStart = false;
+
+            Destroy(gameObject);
+        }
+
+    }
+
 }

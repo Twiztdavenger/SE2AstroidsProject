@@ -44,6 +44,9 @@ public class Asteroid : MonoBehaviour {
         Debug.Log(col.ToString());
         if (col.gameObject.name == "missile(Clone)") {
             Destroy (gameObject);
+
+            // Sets bool of our parent trial's variable to true
+            gameObject.transform.parent.GetComponent<Trial>().asteroidDone = true;
         }
     }
 }
