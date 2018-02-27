@@ -45,6 +45,7 @@ public class AsteroidController : MonoBehaviour {
             Instantiate(tempAstroid, spawnPoint, transform.rotation);
         }
 
+
 	}
 
    void OnTriggerEnter2D()
