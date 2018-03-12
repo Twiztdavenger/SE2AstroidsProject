@@ -49,12 +49,6 @@ public class Trial : MonoBehaviour
 
         var createShip = Instantiate(shipPrefab, shipSpawn, transform.rotation);
         createShip.transform.parent = gameObject.transform;
-
-
-        
-
-
-
     }
 
     // Update is called once per frame
