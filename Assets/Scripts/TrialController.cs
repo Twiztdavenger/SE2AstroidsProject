@@ -31,7 +31,6 @@ public class TrialController : MonoBehaviour {
                 XmlNode asteroid = xmlTrial.SelectSingleNode("asteroid");
 
                 // Ship
-
                 float shipSpawnX = float.Parse(ship.SelectSingleNode("spawn").Attributes["x"].InnerText);
                 float shipSpawnY = float.Parse(ship.SelectSingleNode("spawn").Attributes["y"].InnerText);
                 float shipSpawnZ = float.Parse(ship.SelectSingleNode("spawn").Attributes["z"].InnerText);
@@ -39,27 +38,25 @@ public class TrialController : MonoBehaviour {
                 bool shipCanMove = bool.Parse(ship.Attributes["canMove"].Value);
                 bool shipCanRotate = bool.Parse(ship.Attributes["canRotate"].Value);
 
-                float shipMoveSpeed = float.Parse(ship.SelectSingleNode("moveSpeed").InnerText);
-                float shipRotSpeed = float.Parse(ship.SelectSingleNode("rotationSpeed").InnerText);
+                float shipMoveSpeed = float.Parse(ship.Attributes["moveSpeed"].Value);
+                float shipRotSpeed = float.Parse(ship.Attributes["rotationSpeed"].Value);
 
                 // Asteroid
+                XmlNode spawnPoint = asteroid.SelectSingleNode("spawn");
+                float asteroidSpawnX = float.Parse(spawnPoint.Attributes["x"].InnerText);
+                float asteroidSpawnY = float.Parse(spawnPoint.Attributes["y"].InnerText);
+                float asteroidSpawnZ = float.Parse(spawnPoint.Attributes["z"].InnerText);
 
-                float asteroidSpawnX = float.Parse(asteroid.SelectSingleNode("spawn").Attributes["x"].InnerText);
-                float asteroidSpawnY = float.Parse(asteroid.SelectSingleNode("spawn").Attributes["y"].InnerText);
-                float asteroidSpawnZ = float.Parse(asteroid.SelectSingleNode("spawn").Attributes["z"].InnerText);
+                float asteroidMoveX = float.Parse(asteroid.Attributes["movementX"].Value);
+                float asteroidMoveY = float.Parse(asteroid.Attributes["movementY"].Value);
 
-                float asteroidMoveX = float.Parse(asteroid.SelectSingleNode("movementX").InnerText);
-                float asteroidMoveY = float.Parse(asteroid.SelectSingleNode("movementY").InnerText);
-
-                float asteroidRotSpeed = float.Parse(asteroid.SelectSingleNode("rotationSpeed").InnerText);
+                float asteroidRotSpeed = float.Parse(asteroid.Attributes["rotationSpeed"].Value);
 
                 // Trial
-
                 GameObject tempTrial = new GameObject();
                 tempTrial.AddComponent<Trial>();
 
                 // Trial Ship
-
                 tempTrial.GetComponent<Trial>().shipSpawn = new Vector3(shipSpawnX, shipSpawnY, shipSpawnZ);
 
                 tempTrial.GetComponent<Trial>().shipMove = shipCanMove;
@@ -69,7 +66,6 @@ public class TrialController : MonoBehaviour {
                 tempTrial.GetComponent<Trial>().shipRotateSpeed = shipRotSpeed;
 
                 // Trial Asteroid
-
                 tempTrial.GetComponent<Trial>().AsteroidSpawn = new Vector3(asteroidSpawnX, asteroidSpawnY, asteroidSpawnZ);
 
                 tempTrial.GetComponent<Trial>().AsteroidMovementX = asteroidMoveX;
@@ -78,7 +74,6 @@ public class TrialController : MonoBehaviour {
                 tempTrial.GetComponent<Trial>().AsteroidRotation = asteroidRotSpeed;
 
                 // Put trial into queue
-
                 trials.Enqueue(tempTrial);
 
 
