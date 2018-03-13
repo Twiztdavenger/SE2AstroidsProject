@@ -6,30 +6,26 @@ public class Trial : MonoBehaviour
 {
     public bool asteroidDone = false;
 
+    // Ship
     public GameObject shipPrefab;
+    //Ship Attributes
 
 
 
     // Ship attributes
     public Vector3 shipSpawn = new Vector3(0, 0, 0);
-
     public bool shipMove = false;
     public bool shipRotate = false;
-
     public float shipMoveSpeed = 1.5f;
     public float shipRotateSpeed = 180f;
 
-
-
-    // Asteroid Object
+    // Asteroid
     public GameObject asteroidPrefab;
-
-    // Asteroid attributes
+    // Asteroid Attributes
+    public Vector3 AsteroidSpawn = new Vector3(0, 0, 0);
     public float AsteroidMovementX = 0;
     public float AsteroidMovementY = 0;
     public float AsteroidRotation = 180f;
-
-    public Vector3 AsteroidSpawn = new Vector3(0, 0, 0);
 
 
     // Use this for initialization

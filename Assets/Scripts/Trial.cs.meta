@@ -1,9 +1,8 @@
 fileFormatVersion: 2
 guid: d025fc5633d9d334f8dcc4acbd8547d2
-timeCreated: 1519400240
+timeCreated: 1520951874
 licenseType: Free
 MonoImporter:
-  externalObjects: {}
   serializedVersion: 2
   defaultReferences:
   - shipPrefab: {fileID: 1518773236984966, guid: 1dca91303cb327546958ec3d1ab9087a,

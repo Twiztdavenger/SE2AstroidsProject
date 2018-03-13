@@ -10,7 +10,7 @@ public class Asteroid : MonoBehaviour {
     public float movementSpeedY = 1.5f;
     // Use this for initialization
     void Start () {
-
+        
     }
 
     // Update is called once per frame

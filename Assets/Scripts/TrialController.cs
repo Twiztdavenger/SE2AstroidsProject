@@ -56,20 +56,17 @@ public class TrialController : MonoBehaviour {
                 GameObject tempTrial = trial;
 
                 // Trial Ship
+                // tempTrial.GetComponent<Trial>().shipPrefab = (GameObject)Resources.Load("prefabs/ship", typeof(GameObject));
                 tempTrial.GetComponent<Trial>().shipSpawn = new Vector3(shipSpawnX, shipSpawnY, shipSpawnZ);
-
                 tempTrial.GetComponent<Trial>().shipMove = shipCanMove;
                 tempTrial.GetComponent<Trial>().shipRotate = shipCanRotate;
-
                 tempTrial.GetComponent<Trial>().shipMoveSpeed = shipMoveSpeed;
                 tempTrial.GetComponent<Trial>().shipRotateSpeed = shipRotSpeed;
-
                 // Trial Asteroid
+                // tempTrial.GetComponent<Trial>().asteroidPrefab = (GameObject)Resources.Load("prefabs/Asteroid Large", typeof(GameObject));
                 tempTrial.GetComponent<Trial>().AsteroidSpawn = new Vector3(asteroidSpawnX, asteroidSpawnY, asteroidSpawnZ);
-
                 tempTrial.GetComponent<Trial>().AsteroidMovementX = asteroidMoveX;
                 tempTrial.GetComponent<Trial>().AsteroidMovementY = asteroidMoveY;
-
                 tempTrial.GetComponent<Trial>().AsteroidRotation = asteroidRotSpeed;
 
                 // Put trial into queue
