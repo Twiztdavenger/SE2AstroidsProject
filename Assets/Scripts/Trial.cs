@@ -37,14 +37,30 @@ public class Trial : MonoBehaviour
     {
         //GameObject tempAstroid = AsteroidList.Dequeue();
 
-        GameObject tempAstroid = asteroidPrefab;
+        // Asteroid Parameters
 
-        tempAstroid.GetComponent<Asteroid>().rotationSpeed = AsteroidRotation;
-        tempAstroid.GetComponent<Asteroid>().movementSpeedX = AsteroidMovementX;
-        tempAstroid.GetComponent<Asteroid>().movementSpeedY = AsteroidMovementY;
-        tempAstroid.GetComponent<Asteroid>().rotation = true;
+        GameObject astroid = asteroidPrefab;
 
-        var createAsteroid = Instantiate(tempAstroid, AsteroidSpawn, transform.rotation);
+        astroid.GetComponent<Asteroid>().rotationSpeed = AsteroidRotation;
+        astroid.GetComponent<Asteroid>().movementSpeedX = AsteroidMovementX;
+        astroid.GetComponent<Asteroid>().movementSpeedY = AsteroidMovementY;
+        astroid.GetComponent<Asteroid>().rotation = true;
+
+        
+
+        // Ship Parameters
+
+        GameObject ship = shipPrefab;
+
+        ship.GetComponent<PlayerMovement>().canMove = shipMove;
+        ship.GetComponent<PlayerMovement>().canRotate = shipRotate;
+
+        ship.GetComponent<PlayerMovement>().maxSpeed = shipMoveSpeed;
+        ship.GetComponent<PlayerMovement>().rotSpeed = shipRotateSpeed;
+
+        // Spawn Asteroid & Ship
+
+        var createAsteroid = Instantiate(astroid, AsteroidSpawn, transform.rotation);
         createAsteroid.transform.parent = gameObject.transform;
 
         var createShip = Instantiate(shipPrefab, shipSpawn, transform.rotation);

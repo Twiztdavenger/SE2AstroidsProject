@@ -16,7 +16,7 @@ public class TrialController : MonoBehaviour {
 
     private const string XML_FILE_PATH = @"Assets/Data/Experiment.xml";
 
-    private Queue<GameObject> trials;
+    private Queue<GameObject> trials = new Queue<GameObject>();
 
     // Use this for initialization
     void Start () {
@@ -30,19 +30,58 @@ public class TrialController : MonoBehaviour {
                 XmlNode ship = xmlTrial.SelectSingleNode("ship");
                 XmlNode asteroid = xmlTrial.SelectSingleNode("asteroid");
 
-                float shipSpawnX = float.Parse(ship.SelectSingleNode("spawn").Attributes["x"]?.InnerText);
-                float shipSpawnY = float.Parse(ship.SelectSingleNode("spawn").Attributes["y"]?.InnerText);
-                float shipSpawnZ = float.Parse(ship.SelectSingleNode("spawn").Attributes["z"]?.InnerText);
+                // Ship
 
-                bool shipCanMove = bool.Parse(ship.SelectSingleNode("canMove")?.Value);
-                bool shipCanRotate = bool.Parse(ship.SelectSingleNode("canRotate")?.Value);
+                float shipSpawnX = float.Parse(ship.SelectSingleNode("spawn").Attributes["x"].InnerText);
+                float shipSpawnY = float.Parse(ship.SelectSingleNode("spawn").Attributes["y"].InnerText);
+                float shipSpawnZ = float.Parse(ship.SelectSingleNode("spawn").Attributes["z"].InnerText);
 
-                
-    
+                bool shipCanMove = bool.Parse(ship.Attributes["canMove"].Value);
+                bool shipCanRotate = bool.Parse(ship.Attributes["canRotate"].Value);
+
+                float shipMoveSpeed = float.Parse(ship.SelectSingleNode("moveSpeed").InnerText);
+                float shipRotSpeed = float.Parse(ship.SelectSingleNode("rotationSpeed").InnerText);
+
+                // Asteroid
+
+                float asteroidSpawnX = float.Parse(asteroid.SelectSingleNode("spawn").Attributes["x"].InnerText);
+                float asteroidSpawnY = float.Parse(asteroid.SelectSingleNode("spawn").Attributes["y"].InnerText);
+                float asteroidSpawnZ = float.Parse(asteroid.SelectSingleNode("spawn").Attributes["z"].InnerText);
+
+                float asteroidMoveX = float.Parse(asteroid.SelectSingleNode("movementX").InnerText);
+                float asteroidMoveY = float.Parse(asteroid.SelectSingleNode("movementY").InnerText);
+
+                float asteroidRotSpeed = float.Parse(asteroid.SelectSingleNode("rotationSpeed").InnerText);
+
+                // Trial
+
                 GameObject tempTrial = new GameObject();
                 tempTrial.AddComponent<Trial>();
 
-                
+                // Trial Ship
+
+                tempTrial.GetComponent<Trial>().shipSpawn = new Vector3(shipSpawnX, shipSpawnY, shipSpawnZ);
+
+                tempTrial.GetComponent<Trial>().shipMove = shipCanMove;
+                tempTrial.GetComponent<Trial>().shipRotate = shipCanRotate;
+
+                tempTrial.GetComponent<Trial>().shipMoveSpeed = shipMoveSpeed;
+                tempTrial.GetComponent<Trial>().shipRotateSpeed = shipRotSpeed;
+
+                // Trial Asteroid
+
+                tempTrial.GetComponent<Trial>().AsteroidSpawn = new Vector3(asteroidSpawnX, asteroidSpawnY, asteroidSpawnZ);
+
+                tempTrial.GetComponent<Trial>().AsteroidMovementX = asteroidMoveX;
+                tempTrial.GetComponent<Trial>().AsteroidMovementY = asteroidMoveY;
+
+                tempTrial.GetComponent<Trial>().AsteroidRotation = asteroidRotSpeed;
+
+                // Put trial into queue
+
+                trials.Enqueue(tempTrial);
+
+
             }
         }
         catch(XmlException e)
@@ -63,21 +102,20 @@ public class TrialController : MonoBehaviour {
         /// Use a for loop to read the XML file and fill a queue of trial objects
         /// For the demo I will just be creating a trial case and hard coding the parameters 
 
-        GameObject tempTrial = trial;
-
-        // Load parameters into trial
-        tempTrial.GetComponent<Trial>().shipSpawn = new Vector3(0f, -2.5f, 0f);
-        tempTrial.GetComponent<Trial>().AsteroidMovementX = 1f;
-
-        if (Input.GetKeyDown(KeyCode.Z) && trialStart != true)
+        if(trials.Count != 0)
         {
-            /// If 'Z' is pressed, the engine spawns a new trial object
-            /// The trial object will then take cover 
+            GameObject currentTrial = trials.Dequeue();
 
-            trialStart = true;
-            var createTrial = Instantiate(tempTrial, transform.position, transform.rotation);
+            if (Input.GetKeyDown(KeyCode.Z) && trialStart != true)
+            {
+                /// If 'Z' is pressed, the engine spawns a new trial object
+                /// The trial object will then take cover 
 
-            createTrial.transform.parent = gameObject.transform;
+                trialStart = true;
+                var createTrial = Instantiate(currentTrial, transform.position, transform.rotation);
+
+                createTrial.transform.parent = gameObject.transform;
+            }
         }
     }
 
