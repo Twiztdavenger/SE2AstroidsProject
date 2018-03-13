@@ -8,7 +8,7 @@ public class Trial : MonoBehaviour
 
     public GameObject shipPrefab;
 
-    public GameObject parentController;
+
 
     // Ship attributes
     public Vector3 shipSpawn = new Vector3(0, 0, 0);
@@ -39,28 +39,28 @@ public class Trial : MonoBehaviour
 
         // Asteroid Parameters
 
-        GameObject astroid = asteroidPrefab;
+        //asteroidPrefab = (GameObject)Instantiate(Resources.Load("Asteroid Large"));
 
-        astroid.GetComponent<Asteroid>().rotationSpeed = AsteroidRotation;
-        astroid.GetComponent<Asteroid>().movementSpeedX = AsteroidMovementX;
-        astroid.GetComponent<Asteroid>().movementSpeedY = AsteroidMovementY;
-        astroid.GetComponent<Asteroid>().rotation = true;
+        asteroidPrefab.GetComponent<Asteroid>().rotationSpeed = AsteroidRotation;
+        asteroidPrefab.GetComponent<Asteroid>().movementSpeedX = AsteroidMovementX;
+        asteroidPrefab.GetComponent<Asteroid>().movementSpeedY = AsteroidMovementY;
+        asteroidPrefab.GetComponent<Asteroid>().rotation = true;
+
 
         
-
         // Ship Parameters
 
-        GameObject ship = shipPrefab;
+        //shipPrefab = (GameObject)Instantiate(Resources.Load("ship"));
 
-        ship.GetComponent<PlayerMovement>().canMove = shipMove;
-        ship.GetComponent<PlayerMovement>().canRotate = shipRotate;
+        shipPrefab.GetComponent<PlayerMovement>().canMove = shipMove;
+        shipPrefab.GetComponent<PlayerMovement>().canRotate = shipRotate;
 
-        ship.GetComponent<PlayerMovement>().maxSpeed = shipMoveSpeed;
-        ship.GetComponent<PlayerMovement>().rotSpeed = shipRotateSpeed;
+        shipPrefab.GetComponent<PlayerMovement>().maxSpeed = shipMoveSpeed;
+        shipPrefab.GetComponent<PlayerMovement>().rotSpeed = shipRotateSpeed;
 
         // Spawn Asteroid & Ship
 
-        var createAsteroid = Instantiate(astroid, AsteroidSpawn, transform.rotation);
+        var createAsteroid = Instantiate(asteroidPrefab, AsteroidSpawn, transform.rotation);
         createAsteroid.transform.parent = gameObject.transform;
 
         var createShip = Instantiate(shipPrefab, shipSpawn, transform.rotation);

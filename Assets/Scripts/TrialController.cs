@@ -24,7 +24,7 @@ public class TrialController : MonoBehaviour {
         try{
             var doc = new XmlDocument();
             doc.Load(XML_FILE_PATH);
-            XmlNodeList xmlTrials = doc.SelectNodes("experiment/trial");
+            XmlNodeList xmlTrials = doc.SelectNodes("/experiment/trial");
             foreach(XmlNode xmlTrial in xmlTrials)
             {
                 XmlNode ship = xmlTrial.SelectSingleNode("ship");
@@ -53,8 +53,7 @@ public class TrialController : MonoBehaviour {
                 float asteroidRotSpeed = float.Parse(asteroid.Attributes["rotationSpeed"].Value);
 
                 // Trial
-                GameObject tempTrial = new GameObject();
-                tempTrial.AddComponent<Trial>();
+                GameObject tempTrial = trial;
 
                 // Trial Ship
                 tempTrial.GetComponent<Trial>().shipSpawn = new Vector3(shipSpawnX, shipSpawnY, shipSpawnZ);
@@ -96,13 +95,12 @@ public class TrialController : MonoBehaviour {
         /// This is where the controller would read the XML data file
         /// Use a for loop to read the XML file and fill a queue of trial objects
         /// For the demo I will just be creating a trial case and hard coding the parameters 
-
-        if(trials.Count != 0)
+        if (Input.GetKeyDown(KeyCode.Z) && trialStart != true)
         {
-            GameObject currentTrial = trials.Dequeue();
-
-            if (Input.GetKeyDown(KeyCode.Z) && trialStart != true)
+            if (trials.Count != 0)
             {
+                GameObject currentTrial = trials.Dequeue();
+
                 /// If 'Z' is pressed, the engine spawns a new trial object
                 /// The trial object will then take cover 
 
@@ -110,8 +108,10 @@ public class TrialController : MonoBehaviour {
                 var createTrial = Instantiate(currentTrial, transform.position, transform.rotation);
 
                 createTrial.transform.parent = gameObject.transform;
+                
             }
         }
+            
     }
 
     void PauseGame() {

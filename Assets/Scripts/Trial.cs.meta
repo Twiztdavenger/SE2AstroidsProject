@@ -5,7 +5,12 @@ licenseType: Free
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - shipPrefab: {fileID: 1518773236984966, guid: 1dca91303cb327546958ec3d1ab9087a,
+      type: 2}
+  - parentController: {instanceID: 0}
+  - asteroidPrefab: {fileID: 1659785828572672, guid: 7ea208e93106ff646bb259504240fe90,
+      type: 2}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
