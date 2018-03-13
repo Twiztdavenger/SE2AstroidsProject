@@ -13,7 +13,7 @@ public class PlayerMovement : MonoBehaviour {
     float shipBoundaryRadius = 0.152f;
 
     // Booleans to determine if the ship can rotate/move or not
-    public bool canRotate = true;
+    public bool canRotate = false;
     public bool canMove = false;
 
     // Floats to control fire delay
@@ -112,7 +112,7 @@ public class PlayerMovement : MonoBehaviour {
 
             // Shoots a missile at our position plus the offset facing the angle of our rotation
             var projectile = Instantiate(missilePrefab, transform.position + offset, transform.rotation);
-            projectile.transform.parent = gameObject.transform;
+
 
 
             // Resets our cooldown timer

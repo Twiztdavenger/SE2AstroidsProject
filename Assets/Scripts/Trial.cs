@@ -69,6 +69,7 @@ public class Trial : MonoBehaviour
         if(asteroidDone == true)
         {
             gameObject.transform.parent.GetComponent<TrialController>().trialStart = false;
+            gameObject.transform.parent.GetComponent<TrialController>().toggleInstructionState();
 
             Destroy(gameObject);
         }

@@ -25,7 +25,7 @@ GameObject:
   - component: {fileID: 114467397733718474}
   - component: {fileID: 114519241192997030}
   m_Layer: 0
-  m_Name: AsteroidLarge
+  m_Name: Asteroid Large
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -113,7 +113,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rotation: 1
   rotationSpeed: 180
-  movementSpeedX: 1
+  movementSpeedX: 3
   movementSpeedY: 0
 --- !u!212 &212594297243159850
 SpriteRenderer:

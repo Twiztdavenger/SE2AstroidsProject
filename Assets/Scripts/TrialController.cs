@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Xml;
 using System.IO;
 using UnityEngine;
+using UnityEngine.UI;
 
 
 public class TrialController : MonoBehaviour {
@@ -16,12 +17,17 @@ public class TrialController : MonoBehaviour {
 
     private const string XML_FILE_PATH = @"Assets/Data/Experiment.xml";
 
-    private Queue<GameObject> trials = new Queue<GameObject>();
+    //private Queue<GameObject> trials = new Queue<GameObject>();
+
+    private int trialCount = 1;
+    private int currentTrialCount = 1;
+    
 
     // Use this for initialization
     void Start () {
          
         try{
+
             var doc = new XmlDocument();
             doc.Load(XML_FILE_PATH);
             XmlNodeList xmlTrials = doc.SelectNodes("/experiment/trial");
@@ -53,27 +59,40 @@ public class TrialController : MonoBehaviour {
                 float asteroidRotSpeed = float.Parse(asteroid.Attributes["rotationSpeed"].Value);
 
                 // Trial
-                GameObject tempTrial = trial;
+                
 
                 // Trial Ship
-                // tempTrial.GetComponent<Trial>().shipPrefab = (GameObject)Resources.Load("prefabs/ship", typeof(GameObject));
-                tempTrial.GetComponent<Trial>().shipSpawn = new Vector3(shipSpawnX, shipSpawnY, shipSpawnZ);
-                tempTrial.GetComponent<Trial>().shipMove = shipCanMove;
-                tempTrial.GetComponent<Trial>().shipRotate = shipCanRotate;
-                tempTrial.GetComponent<Trial>().shipMoveSpeed = shipMoveSpeed;
-                tempTrial.GetComponent<Trial>().shipRotateSpeed = shipRotSpeed;
+                trial.GetComponent<Trial>().shipSpawn = new Vector3(shipSpawnX, shipSpawnY, shipSpawnZ);
+
+                trial.GetComponent<Trial>().shipMove = shipCanMove;
+                trial.GetComponent<Trial>().shipRotate = shipCanRotate;
+
+                trial.GetComponent<Trial>().shipMoveSpeed = shipMoveSpeed;
+                trial.GetComponent<Trial>().shipRotateSpeed = shipRotSpeed;
+
                 // Trial Asteroid
-                // tempTrial.GetComponent<Trial>().asteroidPrefab = (GameObject)Resources.Load("prefabs/Asteroid Large", typeof(GameObject));
-                tempTrial.GetComponent<Trial>().AsteroidSpawn = new Vector3(asteroidSpawnX, asteroidSpawnY, asteroidSpawnZ);
-                tempTrial.GetComponent<Trial>().AsteroidMovementX = asteroidMoveX;
-                tempTrial.GetComponent<Trial>().AsteroidMovementY = asteroidMoveY;
-                tempTrial.GetComponent<Trial>().AsteroidRotation = asteroidRotSpeed;
+                trial.GetComponent<Trial>().AsteroidSpawn = new Vector3(asteroidSpawnX, asteroidSpawnY, asteroidSpawnZ);
+
+                trial.GetComponent<Trial>().AsteroidMovementX = asteroidMoveX;
+                trial.GetComponent<Trial>().AsteroidMovementY = asteroidMoveY;
+
+                trial.GetComponent<Trial>().AsteroidRotation = asteroidRotSpeed;
+
+                GameObject tempTrial = GameObject.Instantiate(trial);
+
+                tempTrial.SetActive(false);
+
+                tempTrial.transform.parent = gameObject.transform;
+
+                tempTrial.name = trialCount++.ToString();
 
                 // Put trial into queue
-                trials.Enqueue(tempTrial);
+                //trials.Enqueue(tempTrial);
 
 
             }
+
+            changeTrialText(currentTrialCount);
         }
         catch(XmlException e)
         {
@@ -88,26 +107,32 @@ public class TrialController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-
-        /// This is where the controller would read the XML data file
-        /// Use a for loop to read the XML file and fill a queue of trial objects
-        /// For the demo I will just be creating a trial case and hard coding the parameters 
+        
         if (Input.GetKeyDown(KeyCode.Z) && trialStart != true)
         {
-            if (trials.Count != 0)
+
+            if (currentTrialCount <= trialCount)
             {
-                GameObject currentTrial = trials.Dequeue();
+                changeTrialText(currentTrialCount);
+
+                toggleInstructionState();
+
+                GameObject currentTrial = gameObject.transform.Find(currentTrialCount.ToString()).gameObject;
 
                 /// If 'Z' is pressed, the engine spawns a new trial object
                 /// The trial object will then take cover 
 
                 trialStart = true;
-                var createTrial = Instantiate(currentTrial, transform.position, transform.rotation);
+                currentTrial.SetActive(true);
 
-                createTrial.transform.parent = gameObject.transform;
+                currentTrialCount++;
+
                 
+
             }
         }
+
+
             
     }
 
@@ -123,9 +148,19 @@ public class TrialController : MonoBehaviour {
         }
     }
 
-    void OnGUI()
+    void changeTrialText(int num)
     {
-        
+        GameObject canvasTrialText = gameObject.transform.GetChild(0).GetChild(0).gameObject;
+        Text trialText = canvasTrialText.GetComponent<Text>();
+
+        trialText.text = "Trial " + num;
+    }
+
+    public void toggleInstructionState()
+    {
+        GameObject canvasInstruction = gameObject.transform.GetChild(0).GetChild(1).gameObject;
+
+        canvasInstruction.SetActive(!canvasInstruction.activeSelf);
     }
 }
 
