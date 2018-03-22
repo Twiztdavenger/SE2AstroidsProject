@@ -21,6 +21,7 @@ public class TrialController : MonoBehaviour {
 
     private int trialCount = 1;
     private int currentTrialCount = 1;
+
     
 
     // Use this for initialization
@@ -108,9 +109,10 @@ public class TrialController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         
+        // "Press Z to start trial"
         if (Input.GetKeyDown(KeyCode.Z) && trialStart != true)
         {
-
+            // If our current trial counter is less than or equal to our total trials
             if (currentTrialCount <= trialCount)
             {
                 changeTrialText(currentTrialCount);
