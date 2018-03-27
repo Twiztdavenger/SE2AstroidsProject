@@ -41,7 +41,6 @@ public class Asteroid : MonoBehaviour {
 
     void OnTriggerEnter2D (Collider2D col) {
         // When we enter a collision with missile, destroy this asteroid
-        Debug.Log(col.ToString());
         if (col.gameObject.name == "missile(Clone)") {
             Destroy (gameObject);
 

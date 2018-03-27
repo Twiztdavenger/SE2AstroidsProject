@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <experiment>
     <trial>
-        <ship canMove="false" 
-              canRotate="false"
-              moveSpeed="1.0" 
-              rotationSpeed="180">
+        <ship 
+        canMove="false" 
+        canRotate="false" 
+        moveSpeed="1.0" 
+        rotationSpeed="1.0">
             <spawn x="0" y="-2.3" z="0" />
         </ship>
         <asteroid movementX="1.0" 
@@ -13,30 +14,35 @@
           <spawn x="-5" y="1" z="0" />
         </asteroid>
     </trial>
-  <trial>
-    <ship canMove="false"
-          canRotate="true"
-          moveSpeed="1.0"
-          rotationSpeed="180">
-      <spawn x="0" y="-2.3" z="0" />
-    </ship>
-    <asteroid movementX="3.0"
-              movementY="0.0"
-              rotationSpeed="180.0">
-      <spawn x="-5" y="1" z="0" />
-    </asteroid>
-  </trial>
-  <trial>
-    <ship canMove="false"
-          canRotate="false"
-          moveSpeed="1.0"
-          rotationSpeed="180">
-      <spawn x="0" y="-2.3" z="0" />
-    </ship>
-    <asteroid movementX="1.0"
-              movementY="0.0"
-              rotationSpeed="360.0">
-      <spawn x="-5" y="0" z="0" />
-    </asteroid>
-  </trial>
+    <trial>
+        <ship 
+        canMove="false" 
+        canRotate="false" 
+        moveSpeed="1.0" 
+        rotationSpeed="1.0">
+            <spawn x="0" y="-2.2" z="0" />
+        </ship>
+        <asteroid 
+        movementX="1.5" 
+        movementY="0.0" 
+        rotationSpeed="0.0">
+            <spawn x="-5" y="1" z="0" />
+        </asteroid>
+    </trial>
+    <trial>
+        <ship 
+            canMove="false" 
+            canRotate="false" 
+            moveSpeed="1.0" 
+            rotationSpeed="1.0">
+            <spawn x="0" y="-2.1" z="0" />
+        </ship>
+        <asteroid 
+        movementX="4" 
+        movementY="0"
+        rotationSpeed="180.0">
+            <spawn x="-5" y="1" z="0" />
+        </asteroid>
+    </trial>
+        
 </experiment>

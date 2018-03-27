@@ -44,7 +44,7 @@ public class TrialController : MonoBehaviour {
 
                 bool shipCanMove = bool.Parse(ship.Attributes["canMove"].Value);
                 bool shipCanRotate = bool.Parse(ship.Attributes["canRotate"].Value);
-
+                
                 float shipMoveSpeed = float.Parse(ship.Attributes["moveSpeed"].Value);
                 float shipRotSpeed = float.Parse(ship.Attributes["rotationSpeed"].Value);
 

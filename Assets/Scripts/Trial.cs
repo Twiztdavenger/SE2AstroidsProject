@@ -2,18 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Trial : MonoBehaviour
-{
+public class Trial : MonoBehaviour {
     public bool asteroidDone = false;
 
     // Ship
     public GameObject shipPrefab;
     //Ship Attributes
 
-
-
     // Ship attributes
-    public Vector3 shipSpawn = new Vector3(0, 0, 0);
+    public Vector3 shipSpawn = new Vector3 (0, 0, 0);
     public bool shipMove = false;
     public bool shipRotate = false;
     public float shipMoveSpeed = 1.5f;
@@ -22,58 +19,50 @@ public class Trial : MonoBehaviour
     // Asteroid
     public GameObject asteroidPrefab;
     // Asteroid Attributes
-    public Vector3 AsteroidSpawn = new Vector3(0, 0, 0);
+    public Vector3 AsteroidSpawn = new Vector3 (0, 0, 0);
     public float AsteroidMovementX = 0;
     public float AsteroidMovementY = 0;
     public float AsteroidRotation = 180f;
 
+    private bool spawned = false;
 
     // Use this for initialization
-    void Start()
-    {
-        //GameObject tempAstroid = AsteroidList.Dequeue();
+    void Start () {
+        hideFlags = HideFlags.HideInHierarchy;
 
         // Asteroid Parameters
 
-        //asteroidPrefab = (GameObject)Instantiate(Resources.Load("Asteroid Large"));
+        asteroidPrefab.GetComponent<Asteroid> ().rotationSpeed = AsteroidRotation;
+        asteroidPrefab.GetComponent<Asteroid> ().movementSpeedX = AsteroidMovementX;
+        asteroidPrefab.GetComponent<Asteroid> ().movementSpeedY = AsteroidMovementY;
+        asteroidPrefab.GetComponent<Asteroid> ().rotation = true;
 
-        asteroidPrefab.GetComponent<Asteroid>().rotationSpeed = AsteroidRotation;
-        asteroidPrefab.GetComponent<Asteroid>().movementSpeedX = AsteroidMovementX;
-        asteroidPrefab.GetComponent<Asteroid>().movementSpeedY = AsteroidMovementY;
-        asteroidPrefab.GetComponent<Asteroid>().rotation = true;
-
-
-        
         // Ship Parameters
 
         //shipPrefab = (GameObject)Instantiate(Resources.Load("ship"));
 
-        shipPrefab.GetComponent<PlayerMovement>().canMove = shipMove;
-        shipPrefab.GetComponent<PlayerMovement>().canRotate = shipRotate;
+        shipPrefab.GetComponent<PlayerMovement> ().canMove = shipMove;
+        shipPrefab.GetComponent<PlayerMovement> ().canRotate = shipRotate;
 
-        shipPrefab.GetComponent<PlayerMovement>().maxSpeed = shipMoveSpeed;
-        shipPrefab.GetComponent<PlayerMovement>().rotSpeed = shipRotateSpeed;
+        shipPrefab.GetComponent<PlayerMovement> ().maxSpeed = shipMoveSpeed;
+        shipPrefab.GetComponent<PlayerMovement> ().rotSpeed = shipRotateSpeed;
 
         // Spawn Asteroid & Ship
 
-        var createAsteroid = Instantiate(asteroidPrefab, AsteroidSpawn, transform.rotation);
+        var createAsteroid = Instantiate (asteroidPrefab, AsteroidSpawn, transform.rotation);
         createAsteroid.transform.parent = gameObject.transform;
 
-        var createShip = Instantiate(shipPrefab, shipSpawn, transform.rotation);
+        var createShip = Instantiate (shipPrefab, shipSpawn, transform.rotation);
         createShip.transform.parent = gameObject.transform;
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        if(asteroidDone == true)
-        {
-            gameObject.transform.parent.GetComponent<TrialController>().trialStart = false;
-            gameObject.transform.parent.GetComponent<TrialController>().toggleInstructionState();
+    void Update () {
+        if (asteroidDone == true) {
+            gameObject.transform.parent.GetComponent<TrialController> ().trialStart = false;
+            gameObject.transform.parent.GetComponent<TrialController> ().toggleInstructionState ();
 
-            Destroy(gameObject);
+            Destroy (gameObject);
         }
-
     }
-
 }
