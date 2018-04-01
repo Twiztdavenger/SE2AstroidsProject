@@ -4,7 +4,7 @@ using System.Xml;
 using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
-
+using Assets.Scripts.Output;
 
 public class TrialController : MonoBehaviour {
     bool isPaused = false;
@@ -22,12 +22,16 @@ public class TrialController : MonoBehaviour {
     private int trialCount = 1;
     private int currentTrialCount = 1;
 
+    // list of data models to load the xml data into
+    List<TrialDataModel> trialList = new List<TrialDataModel>();
+
     
 
     // Use this for initialization
     void Start () {
          
         try{
+            int trialNumber = 1;
 
             var doc = new XmlDocument();
             doc.Load(XML_FILE_PATH);
@@ -60,26 +64,38 @@ public class TrialController : MonoBehaviour {
                 float asteroidRotSpeed = float.Parse(asteroid.Attributes["rotationSpeed"].Value);
 
                 // Trial
+                TrialDataModel tempTrial = new TrialDataModel();
                 
 
                 // Trial Ship
-                trial.GetComponent<Trial>().shipSpawn = new Vector3(shipSpawnX, shipSpawnY, shipSpawnZ);
+                tempTrial.ShipSpawn = new Vector3(shipSpawnX, shipSpawnY, shipSpawnZ);
 
-                trial.GetComponent<Trial>().shipMove = shipCanMove;
-                trial.GetComponent<Trial>().shipRotate = shipCanRotate;
+                tempTrial.ShipMove = shipCanMove;
+                tempTrial.ShipRotate = shipCanRotate;
 
-                trial.GetComponent<Trial>().shipMoveSpeed = shipMoveSpeed;
-                trial.GetComponent<Trial>().shipRotateSpeed = shipRotSpeed;
+                tempTrial.ShipMoveSpeed = shipMoveSpeed;
+                tempTrial.ShipRotateSpeed = shipRotSpeed;
 
                 // Trial Asteroid
-                trial.GetComponent<Trial>().AsteroidSpawn = new Vector3(asteroidSpawnX, asteroidSpawnY, asteroidSpawnZ);
+                tempTrial.AsteroidSpawn = new Vector3(asteroidSpawnX, asteroidSpawnY, asteroidSpawnZ);
 
-                trial.GetComponent<Trial>().AsteroidMovementX = asteroidMoveX;
-                trial.GetComponent<Trial>().AsteroidMovementY = asteroidMoveY;
+                tempTrial.AsteroidMovementX = asteroidMoveX;
+                tempTrial.AsteroidMovementY = asteroidMoveY;
 
-                trial.GetComponent<Trial>().AsteroidRotation = asteroidRotSpeed;
+                tempTrial.AsteroidRotation = asteroidRotSpeed;
 
-                GameObject tempTrial = GameObject.Instantiate(trial);
+                // Trial Specific Information
+                tempTrial.TrialID = trialNumber;
+                trialNumber++;
+
+                // Add TrialDataModel To List
+                trialList.Add(tempTrial);
+                tempTrial.Start();
+
+
+
+                /*
+                //GameObject tempTrial = GameObject.Instantiate(trial);
 
                 tempTrial.SetActive(false);
 
@@ -87,13 +103,16 @@ public class TrialController : MonoBehaviour {
 
                 tempTrial.name = trialCount++.ToString();
 
+                
+
                 // Put trial into queue
                 //trials.Enqueue(tempTrial);
 
-
+                */
             }
 
             changeTrialText(currentTrialCount);
+            
         }
         catch(XmlException e)
         {
@@ -115,6 +134,7 @@ public class TrialController : MonoBehaviour {
             // If our current trial counter is less than or equal to our total trials
             if (currentTrialCount <= trialCount)
             {
+
                 changeTrialText(currentTrialCount);
 
                 toggleInstructionState();
@@ -152,10 +172,11 @@ public class TrialController : MonoBehaviour {
 
     void changeTrialText(int num)
     {
+        /*
         GameObject canvasTrialText = gameObject.transform.GetChild(0).GetChild(0).gameObject;
         Text trialText = canvasTrialText.GetComponent<Text>();
 
-        trialText.text = "Trial " + num;
+        trialText.text = "Trial 1";*/
     }
 
     public void toggleInstructionState()
@@ -164,5 +185,7 @@ public class TrialController : MonoBehaviour {
 
         canvasInstruction.SetActive(!canvasInstruction.activeSelf);
     }
+
 }
+
 

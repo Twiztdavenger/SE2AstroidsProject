@@ -8,10 +8,7 @@ public class Trial : MonoBehaviour
 
     // Ship
     public GameObject shipPrefab;
-    //Ship Attributes
-
-
-
+    
     // Ship attributes
     public Vector3 shipSpawn = new Vector3(0, 0, 0);
     public bool shipMove = false;
