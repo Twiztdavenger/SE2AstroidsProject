@@ -148,8 +148,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   trial: {fileID: 1401095546594432, guid: 91dde23f912900547a1039b401b881e5, type: 2}
-  stringToEdit: Hello World
   trialStart: 0
+  shipPrefab: {fileID: 1518773236984966, guid: 1dca91303cb327546958ec3d1ab9087a, type: 2}
+  asteroidPrefab: {fileID: 1659785828572672, guid: 7ea208e93106ff646bb259504240fe90,
+    type: 2}
+  asteroidDone: 0
 --- !u!224 &165385052
 RectTransform:
   m_ObjectHideFlags: 0

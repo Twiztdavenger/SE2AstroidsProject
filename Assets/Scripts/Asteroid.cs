@@ -46,7 +46,7 @@ public class Asteroid : MonoBehaviour {
             Destroy (gameObject);
 
             // Sets bool of our parent trial's variable to true
-            gameObject.transform.parent.GetComponent<Trial>().asteroidDone = true;
+            gameObject.transform.parent.GetComponent<TrialController>().asteroidDone = true;
         }
     }
 }

@@ -3,7 +3,8 @@ using UnityEngine;
 
 namespace Assets.Scripts.Output
 {
-    class TrialDataModel : MonoBehaviour
+
+    class TrialDataModel : ScriptableObject
     {
         /// <summary>
         /// DataOutput Specs for Trial Data:
@@ -49,10 +50,7 @@ namespace Assets.Scripts.Output
         float totalTrialTime;
         bool trialDone = false;
 
-        public void Start()
-        {
-            Debug.Log(TrialID);
-        }
+
 
     }
 }

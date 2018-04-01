@@ -7,25 +7,38 @@ using UnityEngine.UI;
 using Assets.Scripts.Output;
 
 public class TrialController : MonoBehaviour {
-    bool isPaused = false;
-
-    public GameObject trial;
-
-    public string stringToEdit = "Hello World";
-
-    public bool trialStart = false;
+    /// 
+    /// TrialController
+    /// 
+    /// Start():
+    ///     Loads XML document
+    ///     Grabs these loaded values and inserts them into TrialDataModel
+    /// 
+    /// Update():
+    ///     Checks if 'Z' is pressed and a trial is not started yet
+    ///         Dequeues TrialDataModel from TrialQueue
+    ///         Toggles "Press 'Z' to start" GUI message
+    ///         Loads Asteroid and Ship Prefabs based on dequeued TrialDataModel
+    ///         Instantiates Ship and Asteroid into scene
+    ///     
+    ///     Checks if AsteroidDone is true
+    ///         TrialStart becomes false
+    ///         Destroys gameobjects with tags "Ship" and "Asteroid"
+    ///         AsteroidDone becomes false
+    ///
 
     private const string XML_FILE_PATH = @"Assets/Data/Experiment.xml";
 
-    //private Queue<GameObject> trials = new Queue<GameObject>();
-
-    private int trialCount = 1;
-    private int currentTrialCount = 1;
-
     // list of data models to load the xml data into
-    List<TrialDataModel> trialList = new List<TrialDataModel>();
+    Queue<TrialDataModel> trialQueue = new Queue<TrialDataModel>();
 
-    
+    public GameObject shipPrefab;
+    public GameObject asteroidPrefab;
+
+    public bool asteroidDone = false;
+    public bool trialStart = false;
+
+
 
     // Use this for initialization
     void Start () {
@@ -38,6 +51,8 @@ public class TrialController : MonoBehaviour {
             XmlNodeList xmlTrials = doc.SelectNodes("/experiment/trial");
             foreach(XmlNode xmlTrial in xmlTrials)
             {
+
+                // LOAD XML DOCUMENT 
                 XmlNode ship = xmlTrial.SelectSingleNode("ship");
                 XmlNode asteroid = xmlTrial.SelectSingleNode("asteroid");
 
@@ -63,9 +78,9 @@ public class TrialController : MonoBehaviour {
 
                 float asteroidRotSpeed = float.Parse(asteroid.Attributes["rotationSpeed"].Value);
 
+                // LOAD DATAMODELS WITH INFORMATION FROM XML
                 // Trial
                 TrialDataModel tempTrial = new TrialDataModel();
-                
 
                 // Trial Ship
                 tempTrial.ShipSpawn = new Vector3(shipSpawnX, shipSpawnY, shipSpawnZ);
@@ -89,30 +104,8 @@ public class TrialController : MonoBehaviour {
                 trialNumber++;
 
                 // Add TrialDataModel To List
-                trialList.Add(tempTrial);
-                tempTrial.Start();
-
-
-
-                /*
-                //GameObject tempTrial = GameObject.Instantiate(trial);
-
-                tempTrial.SetActive(false);
-
-                tempTrial.transform.parent = gameObject.transform;
-
-                tempTrial.name = trialCount++.ToString();
-
-                
-
-                // Put trial into queue
-                //trials.Enqueue(tempTrial);
-
-                */
+                trialQueue.Enqueue(tempTrial);
             }
-
-            changeTrialText(currentTrialCount);
-            
         }
         catch(XmlException e)
         {
@@ -127,56 +120,47 @@ public class TrialController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        
+
+        TrialDataModel trialModel = new TrialDataModel();
+
         // "Press Z to start trial"
         if (Input.GetKeyDown(KeyCode.Z) && trialStart != true)
         {
-            // If our current trial counter is less than or equal to our total trials
-            if (currentTrialCount <= trialCount)
-            {
+            trialStart = true;
+            trialModel = trialQueue.Dequeue();
+            toggleInstructionState();
 
-                changeTrialText(currentTrialCount);
+            // Load Asteroid 
+            asteroidPrefab.GetComponent<Asteroid>().rotation = true;
+            asteroidPrefab.GetComponent<Asteroid>().rotationSpeed = trialModel.AsteroidRotation;
+            asteroidPrefab.GetComponent<Asteroid>().movementSpeedX = trialModel.AsteroidMovementX;
+            asteroidPrefab.GetComponent<Asteroid>().movementSpeedY = trialModel.AsteroidMovementY;
 
-                toggleInstructionState();
 
-                GameObject currentTrial = gameObject.transform.Find(currentTrialCount.ToString()).gameObject;
+            // Load Ship
+            shipPrefab.GetComponent<PlayerMovement>().canMove = trialModel.ShipMove;
+            shipPrefab.GetComponent<PlayerMovement>().canRotate = trialModel.ShipRotate;
+            shipPrefab.GetComponent<PlayerMovement>().maxSpeed = trialModel.ShipMoveSpeed;
+            shipPrefab.GetComponent<PlayerMovement>().rotSpeed = trialModel.ShipRotateSpeed;
 
-                /// If 'Z' is pressed, the engine spawns a new trial object
-                /// The trial object will then take cover 
+            //Instantiate GameObjects
+            var createAsteroid = Instantiate(asteroidPrefab, trialModel.AsteroidSpawn, transform.rotation);
+            createAsteroid.transform.parent = gameObject.transform;
 
-                trialStart = true;
-                currentTrial.SetActive(true);
-
-                currentTrialCount++;
-
-                
-
-            }
+            var createShip = Instantiate(shipPrefab, trialModel.ShipSpawn, transform.rotation);
+            createShip.transform.parent = gameObject.transform;
         }
 
-
-            
-    }
-
-    void PauseGame() {
-        if (isPaused)
+        if(asteroidDone == true)
         {
-            Time.timeScale = 1;
-            isPaused = true;
-        } else
-        {
-            Time.timeScale = 0;
-            isPaused = false;
-        }
-    }
+            trialStart = false;
+            toggleInstructionState();
 
-    void changeTrialText(int num)
-    {
-        /*
-        GameObject canvasTrialText = gameObject.transform.GetChild(0).GetChild(0).gameObject;
-        Text trialText = canvasTrialText.GetComponent<Text>();
+            DestroyImmediate(GameObject.FindWithTag("Ship"), true);
+            DestroyImmediate(GameObject.FindWithTag("Asteroid"), true);
 
-        trialText.text = "Trial 1";*/
+            asteroidDone = false;
+        } 
     }
 
     public void toggleInstructionState()
