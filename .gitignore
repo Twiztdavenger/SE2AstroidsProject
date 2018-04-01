@@ -33,3 +33,7 @@ sysinfo.txt
 *.apk
 *.unitypackage
 Assets/Scripts/AsteroidController.cs
+Assets/Scripts/Trial.cs
+Assets/Scripts/Trial.cs
+Assets/Scripts/Trial.cs.meta
+ProjectSettings/ProjectVersion.txt

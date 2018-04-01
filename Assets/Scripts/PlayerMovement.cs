@@ -23,18 +23,11 @@ public class PlayerMovement : MonoBehaviour {
     // Projectile we will be firing
     public GameObject missilePrefab;
 
-	// Use this for initialization
-	void Start () {
-
-    }
-	
-	// Update is called once per frame
 	void Update () {
-        // ROTATE the ship
 
-        // Grab rotation quaterion
+
+        // ROTATATION
         Quaternion rot = transform.rotation;
-
 
         if (canRotate)
         {
@@ -51,6 +44,7 @@ public class PlayerMovement : MonoBehaviour {
             transform.rotation = rot;
         }
 
+        // MOVEMENT
         Vector3 pos = transform.position;
 
         if (canMove)
@@ -100,27 +94,23 @@ public class PlayerMovement : MonoBehaviour {
 
         // Subtract a second every time a frame hits
         coolDownTimer -= Time.deltaTime;
-
         // If we are pressing a fire button and our cooldown is 0
         if(Input.GetButton("Fire1") && coolDownTimer <= 0)
         {
-            //So we can change values in the inspector to match the speed of the projectile
             missilePrefab.GetComponent<Projectile>().maxSpeed = projSpeed;
-
             // Set a spawn point to our objects rotation * .35 pixels above our origin point
             Vector3 offset = transform.rotation * new Vector3(0, .35f, 0);
-
-            // Shoots a missile at our position plus the offset facing the angle of our rotation
             var projectile = Instantiate(missilePrefab, transform.position + offset, transform.rotation);
-
-
 
             // Resets our cooldown timer
             coolDownTimer = fireDelay;
         }
 
-
-
+        // DESTROY THIS SHIP IF ASTEROID IS DONE
+        if(gameObject.transform.parent.GetComponent<TrialController>().asteroidDone == true)
+        {
+            Destroy(gameObject);
+        }
 
     }
 
