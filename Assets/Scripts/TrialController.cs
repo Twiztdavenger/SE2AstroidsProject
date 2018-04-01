@@ -83,7 +83,8 @@ public class TrialController : MonoBehaviour {
                 TrialDataModel tempTrial = new TrialDataModel();
 
                 // Trial Ship
-                tempTrial.ShipSpawn = new Vector3(shipSpawnX, shipSpawnY, shipSpawnZ);
+                tempTrial.ShipSpawnX = shipSpawnX;
+                tempTrial.ShipSpawnY = shipSpawnY;
 
                 tempTrial.ShipMove = shipCanMove;
                 tempTrial.ShipRotate = shipCanRotate;
@@ -92,7 +93,8 @@ public class TrialController : MonoBehaviour {
                 tempTrial.ShipRotateSpeed = shipRotSpeed;
 
                 // Trial Asteroid
-                tempTrial.AsteroidSpawn = new Vector3(asteroidSpawnX, asteroidSpawnY, asteroidSpawnZ);
+                tempTrial.AsteroidSpawnX = asteroidSpawnX;
+                tempTrial.AsteroidSpawnY = asteroidSpawnY;
 
                 tempTrial.AsteroidMovementX = asteroidMoveX;
                 tempTrial.AsteroidMovementY = asteroidMoveY;
@@ -144,10 +146,14 @@ public class TrialController : MonoBehaviour {
             shipPrefab.GetComponent<PlayerMovement>().rotSpeed = trialModel.ShipRotateSpeed;
 
             //Instantiate GameObjects
-            var createAsteroid = Instantiate(asteroidPrefab, trialModel.AsteroidSpawn, transform.rotation);
+            Vector3 asteroidSpawnVector = new Vector3(trialModel.AsteroidSpawnX, trialModel.AsteroidSpawnY, 0);
+
+            var createAsteroid = Instantiate(asteroidPrefab, asteroidSpawnVector, transform.rotation);
             createAsteroid.transform.parent = gameObject.transform;
 
-            var createShip = Instantiate(shipPrefab, trialModel.ShipSpawn, transform.rotation);
+            Vector3 shipSpawnVector = new Vector3(trialModel.ShipSpawnX, trialModel.ShipSpawnY, 0);
+
+            var createShip = Instantiate(shipPrefab, shipSpawnVector, transform.rotation);
             createShip.transform.parent = gameObject.transform;
         }
 

@@ -25,7 +25,7 @@
         <asteroid 
         movementX="1.5" 
         movementY="0.0" 
-        rotationSpeed="0.0">
+        rotationSpeed="180.0">
             <spawn x="-5" y="1" z="0" />
         </asteroid>
     </trial>

@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Assets.Scripts.Output
 {
 
-    class TrialDataModel : ScriptableObject
+    class TrialDataModel 
     {
         /// <summary>
         /// DataOutput Specs for Trial Data:
@@ -35,14 +35,16 @@ namespace Assets.Scripts.Output
         public bool DisplayScore { get; set; }
 
         // Ship Data
-        public Vector3 ShipSpawn { get; set; }
+        public float ShipSpawnX { get; set; }
+        public float ShipSpawnY { get; set; }
         public bool ShipMove { get; set; }
         public bool ShipRotate { get; set; }
         public float ShipMoveSpeed { get; set; }
         public float ShipRotateSpeed { get; set; }
 
         // Asteroid Data
-        public Vector3 AsteroidSpawn { get; set; }
+        public float AsteroidSpawnX { get; set; }
+        public float AsteroidSpawnY { get; set; }
         public float AsteroidMovementX { get; set; }
         public float AsteroidMovementY { get; set; }
         public float AsteroidRotation { get; set; }
