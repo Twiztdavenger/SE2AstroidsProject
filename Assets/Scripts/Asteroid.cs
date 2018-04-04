@@ -1,32 +1,87 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class Asteroid : MonoBehaviour {
+
+    /// 
+    /// This object holds all of the logic for data output between passes
+    /// 
+    /// Update():
+    ///     This update function is separated into 2 parts
+    ///     
+    ///     MOVEMENT
+    ///         Vector3 pos grabs the transform.position
+    ///         pos is then modified to move in a direction based on MovementX and MovementY
+    ///         
+    ///     PASS
+    ///         screenRatio grabs the ratio between the width and height of the display
+    ///         Camera.OrthographicSize is multiplied by the screen ratio to grab width.
+    ///             This variable is widthOrtho
+    ///         
+    ///         These variables are then used to check if the asteroid in the X direction 
+    ///             is greater than widthOrtho, the X boundaries of the camera view
+    ///             
+    ///             If pos.x IS greater than widthOrtho:
+    ///                 Reset the asteroid to a position outside of the view
+    ///                     This gives the illusion of "looping"
+    ///             
+    ///          Once we've verified if the asteroid is out of bounds
+    ///             We know a 'pass' happened
+    ///             
+    ///             This portion grabs the parent object of our gameObject <TrialController>,
+    ///                 and accesses a method called trialPass()
+    ///                 
+    ///                 trialPass() is a method that lets the trialController know a pass has happened
+    ///                     We then pass a bunch of values (data may vary) to fill the PassDataModel with
+    ///         
+    ///         Since the asteroid left the view, we can assume it was still alive.
+    ///             So therefore, hit = false
+    ///             
+    /// OnTriggerEnter2D():
+    ///     This method is a collision detector that is activated
+    ///         when we get hit by the projectile
+    ///     
+    ///     hit = true
+    ///     
+    ///     calls finishAsteroid()
+    ///     
+    /// finishAsteroid():
+    ///     Lets our parent object the asteroid is destroyed
+    ///     By hitting the asteroid, our pass has ended and we can move our data on
+    ///         
+    /// 
 
     public bool rotation = false;
     public float rotationSpeed = -180f;
     public float movementSpeedX= 1.5f;
     public float movementSpeedY = 1.5f;
-    // Use this for initialization
-    void Start () {
-        
-    }
 
-    // Update is called once per frame
+    public int numPasses = 0;
+    public int totalPasses = 5;
+
+    public bool hit = false;
+
+    public float passTimer = 0f;
+
     void Update () {
+
+        passTimer += Time.deltaTime;
+
+        // MOVEMENT
         Vector3 pos = transform.position;
         pos += new Vector3 (movementSpeedX * Time.deltaTime, movementSpeedY * Time.deltaTime, 0);
         Quaternion rot = transform.rotation;
         float z = rot.eulerAngles.z;
-        // Change z angle based on input
+
         z -= rotationSpeed * Time.deltaTime;
         if (rotation) {
-            // Recreate quaternion
             rot = Quaternion.Euler (0, 0, z);
-            // Feed quaternion into our rotation
             transform.rotation = rot;
         }
+
+        // PASS
 
         // Grabs screen ratio so we have a correct x boundary
         float screenRatio = (float) Screen.width / (float) Screen.height;
@@ -34,18 +89,34 @@ public class Asteroid : MonoBehaviour {
 
         if (pos.x - 1f > widthOrtho) {
             pos.x = -widthOrtho - 1f;
-        }
 
+            // START NEW PASS FOR DATA COLLECTION
+            gameObject.transform.parent.GetComponent<TrialController>()
+                .trialPass(numPasses, hit, passTimer);
+            numPasses++;
+            hit = false;
+
+            passTimer = 0;
+        }
         transform.position = pos;
     }
 
     void OnTriggerEnter2D (Collider2D col) {
         // When we enter a collision with missile, destroy this asteroid
         if (col.gameObject.name == "missile(Clone)") {
-            Destroy (gameObject);
-
-            // Sets bool of our parent trial's variable to true
-            gameObject.transform.parent.GetComponent<TrialController>().asteroidDone = true;
+            hit = true;
+            finishAsteroid();
         }
     }
+
+    void finishAsteroid()
+    {
+        Destroy(gameObject);
+        // Sets bool of our parent trial's variable to true
+        gameObject.transform.parent.GetComponent<TrialController>().asteroidDone = true;
+        gameObject.transform.parent.GetComponent<TrialController>().trialPass(numPasses, hit, Time.deltaTime * 60);
+
+
+    }
+
 }

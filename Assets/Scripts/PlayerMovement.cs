@@ -22,9 +22,12 @@ public class PlayerMovement : MonoBehaviour {
 
     // Projectile we will be firing
     public GameObject missilePrefab;
+    public bool didFire;
+    public float timeFired = 0f;
 
 	void Update () {
 
+        timeFired += Time.deltaTime;
 
         // ROTATATION
         Quaternion rot = transform.rotation;
@@ -89,21 +92,21 @@ public class PlayerMovement : MonoBehaviour {
             // Change our position based upon the changes we made to pos
             transform.position = pos;
         }
-
+        
         // SHOOTING
 
-        // Subtract a second every time a frame hits
-        coolDownTimer -= Time.deltaTime;
-        // If we are pressing a fire button and our cooldown is 0
-        if(Input.GetButton("Fire1") && coolDownTimer <= 0)
+        // If we are pressing a fire button and bool didFire was false
+        if(Input.GetButton("Fire1") && !didFire)
         {
             missilePrefab.GetComponent<Projectile>().maxSpeed = projSpeed;
+
             // Set a spawn point to our objects rotation * .35 pixels above our origin point
             Vector3 offset = transform.rotation * new Vector3(0, .35f, 0);
             var projectile = Instantiate(missilePrefab, transform.position + offset, transform.rotation);
 
-            // Resets our cooldown timer
-            coolDownTimer = fireDelay;
+            // DATA COLLECTION
+            didFire = true;
+
         }
 
         // DESTROY THIS SHIP IF ASTEROID IS DONE

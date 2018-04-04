@@ -21,7 +21,7 @@ namespace Assets.Scripts.Output
         /// TODO: Figure out where to instantiate trial object 
         ///     into the scene and grab data from it (Do we control trial object HERE or in trialController?)
         /// </summary>
-        List<PassDataModel> passList = new List<PassDataModel>();
+        public Queue<PassDataModel> passList = new Queue<PassDataModel>();
 
 
         public int TrialID { get; set; }
@@ -53,6 +53,33 @@ namespace Assets.Scripts.Output
         bool trialDone = false;
 
 
+        public void addPass(int num, bool didFire, bool hit, float fireTime, float totalPassTime)
+        {
+            PassDataModel tempPassData = new PassDataModel();
 
+            tempPassData.passID = num;
+            tempPassData.projectileFired = didFire;
+            tempPassData.hit = hit;
+            tempPassData.projFireTime = fireTime;
+            tempPassData.totalPassTime = totalPassTime;
+
+            passList.Enqueue(tempPassData);
+        }
+
+        public string returnPassData()
+        {
+            string output = "";
+            while(passList.Count != 0)
+            {
+                PassDataModel temp = passList.Dequeue();
+                
+                output += "(, " + temp.passID + ", ";
+                output += temp.projectileFired + ", ";
+                output += temp.hit + ", ";
+                output += temp.projFireTime + ", ";
+                output += temp.totalPassTime + "), ";
+            }
+            return output ;
+        }
     }
 }

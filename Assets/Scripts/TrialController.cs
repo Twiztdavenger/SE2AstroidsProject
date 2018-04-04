@@ -5,6 +5,7 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 using Assets.Scripts.Output;
+using System;
 
 public class TrialController : MonoBehaviour {
     /// 
@@ -25,18 +26,26 @@ public class TrialController : MonoBehaviour {
     ///         TrialStart becomes false
     ///         Destroys gameobjects with tags "Ship" and "Asteroid"
     ///         AsteroidDone becomes false
+    ///         
+    ///  trialPass():
+    ///     Called from Asteroid Object
+    ///         
+    ///         
     ///
 
     private const string XML_FILE_PATH = @"Assets/Data/Experiment.xml";
 
     // list of data models to load the xml data into
     Queue<TrialDataModel> trialQueue = new Queue<TrialDataModel>();
+    Queue<String> dataOutput = new Queue<String>();
 
     public GameObject shipPrefab;
     public GameObject asteroidPrefab;
 
     public bool asteroidDone = false;
     public bool trialStart = false;
+
+    
 
 
 
@@ -119,55 +128,79 @@ public class TrialController : MonoBehaviour {
         }
 
     }
-	
-	// Update is called once per frame
-	void Update () {
 
-        TrialDataModel trialModel = new TrialDataModel();
+    // Our current trial
+    TrialDataModel trialModel = new TrialDataModel();
 
-        // "Press Z to start trial"
-        if (Input.GetKeyDown(KeyCode.Z) && trialStart != true)
+
+    void Update () {
+        try
         {
-            trialStart = true;
-            trialModel = trialQueue.Dequeue();
-            toggleInstructionState();
+            // "Press Z to start trial"
+            if (Input.GetKeyDown(KeyCode.Z) && trialStart != true)
+            {
+                trialStart = true;
+                trialModel = trialQueue.Dequeue();
+                toggleInstructionState();
 
-            // Load Asteroid 
-            asteroidPrefab.GetComponent<Asteroid>().rotation = true;
-            asteroidPrefab.GetComponent<Asteroid>().rotationSpeed = trialModel.AsteroidRotation;
-            asteroidPrefab.GetComponent<Asteroid>().movementSpeedX = trialModel.AsteroidMovementX;
-            asteroidPrefab.GetComponent<Asteroid>().movementSpeedY = trialModel.AsteroidMovementY;
+                // Load Asteroid 
+                asteroidPrefab.GetComponent<Asteroid>().rotation = true;
+                asteroidPrefab.GetComponent<Asteroid>().rotationSpeed = trialModel.AsteroidRotation;
+                asteroidPrefab.GetComponent<Asteroid>().movementSpeedX = trialModel.AsteroidMovementX;
+                asteroidPrefab.GetComponent<Asteroid>().movementSpeedY = trialModel.AsteroidMovementY;
 
 
-            // Load Ship
-            shipPrefab.GetComponent<PlayerMovement>().canMove = trialModel.ShipMove;
-            shipPrefab.GetComponent<PlayerMovement>().canRotate = trialModel.ShipRotate;
-            shipPrefab.GetComponent<PlayerMovement>().maxSpeed = trialModel.ShipMoveSpeed;
-            shipPrefab.GetComponent<PlayerMovement>().rotSpeed = trialModel.ShipRotateSpeed;
+                // Load Ship
+                shipPrefab.GetComponent<PlayerMovement>().canMove = trialModel.ShipMove;
+                shipPrefab.GetComponent<PlayerMovement>().canRotate = trialModel.ShipRotate;
+                shipPrefab.GetComponent<PlayerMovement>().maxSpeed = trialModel.ShipMoveSpeed;
+                shipPrefab.GetComponent<PlayerMovement>().rotSpeed = trialModel.ShipRotateSpeed;
 
-            //Instantiate GameObjects
-            Vector3 asteroidSpawnVector = new Vector3(trialModel.AsteroidSpawnX, trialModel.AsteroidSpawnY, 0);
+                //Instantiate GameObjects
+                Vector3 asteroidSpawnVector = new Vector3(trialModel.AsteroidSpawnX, trialModel.AsteroidSpawnY, 0);
 
-            var createAsteroid = Instantiate(asteroidPrefab, asteroidSpawnVector, transform.rotation);
-            createAsteroid.transform.parent = gameObject.transform;
+                var createAsteroid = Instantiate(asteroidPrefab, asteroidSpawnVector, transform.rotation);
+                createAsteroid.transform.parent = gameObject.transform;
 
-            Vector3 shipSpawnVector = new Vector3(trialModel.ShipSpawnX, trialModel.ShipSpawnY, 0);
+                Vector3 shipSpawnVector = new Vector3(trialModel.ShipSpawnX, trialModel.ShipSpawnY, 0);
 
-            var createShip = Instantiate(shipPrefab, shipSpawnVector, transform.rotation);
-            createShip.transform.parent = gameObject.transform;
+                var createShip = Instantiate(shipPrefab, shipSpawnVector, transform.rotation);
+                createShip.transform.parent = gameObject.transform;
+            }
+        } catch(Exception e)
+        {
+            Debug.Log("There may be no more trials in the queue to load");
         }
+        
 
-        if(asteroidDone == true)
+    }
+
+    public void trialPass(int passNum, bool hit, float totalPassTime)
+    {
+        bool fire = GameObject.FindWithTag("Ship").GetComponent<PlayerMovement>().didFire;
+        float fireTime = GameObject.FindWithTag("Ship").GetComponent<PlayerMovement>().timeFired;
+
+        trialModel.addPass(passNum, fire, hit, fireTime, totalPassTime);
+
+        GameObject.FindWithTag("Ship").GetComponent<PlayerMovement>().didFire = false;
+        //GameObject.FindWithTag("Ship").GetComponent<PlayerMovement>().timeFired = 0f;
+
+        if (hit)
         {
             trialStart = false;
             toggleInstructionState();
 
-            DestroyImmediate(GameObject.FindWithTag("Ship"), true);
-            DestroyImmediate(GameObject.FindWithTag("Asteroid"), true);
+            Destroy(GameObject.FindWithTag("Ship"));
+            Destroy(GameObject.FindWithTag("Asteroid"));
 
             asteroidDone = false;
-        } 
+
+            dataCollection();
+
+        }
     }
+
+
 
     public void toggleInstructionState()
     {
@@ -176,6 +209,21 @@ public class TrialController : MonoBehaviour {
         canvasInstruction.SetActive(!canvasInstruction.activeSelf);
     }
 
+    // Builds the strings to send to the .CSV file
+    void dataCollection()
+    {
+        String output = "";
+
+        // Output Format (for now):
+        // TrialID, Passes, (PassID, If Proj Fired, If Proj Hit, ProjFireTime, PassTotalTime)
+        output += trialModel.TrialID + ", ";
+        output += trialModel.TotalNumPasses + ", ";
+        output += trialModel.returnPassData();
+
+
+
+        Debug.Log(output);
+    }
 }
 
 

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using UnityEngine;
 
 namespace Assets.Scripts.Output 
 {
@@ -14,21 +13,24 @@ namespace Assets.Scripts.Output
     /// -Positions of both the projectile and the asteroid when 
     ///     distance between the two is at a minimum 
     /// </summary>
-    class PassDataModel : MonoBehaviour
+    class PassDataModel 
     {
 
         public int passID { get; set; }
 
-        bool projectileFired { get; set; }
-        bool hit { get; set; }
-        float projFireTime { get; set; }
-        float totalPassTime { get; set; }
+        public bool projectileFired { get; set; }
+        public bool hit { get; set; }
+        public float projFireTime { get; set; }
+        public float totalPassTime { get; set; }
 
         // Position of proj when closest to asteroid
-        Vector3 minProjCoord { get; set; }
+        public float minProjCoordX { get; set; }
+        public float minProjCoordY { get; set; }
 
         // Position of asteroid when closest to proj
-         Vector3 minAsCoord { get; set; }
+        public float minAsCoordX { get; set; }
+        public float minAsCoordY { get; set; }
+
 
         //TODO: Calculate angle of projectile fired
 
