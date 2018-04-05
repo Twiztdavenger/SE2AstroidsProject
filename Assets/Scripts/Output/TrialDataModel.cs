@@ -29,8 +29,8 @@ namespace Assets.Scripts.Output
         public string RoundStatus { get; set; }
         public int TotalNumPasses { get; set; }
 
-        public float SpeedOfLoop { get; set; }
-        public float DelayTime { get; set; }
+        public float SpeedEachPass { get; set; }
+        public float SpawnDelayTime { get; set; }
 
         public bool DisplayScore { get; set; }
 
@@ -53,14 +53,14 @@ namespace Assets.Scripts.Output
         bool trialDone = false;
 
 
-        public void addPass(int num, bool didFire, bool hit, float fireTime, float totalPassTime)
+        public void addPass(int num, bool wasFired, bool hit, float projFireTime, float totalPassTime)
         {
             PassDataModel tempPassData = new PassDataModel();
 
             tempPassData.passID = num;
-            tempPassData.projectileFired = didFire;
+            tempPassData.wasFired = wasFired;
             tempPassData.hit = hit;
-            tempPassData.projFireTime = fireTime;
+            tempPassData.projFireTime = projFireTime;
             tempPassData.totalPassTime = totalPassTime;
 
             passList.Enqueue(tempPassData);
@@ -73,11 +73,11 @@ namespace Assets.Scripts.Output
             {
                 PassDataModel temp = passList.Dequeue();
                 
-                output += "(, " + temp.passID + ", ";
-                output += temp.projectileFired + ", ";
+                output += ", (, " + temp.passID + ", ";
+                output += temp.wasFired + ", ";
                 output += temp.hit + ", ";
                 output += temp.projFireTime + ", ";
-                output += temp.totalPassTime + "), ";
+                output += temp.totalPassTime + ")";
             }
             return output ;
         }

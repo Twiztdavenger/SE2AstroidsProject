@@ -18,7 +18,7 @@ namespace Assets.Scripts.Output
 
         public int passID { get; set; }
 
-        public bool projectileFired { get; set; }
+        public bool wasFired { get; set; }
         public bool hit { get; set; }
         public float projFireTime { get; set; }
         public float totalPassTime { get; set; }

@@ -42,7 +42,6 @@ public class TrialController : MonoBehaviour {
     public GameObject shipPrefab;
     public GameObject asteroidPrefab;
 
-    public bool asteroidDone = false;
     public bool trialStart = false;
 
     
@@ -175,14 +174,14 @@ public class TrialController : MonoBehaviour {
 
     }
 
-    public void trialPass(int passNum, bool hit, float totalPassTime)
+    public void trialPass(int passID, bool hit, float totalPassTime)
     {
-        bool fire = GameObject.FindWithTag("Ship").GetComponent<PlayerMovement>().didFire;
+        bool wasFired = GameObject.FindWithTag("Ship").GetComponent<PlayerMovement>().wasFired;
         float fireTime = GameObject.FindWithTag("Ship").GetComponent<PlayerMovement>().timeFired;
 
-        trialModel.addPass(passNum, fire, hit, fireTime, totalPassTime);
+        trialModel.addPass(passID, wasFired, hit, fireTime, totalPassTime);
 
-        GameObject.FindWithTag("Ship").GetComponent<PlayerMovement>().didFire = false;
+        GameObject.FindWithTag("Ship").GetComponent<PlayerMovement>().wasFired = false;
         //GameObject.FindWithTag("Ship").GetComponent<PlayerMovement>().timeFired = 0f;
 
         if (hit)
@@ -193,10 +192,9 @@ public class TrialController : MonoBehaviour {
             Destroy(GameObject.FindWithTag("Ship"));
             Destroy(GameObject.FindWithTag("Asteroid"));
 
-            asteroidDone = false;
+
 
             dataCollection();
-
         }
     }
 
@@ -217,7 +215,7 @@ public class TrialController : MonoBehaviour {
         // Output Format (for now):
         // TrialID, Passes, (PassID, If Proj Fired, If Proj Hit, ProjFireTime, PassTotalTime)
         output += trialModel.TrialID + ", ";
-        output += trialModel.TotalNumPasses + ", ";
+        output += trialModel.TotalNumPasses;
         output += trialModel.returnPassData();
 
 

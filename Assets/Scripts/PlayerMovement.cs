@@ -22,7 +22,7 @@ public class PlayerMovement : MonoBehaviour {
 
     // Projectile we will be firing
     public GameObject missilePrefab;
-    public bool didFire;
+    public bool wasFired;
     public float timeFired = 0f;
 
 	void Update () {
@@ -96,7 +96,7 @@ public class PlayerMovement : MonoBehaviour {
         // SHOOTING
 
         // If we are pressing a fire button and bool didFire was false
-        if(Input.GetButton("Fire1") && !didFire)
+        if(Input.GetButton("Fire1") && !wasFired)
         {
             missilePrefab.GetComponent<Projectile>().maxSpeed = projSpeed;
 
@@ -105,14 +105,8 @@ public class PlayerMovement : MonoBehaviour {
             var projectile = Instantiate(missilePrefab, transform.position + offset, transform.rotation);
 
             // DATA COLLECTION
-            didFire = true;
+            wasFired = true;
 
-        }
-
-        // DESTROY THIS SHIP IF ASTEROID IS DONE
-        if(gameObject.transform.parent.GetComponent<TrialController>().asteroidDone == true)
-        {
-            Destroy(gameObject);
         }
 
     }

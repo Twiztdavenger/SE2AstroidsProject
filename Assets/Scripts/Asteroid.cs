@@ -94,13 +94,17 @@ public class Asteroid : MonoBehaviour {
             gameObject.transform.parent.GetComponent<TrialController>()
                 .trialPass(numPasses, hit, passTimer);
             numPasses++;
+
+            // If asteroid reaches end of screen, it was not hit
             hit = false;
 
+            // Resets the time for the next pass
             passTimer = 0;
         }
         transform.position = pos;
     }
 
+    
     void OnTriggerEnter2D (Collider2D col) {
         // When we enter a collision with missile, destroy this asteroid
         if (col.gameObject.name == "missile(Clone)") {
@@ -112,8 +116,7 @@ public class Asteroid : MonoBehaviour {
     void finishAsteroid()
     {
         Destroy(gameObject);
-        // Sets bool of our parent trial's variable to true
-        gameObject.transform.parent.GetComponent<TrialController>().asteroidDone = true;
+
         gameObject.transform.parent.GetComponent<TrialController>().trialPass(numPasses, hit, Time.deltaTime * 60);
 
 
