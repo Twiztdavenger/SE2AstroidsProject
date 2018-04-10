@@ -29,9 +29,6 @@ public class TrialController : MonoBehaviour {
     ///         
     ///  trialPass():
     ///     Called from Asteroid Object
-    ///         
-    ///         
-    ///
 
     private const string XML_FILE_PATH = @"Assets/Data/Experiment.xml";
 
@@ -43,10 +40,6 @@ public class TrialController : MonoBehaviour {
     public GameObject asteroidPrefab;
 
     public bool trialStart = false;
-
-    
-
-
 
     // Use this for initialization
     void Start () {
@@ -192,8 +185,6 @@ public class TrialController : MonoBehaviour {
             Destroy(GameObject.FindWithTag("Ship"));
             Destroy(GameObject.FindWithTag("Asteroid"));
 
-
-
             dataCollection();
         }
     }
@@ -217,8 +208,6 @@ public class TrialController : MonoBehaviour {
         output += trialModel.TrialID + ", ";
         output += trialModel.TotalNumPasses;
         output += trialModel.returnPassData();
-
-
 
         Debug.Log(output);
     }
