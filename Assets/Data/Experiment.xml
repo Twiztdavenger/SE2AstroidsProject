@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <experiment>
-    <trial>
+    <trial name="Trial 1">
         <ship 
         canMove="false" 
         canRotate="false" 
@@ -14,7 +14,7 @@
           <spawn x="-5" y="1" z="0" />
         </asteroid>
     </trial>
-    <trial>
+    <trial name="Trial 2">
         <ship 
         canMove="false" 
         canRotate="false" 
@@ -29,7 +29,7 @@
             <spawn x="-5" y="1" z="0" />
         </asteroid>
     </trial>
-    <trial>
+    <trial name="Trial 3">
         <ship 
             canMove="false" 
             canRotate="false" 

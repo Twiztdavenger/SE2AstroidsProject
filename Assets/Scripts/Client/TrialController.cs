@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Assets.Scripts.Output;
 using System;
+using UnityEngine.SceneManagement;
 
 public class TrialController : MonoBehaviour {
     /// 
@@ -32,6 +33,7 @@ public class TrialController : MonoBehaviour {
 
     private const string XML_FILE_PATH = @"Assets/Data/Experiment.xml";
 
+    
     // list of data models to load the xml data into
     Queue<TrialDataModel> trialQueue = new Queue<TrialDataModel>();
     Queue<String> dataOutput = new Queue<String>();
@@ -39,11 +41,17 @@ public class TrialController : MonoBehaviour {
     public GameObject shipPrefab;
     public GameObject asteroidPrefab;
 
+    public GameObject MainMenu;
+
     public bool trialStart = false;
+    public bool end = false;
 
     // Use this for initialization
     void Start () {
-         
+
+        Button menuBtn = MainMenu.GetComponent<Button>();
+        menuBtn.onClick.AddListener(ClickMainMenu);
+
         try{
             int trialNumber = 1;
 
@@ -123,13 +131,13 @@ public class TrialController : MonoBehaviour {
 
     // Our current trial
     TrialDataModel trialModel = new TrialDataModel();
-
+    
 
     void Update () {
         try
         {
             // "Press Z to start trial"
-            if (Input.GetKeyDown(KeyCode.Z) && trialStart != true)
+            if (Input.GetKeyDown(KeyCode.Z) && trialStart != true && end == false)
             {
                 trialStart = true;
                 trialModel = trialQueue.Dequeue();
@@ -161,7 +169,13 @@ public class TrialController : MonoBehaviour {
             }
         } catch(Exception e)
         {
-            Debug.Log("There may be no more trials in the queue to load");
+            end = true;
+            GameObject canvasInstruction = gameObject.transform.GetChild(0).GetChild(1).gameObject;
+
+            canvasInstruction.transform.GetChild(1).GetComponent<Text>().text = "No More Trials";
+
+            MainMenu.SetActive(true);
+            
         }
         
 
@@ -189,7 +203,10 @@ public class TrialController : MonoBehaviour {
         }
     }
 
-
+    public void ClickMainMenu()
+    {
+        SceneManager.LoadScene("Menu");
+    }
 
     public void toggleInstructionState()
     {
