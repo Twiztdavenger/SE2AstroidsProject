@@ -172,7 +172,7 @@ public class TrialController : MonoBehaviour {
             end = true;
             GameObject canvasInstruction = gameObject.transform.GetChild(0).GetChild(1).gameObject;
 
-            canvasInstruction.transform.GetChild(1).GetComponent<Text>().text = "No More Trials";
+            //canvasInstruction.transform.GetChild(1).GetComponent<Text>().text = "No More Trials";
 
             MainMenu.SetActive(true);
             
