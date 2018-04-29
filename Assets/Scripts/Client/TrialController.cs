@@ -41,22 +41,17 @@ public class TrialController : MonoBehaviour {
     public GameObject shipPrefab;
     public GameObject asteroidPrefab;
 
-    public GameObject MainMenu;
-
     public bool trialStart = false;
     public bool end = false;
 
     // Use this for initialization
     void Start () {
 
-        Button menuBtn = MainMenu.GetComponent<Button>();
-        menuBtn.onClick.AddListener(ClickMainMenu);
-
         try{
             int trialNumber = 1;
-
+            
             var doc = new XmlDocument();
-            doc.Load(XML_FILE_PATH);
+            doc.LoadXml(xmlData.Data);
             XmlNodeList xmlTrials = doc.SelectNodes("/experiment/trial");
             foreach(XmlNode xmlTrial in xmlTrials)
             {
@@ -174,7 +169,7 @@ public class TrialController : MonoBehaviour {
 
             //canvasInstruction.transform.GetChild(1).GetComponent<Text>().text = "No More Trials";
 
-            MainMenu.SetActive(true);
+            //MainMenu.SetActive(true);
             
         }
         
