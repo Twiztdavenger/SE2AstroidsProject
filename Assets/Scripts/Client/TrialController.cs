@@ -41,12 +41,31 @@ public class TrialController : MonoBehaviour {
     public GameObject shipPrefab;
     public GameObject asteroidPrefab;
 
+    public GameObject endWindow;
+
+    public GameObject canvasText;
+
     public bool trialStart = false;
-    public bool end = false;
+    public bool endOfExperiment = false;
+
+    //BUTTONS FOR ENDTRIAL WINDOW
+    public Button MainMenu;
+    public Button Restart;
 
     // Use this for initialization
     void Start () {
         trialQueue = xmlData.TrialQueue;
+        endWindow.SetActive(false);
+
+        Button btn = MainMenu.GetComponent<Button>();
+        btn.onClick.AddListener(GoToMainMenu);
+
+        btn = Restart.GetComponent<Button>();
+        btn.onClick.AddListener(restartTrials);
+
+        trialStart = false;
+        endOfExperiment = false;
+
     }
 
     // Our current trial
@@ -56,13 +75,23 @@ public class TrialController : MonoBehaviour {
     void Update () {
         try
         {
-            
+            if(trialQueue.Count == 0 && !endOfExperiment && !trialStart)
+            {
+                endOfExperiment = true;
+                trialStart = false;
+                changeCanvasText("RESET");
+
+                endWindow.SetActive(true);
+                Debug.Log(outputData.getTrialOutput());
+
+            }
             // "Press Z to start trial"
-            if (Input.GetKeyDown(KeyCode.Z) && trialStart != true && end == false)
+            else if (Input.GetKeyDown(KeyCode.Z) == true && !trialStart && !endOfExperiment)
             {
                 trialStart = true;
                 trialModel = trialQueue.Dequeue();
-                toggleInstructionState();
+
+                changeCanvasText("RESET");
 
                 // Load Asteroid 
                 asteroidPrefab.GetComponent<Asteroid>().rotation = true;
@@ -90,11 +119,9 @@ public class TrialController : MonoBehaviour {
             }
         } catch(Exception e)
         {
-            end = true;
-            GameObject canvasInstruction = gameObject.transform.GetChild(0).GetChild(1).gameObject;
-
             Debug.Log(outputData.getTrialOutput());
 
+            Debug.Log(e);
         }
         
 
@@ -110,10 +137,12 @@ public class TrialController : MonoBehaviour {
         GameObject.FindWithTag("Ship").GetComponent<PlayerMovement>().wasFired = false;
         //GameObject.FindWithTag("Ship").GetComponent<PlayerMovement>().timeFired = 0f;
 
+        
+
         if (hit)
         {
+            changeCanvasText("PRETRIAL");
             trialStart = false;
-            toggleInstructionState();
 
             Destroy(GameObject.FindWithTag("Ship"));
             Destroy(GameObject.FindWithTag("Asteroid"));
@@ -127,11 +156,40 @@ public class TrialController : MonoBehaviour {
         SceneManager.LoadScene("Menu");
     }
 
-    public void toggleInstructionState()
+    public void changeCanvasText(string gameState)
     {
-        GameObject canvasInstruction = gameObject.transform.GetChild(0).GetChild(1).gameObject;
+        string content = "";
 
-        canvasInstruction.SetActive(!canvasInstruction.activeSelf);
+        switch(gameState)
+        {
+            case "PRETRIAL":
+                content = "Press 'Z' to Start Trial";
+                break;
+            case "MISS":
+                content = "Miss!";
+                break;
+            case "HIT":
+                content = "You Did It!";
+                break;
+            case "END":
+                content = "End of Trials";
+                break;
+            case "RESET":
+                content = "";
+                break;
+        }
+
+        canvasText.GetComponent<Text>().text = content;
+    }
+
+    public void GoToMainMenu()
+    {
+        SceneManager.LoadScene("Menu");
+    }
+
+    public void restartTrials()
+    {
+        SceneManager.LoadScene("Client");
     }
 
     // Builds the strings to send to the .CSV file
