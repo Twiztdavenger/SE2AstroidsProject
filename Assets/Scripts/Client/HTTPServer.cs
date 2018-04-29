@@ -28,26 +28,32 @@ public class HTTPServer : MonoBehaviour {
         var doc = new XmlDocument();
         doc.Load(XML_FILE_PATH);
 
-        UnityWebRequest www = UnityWebRequest.Post("http://astralqueen.bw.edu/hci/experimentData.php", "XMLContentTest");
-        yield return www.SendWebRequest();
+        string xml = doc.OuterXml;
 
-        if (www.isNetworkError || www.isHttpError)
-        {
-            Debug.Log(www.error);
-        }
-        else
-        {
-            // Show results as text
-            //Debug.Log(www.downloadHandler.text);
-            //Debug.Log(www.ToString());
+        string url = "http://astralqueen.bw.edu/hci/experimentData.php";
 
-            // Or retrieve results as binary data
-            byte[] results = www.downloadHandler.data;
+        WWWForm form = new WWWForm();
+        form.AddField("XMLData", "xml=" + xml);
+
+        using (var w = UnityWebRequest.Post(url, form))
+        {
+            yield return w.SendWebRequest();
+            if (w.isNetworkError || w.isHttpError)
+            {
+                print(w.error);
+            }
+            else
+            {
+                print("Finished Uploading XML");
+            }
         }
+
+
     }
 
     IEnumerator GetText()
     {
+        Debug.Log("Recieving HTTP Request");
         UnityWebRequest www = UnityWebRequest.Get("http://astralqueen.bw.edu/hci/experimentData.php");
         yield return www.SendWebRequest();
 
@@ -58,12 +64,13 @@ public class HTTPServer : MonoBehaviour {
         else
         {
             // Show results as text
+            Debug.Log("Results:");
             Debug.Log(www.downloadHandler.text);
             //Debug.Log(www.downloadHandler.text);
-            Debug.Log(www.ToString());
+            //Debug.Log(www.ToString());
 
             // Or retrieve results as binary data
-            byte[] results = www.downloadHandler.data;
+            //byte[] results = www.downloadHandler.data;
         }
     }
 }
