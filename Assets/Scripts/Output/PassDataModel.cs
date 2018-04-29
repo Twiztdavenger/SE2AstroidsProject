@@ -13,7 +13,7 @@ namespace Assets.Scripts.Output
     /// -Positions of both the projectile and the asteroid when 
     ///     distance between the two is at a minimum 
     /// </summary>
-    class PassDataModel 
+    public class PassDataModel 
     {
 
         public int passID { get; set; }

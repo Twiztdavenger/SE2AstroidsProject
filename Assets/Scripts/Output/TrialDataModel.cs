@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Assets.Scripts.Output
 {
 
-    class TrialDataModel 
+    public class TrialDataModel 
     {
         /// <summary>
         /// DataOutput Specs for Trial Data:
@@ -22,6 +22,8 @@ namespace Assets.Scripts.Output
         ///     into the scene and grab data from it (Do we control trial object HERE or in trialController?)
         /// </summary>
         public Queue<PassDataModel> passList = new Queue<PassDataModel>();
+
+        
 
 
         public int TrialID { get; set; }
@@ -53,6 +55,8 @@ namespace Assets.Scripts.Output
         bool trialDone = false;
 
 
+
+
         public void addPass(int num, bool wasFired, bool hit, float projFireTime, float totalPassTime)
         {
             PassDataModel tempPassData = new PassDataModel();
@@ -73,10 +77,10 @@ namespace Assets.Scripts.Output
             {
                 PassDataModel temp = passList.Dequeue();
                 
-                output += ", (, " + temp.passID + ", ";
-                output += temp.wasFired + ", ";
-                output += temp.hit + ", ";
-                output += temp.projFireTime + ", ";
+                output += "; (" + temp.passID + "; ";
+                output += temp.wasFired + "; ";
+                output += temp.hit + "; ";
+                output += temp.projFireTime + "; ";
                 output += temp.totalPassTime + ")";
             }
             return output ;

@@ -1,19 +1,20 @@
-﻿using System.Collections;
+﻿using Assets.Scripts.Output;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public static class xmlData  {
-    public static string data;
+    public static Queue<TrialDataModel> trialQueue = new Queue<TrialDataModel>();
 
-    public static string Data
+    public static Queue<TrialDataModel> TrialQueue
     {
         get
         {
-            return data;
+            return trialQueue;
         }
         set
         {
-            data = value;
+            trialQueue = value;
         }
     }
 
