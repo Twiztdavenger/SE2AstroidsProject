@@ -24,10 +24,11 @@ public class TrialMenu : MonoBehaviour {
     // Use this for initialization
     void Start () {
         //Button for LoadData
+        /*
         Button btn = loadData.GetComponent<Button>();
-        btn.onClick.AddListener(LoadXML);
+        btn.onClick.AddListener(LoadXML);*/
 
-        btn = startExperiment.GetComponent<Button>();
+        Button btn = startExperiment.GetComponent<Button>();
         btn.onClick.AddListener(StartExperiment);
 
     }
