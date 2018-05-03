@@ -68,10 +68,6 @@ public class TrialController : MonoBehaviour {
         endOfExperiment = false;
 
         trialText.GetComponent<Text>().text = "Trial " + trialQueue.Count.ToString();
-
-        int width = Screen.width;
-        Camera.main.aspect = width / Screen.height;
-
     }
 
     // Our current trial
@@ -133,8 +129,6 @@ public class TrialController : MonoBehaviour {
 
             Debug.Log(e);
         }
-        
-
     }
 
     public void trialPass(int passID, bool hit, float totalPassTime)

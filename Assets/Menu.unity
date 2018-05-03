@@ -994,7 +994,7 @@ Prefab:
         type: 2}
       propertyPath: trialsText
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 481455179}
     - target: {fileID: 114922241059981942, guid: c6da86d523ad1ba4c86f2eee26328562,
         type: 2}
       propertyPath: loadData
@@ -1005,6 +1005,11 @@ Prefab:
       propertyPath: startExperiment
       value: 
       objectReference: {fileID: 2096884196}
+    - target: {fileID: 114922241059981942, guid: c6da86d523ad1ba4c86f2eee26328562,
+        type: 2}
+      propertyPath: httpServer
+      value: 
+      objectReference: {fileID: 31041363}
     m_RemovedComponents:
     - {fileID: 114494450268372168, guid: c6da86d523ad1ba4c86f2eee26328562, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: c6da86d523ad1ba4c86f2eee26328562, type: 2}

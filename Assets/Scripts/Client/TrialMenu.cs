@@ -8,21 +8,28 @@ using Assets.Scripts.Output;
 using System;
 using UnityEngine.SceneManagement;
 
-public class TrialMenu : MonoBehaviour {
+public class TrialMenu : MonoBehaviour
+{
 
     private const string XML_FILE_PATH = @"Assets/Data/Experiment.xml";
 
     // list of data models to load the xml data into
     Queue<TrialDataModel> trialQueue = new Queue<TrialDataModel>();
 
-    public Text trialsText;
     private String trialsContent = "";
+
+    public GameObject trialsText;
 
     public Button loadData;
     public Button startExperiment;
 
+    public GameObject httpServer;
+
+    //public Button;
+
     // Use this for initialization
-    void Start () {
+    void Start()
+    {
         //Button for LoadData
         /*
         Button btn = loadData.GetComponent<Button>();
@@ -30,7 +37,6 @@ public class TrialMenu : MonoBehaviour {
 
         Button btn = startExperiment.GetComponent<Button>();
         btn.onClick.AddListener(StartExperiment);
-
     }
 
     void LoadXML()
@@ -56,16 +62,24 @@ public class TrialMenu : MonoBehaviour {
             Debug.Log(e.GetType().ToString() + e.Message);
         }
 
-        trialsText.text = trialsContent;
+        trialsText.GetComponent<Text>().text = trialsContent;
     }
 
     void StartExperiment()
     {
-        SceneManager.LoadScene("Client");
+        int accessCode;
+        if (int.TryParse(trialsText.GetComponent<Text>().text, out accessCode))
+        {
+            StartCoroutine(httpServer.GetComponent<HTTPServer>().GetText(accessCode, () => {
+                SceneManager.LoadScene("Client");
+            }));
+            //Debug.Log("Data for Access code: " + accessCode + response.ToString());
+        }
     }
 
     // Update is called once per frame
-    void Update () {
-		
-	}
+    void Update()
+    {
+
+    }
 }

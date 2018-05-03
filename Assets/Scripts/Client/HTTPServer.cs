@@ -7,21 +7,22 @@ using UnityEngine.Networking;
 using Assets.Scripts.Output;
 using System;
 
-public class HTTPServer : MonoBehaviour {
-
+public class HTTPServer : MonoBehaviour
+{
     private const string XML_FILE_PATH = @"Assets/Data/Experiment.xml";
 
     Queue<TrialDataModel> trialQueue = new Queue<TrialDataModel>();
 
     // Use this for initialization
-    void Start () {
-        StartCoroutine(GetText());
+    void Start()
+    {
+
     }
 
-    IEnumerator GetText()
+    public IEnumerator GetText(int accessCode, Action callback)
     {
         Debug.Log("Recieving HTTP Request");
-        UnityWebRequest www = UnityWebRequest.Get("http://astralqueen.bw.edu/hci/experimentData.php?id=861");
+        UnityWebRequest www = UnityWebRequest.Get("http://astralqueen.bw.edu/hci/experimentData.php?id=" + accessCode);
         yield return www.SendWebRequest();
 
         if (www.isNetworkError || www.isHttpError)
@@ -30,7 +31,10 @@ public class HTTPServer : MonoBehaviour {
         }
         else
         {
+            trialQueue = new Queue<TrialDataModel>();
+            Debug.Log(www.downloadHandler.text);
             parseXML(www.downloadHandler.text);
+            callback.Invoke();
         }
     }
 
