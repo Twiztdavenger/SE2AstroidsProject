@@ -44,6 +44,7 @@ public class TrialController : MonoBehaviour {
     public GameObject endWindow;
 
     public GameObject canvasText;
+    public GameObject trialText;
 
     public bool trialStart = false;
     public bool endOfExperiment = false;
@@ -65,6 +66,8 @@ public class TrialController : MonoBehaviour {
 
         trialStart = false;
         endOfExperiment = false;
+
+        trialText.GetComponent<Text>().text = "Trial " + trialQueue.Count.ToString();
 
     }
 
@@ -91,6 +94,8 @@ public class TrialController : MonoBehaviour {
                 trialStart = true;
                 trialModel = trialQueue.Dequeue();
 
+                
+
                 changeCanvasText("RESET");
 
                 // Load Asteroid 
@@ -116,6 +121,8 @@ public class TrialController : MonoBehaviour {
 
                 var createShip = Instantiate(shipPrefab, shipSpawnVector, transform.rotation);
                 createShip.transform.parent = gameObject.transform;
+
+
             }
         } catch(Exception e)
         {
@@ -137,6 +144,7 @@ public class TrialController : MonoBehaviour {
         GameObject.FindWithTag("Ship").GetComponent<PlayerMovement>().wasFired = false;
         //GameObject.FindWithTag("Ship").GetComponent<PlayerMovement>().timeFired = 0f;
 
+
         
 
         if (hit)
@@ -146,6 +154,8 @@ public class TrialController : MonoBehaviour {
 
             Destroy(GameObject.FindWithTag("Ship"));
             Destroy(GameObject.FindWithTag("Asteroid"));
+
+            trialText.GetComponent<Text>().text = "Trial " + trialQueue.Count;
 
             dataCollection();
         }
