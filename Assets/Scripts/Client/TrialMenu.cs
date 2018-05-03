@@ -20,10 +20,11 @@ public class TrialMenu : MonoBehaviour
 
     public GameObject trialsText;
 
-    public Button loadData;
     public Button startExperiment;
+    public Button quit;
 
     public GameObject httpServer;
+    
 
     //public Button;
 
@@ -31,11 +32,11 @@ public class TrialMenu : MonoBehaviour
     void Start()
     {
         //Button for LoadData
-        /*
-        Button btn = loadData.GetComponent<Button>();
-        btn.onClick.AddListener(LoadXML);*/
 
-        Button btn = startExperiment.GetComponent<Button>();
+        Button btn = quit.GetComponent<Button>();
+        btn.onClick.AddListener(QuitExperiment);
+
+        btn = startExperiment.GetComponent<Button>();
         btn.onClick.AddListener(StartExperiment);
     }
 
@@ -76,10 +77,9 @@ public class TrialMenu : MonoBehaviour
             //Debug.Log("Data for Access code: " + accessCode + response.ToString());
         }
     }
-
-    // Update is called once per frame
-    void Update()
+    
+    void QuitExperiment()
     {
-
+        Application.Quit();
     }
 }

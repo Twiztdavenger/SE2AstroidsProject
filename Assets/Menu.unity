@@ -437,7 +437,7 @@ MonoBehaviour:
   m_Script: {fileID: 1980459831, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 800, y: 600}
@@ -1010,6 +1010,11 @@ Prefab:
       propertyPath: httpServer
       value: 
       objectReference: {fileID: 31041363}
+    - target: {fileID: 114922241059981942, guid: c6da86d523ad1ba4c86f2eee26328562,
+        type: 2}
+      propertyPath: quit
+      value: 
+      objectReference: {fileID: 1431034084}
     m_RemovedComponents:
     - {fileID: 114494450268372168, guid: c6da86d523ad1ba4c86f2eee26328562, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: c6da86d523ad1ba4c86f2eee26328562, type: 2}

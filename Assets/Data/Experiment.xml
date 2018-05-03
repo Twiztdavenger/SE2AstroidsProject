@@ -6,7 +6,7 @@
         canRotate="false" 
         moveSpeed="1.0" 
         rotationSpeed="1.0">
-            <spawn x="0" y="-2.3" z="0" />
+            <spawn x="0" y="-2.15" z="0" />
         </ship>
         <asteroid movementX="4.0" 
                   movementY="0.0" 
@@ -20,7 +20,7 @@
         canRotate="false" 
         moveSpeed="1.0" 
         rotationSpeed="1.0">
-            <spawn x="0" y="-2.2" z="0" />
+            <spawn x="0" y="-2.15" z="0" />
         </ship>
         <asteroid 
         movementX="1.5" 
@@ -35,7 +35,7 @@
             canRotate="false" 
             moveSpeed="1.0" 
             rotationSpeed="1.0">
-            <spawn x="0" y="-2.1" z="0" />
+            <spawn x="0" y="-2.15" z="0" />
         </ship>
         <asteroid 
         movementX="4" 

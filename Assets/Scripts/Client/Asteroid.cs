@@ -65,6 +65,8 @@ public class Asteroid : MonoBehaviour {
 
     public float passTimer = 0f;
 
+    public Vector3 spawnPoint;
+
     void Update () {
 
         passTimer += Time.deltaTime;
@@ -88,8 +90,20 @@ public class Asteroid : MonoBehaviour {
         float widthOrtho = Camera.main.orthographicSize * screenRatio;
 
         if (pos.x - 1f > widthOrtho) {
-            pos.x = -widthOrtho - 1f;
+            pos = spawnPoint;
+            // START NEW PASS FOR DATA COLLECTION
+            gameObject.transform.parent.GetComponent<TrialController>()
+                .trialPass(numPasses, hit, passTimer);
+            numPasses++;
 
+            // If asteroid reaches end of screen, it was not hit
+            hit = false;
+
+            // Resets the time for the next pass
+            passTimer = 0;
+        } else if(pos.y - 1f > Camera.main.orthographicSize)
+        {
+            pos = spawnPoint;
             // START NEW PASS FOR DATA COLLECTION
             gameObject.transform.parent.GetComponent<TrialController>()
                 .trialPass(numPasses, hit, passTimer);
@@ -101,6 +115,7 @@ public class Asteroid : MonoBehaviour {
             // Resets the time for the next pass
             passTimer = 0;
         }
+
         transform.position = pos;
     }
 
