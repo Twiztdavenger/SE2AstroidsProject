@@ -69,6 +69,9 @@ public class TrialController : MonoBehaviour {
 
         trialText.GetComponent<Text>().text = "Trial " + trialQueue.Count.ToString();
 
+        int width = Screen.width;
+        Camera.main.aspect = width / Screen.height;
+
     }
 
     // Our current trial
