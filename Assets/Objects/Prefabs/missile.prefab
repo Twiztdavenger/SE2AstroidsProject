@@ -100,6 +100,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxSpeed: 5
+  asteroid: {fileID: 1659785828572672, guid: 7ea208e93106ff646bb259504240fe90, type: 2}
+  distance: 10000
 --- !u!212 &212734744896023012
 SpriteRenderer:
   m_ObjectHideFlags: 1

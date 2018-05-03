@@ -72,7 +72,14 @@ public class TrialMenu : MonoBehaviour
         if (int.TryParse(trialsText.GetComponent<Text>().text, out accessCode))
         {
             StartCoroutine(httpServer.GetComponent<HTTPServer>().GetText(accessCode, () => {
-                SceneManager.LoadScene("Client");
+                if(httpServer.GetComponent<HTTPServer>().invalidAccessCode == false)
+                {
+                    SceneManager.LoadScene("Client");
+                } else
+                {
+                    Debug.Log("That was an invalid access code");
+                }
+                
             }));
             //Debug.Log("Data for Access code: " + accessCode + response.ToString());
         }

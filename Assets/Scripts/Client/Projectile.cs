@@ -6,7 +6,14 @@ public class Projectile : MonoBehaviour {
 
     public float maxSpeed = 5f;
     float timer = 1.5f;
-	void Start () {
+
+    public GameObject asteroid;
+
+
+    public float distance = 10000f;
+    float tempDistance;
+
+    void Start () {
         // This destroys the projectile after 'timer' amount of seconds
         Destroy(gameObject, timer);
 	}
@@ -23,7 +30,24 @@ public class Projectile : MonoBehaviour {
 
         transform.position = pos;
 
-        
+        tempDistance = Vector3.Distance(transform.position, asteroid.transform.position);
+
+        if(tempDistance < distance)
+        {
+            distance = tempDistance;
+            Debug.Log(distance);
+        }
+        /*
+
+        BoxCollider boxColProj = gameObject.GetComponent<BoxCollider>();
+        Vector3 centerBoxProj = boxColProj.ClosestPointOnBounds(asteroid.transform.position);
+
+        BoxCollider boxColAsteroid = asteroid.GetComponent<BoxCollider>();
+        Vector3 centerBoxAst = boxColAsteroid.ClosestPointOnBounds(gameObject.transform.position);
+
+        lineRenderer.SetPosition(0, centerBoxStart);
+        lineRenderer.SetPosition(1, centerBoxEnd);*/
+
     }
 
     void OnTriggerEnter2D()
@@ -32,6 +56,11 @@ public class Projectile : MonoBehaviour {
         Destroy(gameObject);
     }
 
-	// Update is called once per frame
-	
+    private void OnDestroy()
+    {
+        Debug.Log(distance);
+    }
+
+    // Update is called once per frame
+
 }
