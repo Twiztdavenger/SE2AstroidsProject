@@ -9,13 +9,17 @@ public class CameraResetAspectRatio : MonoBehaviour {
         // set the desired aspect ratio (the values in this example are
         // hard-coded for 16:9, but you could make them into public
         // variables instead so you can set them at design time)
-        float targetaspect = 16.0f / 9.0f;
+        float targetaspect = 3.0f / 2.0f;
 
         // determine the game window's current aspect ratio
         float windowaspect = (float)Screen.width / (float)Screen.height;
 
         // current viewport height should be scaled by this amount
         float scaleheight = windowaspect / targetaspect;
+
+        Debug.Log(scaleheight);
+        Debug.Log(Screen.width);
+        Debug.Log(Screen.height);
 
         // obtain camera component so we can modify its viewport
         Camera camera = GetComponent<Camera>();
@@ -45,6 +49,8 @@ public class CameraResetAspectRatio : MonoBehaviour {
 
             camera.rect = rect;
         }
+
+        
     }
 
 }
