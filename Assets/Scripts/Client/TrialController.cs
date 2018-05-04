@@ -135,11 +135,14 @@ public class TrialController : MonoBehaviour {
         bool wasFired = GameObject.FindWithTag("Ship").GetComponent<PlayerMovement>().wasFired;
         float fireTime = GameObject.FindWithTag("Ship").GetComponent<PlayerMovement>().timeFired;
 
-        float pX = minProjCoordinates.x;
-        float pY = minProjCoordinates.x;
+        Debug.Log(DistanceInfo.projMinX);
+        Debug.Log(DistanceInfo.projMinY);
 
-        float aX = minProjCoordinates.x;
-        float aY = minProjCoordinates.x;
+        float pX = DistanceInfo.projMinX;
+        float pY = DistanceInfo.projMinY;
+
+        float aX = DistanceInfo.astMinX;
+        float aY = DistanceInfo.astMinY;
 
         trialModel.addPass(passID, wasFired, hit, fireTime, totalPassTime, pX, pY, aX, aY);
 
@@ -157,7 +160,7 @@ public class TrialController : MonoBehaviour {
             Destroy(GameObject.FindWithTag("Ship"));
             Destroy(GameObject.FindWithTag("Asteroid"));
 
-            trialText.GetComponent<Text>().text = "Trial " + trialQueue.Count;
+            trialText.GetComponent<Text>().text = trialModel.trialName;
 
             dataCollection();
         }
@@ -214,8 +217,8 @@ public class TrialController : MonoBehaviour {
     {
         OutputTrialModel tempOutputModel = new OutputTrialModel();
 
-        tempOutputModel.TrialID = trialModel.TrialID;
-        tempOutputModel.ExperimentName = "Test Name";
+        tempOutputModel.trialName = trialModel.trialName;
+        tempOutputModel.ExperimentName = "Experiment Data";
         tempOutputModel.PracticeRound = false;
         tempOutputModel.TotalNumPasses = trialModel.TotalNumPasses;
         tempOutputModel.DelayTime = trialModel.SpawnDelayTime;

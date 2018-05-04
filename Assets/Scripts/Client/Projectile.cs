@@ -26,7 +26,13 @@ public class Projectile : MonoBehaviour {
         // This destroys the projectile after 'timer' amount of seconds
         Destroy(gameObject, timer);
 
-	}
+        DistanceInfo.projMinX = 0f;
+        DistanceInfo.projMinY = 0f;
+
+        DistanceInfo.astMinX = 0f;
+        DistanceInfo.astMinY = 0f;
+
+    }
 
     void Update()
     {
@@ -53,14 +59,20 @@ public class Projectile : MonoBehaviour {
 
     void OnTriggerEnter2D()
     {
+        GameObject.FindGameObjectWithTag("TrialController").GetComponent<TrialController>().LogCoord(projCloseCoordinates, astCloseCoordinates);
+
+        DistanceInfo.projMinX = projCloseCoordinates.x;
+        DistanceInfo.projMinY = projCloseCoordinates.y;
+
+        DistanceInfo.astMinX = astCloseCoordinates.x;
+        DistanceInfo.astMinY = astCloseCoordinates.y;
         // When we enter a collision (astroid), destroy this projectile
         Destroy(gameObject);
     }
 
     private void OnDestroy()
     {
-        GameObject.FindGameObjectWithTag("TrialController").GetComponent<TrialController>().LogCoord(projCloseCoordinates, astCloseCoordinates);
-
+        
     }
 
     // Update is called once per frame

@@ -101,7 +101,7 @@ public class PlayerMovement : MonoBehaviour {
             missilePrefab.GetComponent<Projectile>().maxSpeed = projSpeed;
 
             // Set a spawn point to our objects rotation * .35 pixels above our origin point
-            Vector3 offset = transform.rotation * new Vector3(0, .55f, 0);
+            Vector3 offset = transform.rotation * new Vector3(0, .70f, 0);
             var projectile = Instantiate(missilePrefab, transform.position + offset, transform.rotation);
 
             // DATA COLLECTION
