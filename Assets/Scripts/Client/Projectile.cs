@@ -14,12 +14,14 @@ public class Projectile : MonoBehaviour {
     public GameObject asteroid;
     public GameObject thisProjectile;
 
-    Collider2D projColl;
-    Collider2D astColl;
+    public GameObject trialController;
+
+    private Vector2 projCloseCoordinates = new Vector2();
+    private Vector2 astCloseCoordinates = new Vector2();
+
 
     void Start () {
-        projColl = thisProjectile.GetComponent<BoxCollider2D>();
-        astColl = asteroid.GetComponent<BoxCollider2D>();
+        
 
         // This destroys the projectile after 'timer' amount of seconds
         Destroy(gameObject, timer);
@@ -28,7 +30,6 @@ public class Projectile : MonoBehaviour {
 
     void Update()
     {
-
         // This basically moves our projectile forward at speed maxSpeed
         Vector3 pos = transform.position;
 
@@ -37,16 +38,17 @@ public class Projectile : MonoBehaviour {
         pos += transform.rotation * velocity;
 
         transform.position = pos;
-        tempDistance = projColl.Distance(astColl).distance;
 
-        Debug.Log(projColl.Distance(astColl).isValid);
+        tempDistance = Vector2.Distance(asteroid.transform.position, transform.position);
 
         if(tempDistance < distance)
         {
             distance = tempDistance;
-            Debug.Log(distance);
+
+            projCloseCoordinates = transform.position;
+            astCloseCoordinates = GameObject.FindGameObjectWithTag("Asteroid").transform.position;
         }
-        
+       
     }
 
     void OnTriggerEnter2D()
@@ -57,7 +59,8 @@ public class Projectile : MonoBehaviour {
 
     private void OnDestroy()
     {
-        Debug.Log(distance);
+        GameObject.FindGameObjectWithTag("TrialController").GetComponent<TrialController>().LogCoord(projCloseCoordinates, astCloseCoordinates);
+
     }
 
     // Update is called once per frame

@@ -13,7 +13,7 @@ namespace Assets.Scripts.Output
         /// -If round was practice or real round
         /// -Total number of passes allowed
         /// -Speed of loop
-        /// -Delay Time (if experimenter decides to choose one
+        /// -Delay Time (if experimenter decides to choose one)
         /// -Whether or not Experimenter wants to display score
         /// -Relevant Ship Data
         /// -Relevant Asteroid Data
@@ -57,7 +57,7 @@ namespace Assets.Scripts.Output
 
 
 
-        public void addPass(int num, bool wasFired, bool hit, float projFireTime, float totalPassTime)
+        public void addPass(int num, bool wasFired, bool hit, float projFireTime, float totalPassTime, float minProjX, float minProjY, float minAstX, float minAstY)
         {
             PassDataModel tempPassData = new PassDataModel();
 
@@ -66,6 +66,12 @@ namespace Assets.Scripts.Output
             tempPassData.hit = hit;
             tempPassData.projFireTime = projFireTime;
             tempPassData.totalPassTime = totalPassTime;
+
+            tempPassData.minProjCoordX = minProjX;
+            tempPassData.minProjCoordY = minProjY;
+
+            tempPassData.minAsCoordX = minAstX;
+            tempPassData.minAsCoordY = minAstY;
 
             passList.Enqueue(tempPassData);
         }
@@ -77,13 +83,18 @@ namespace Assets.Scripts.Output
             {
                 PassDataModel temp = passList.Dequeue();
                 
-                output += "; (" + temp.passID + "; ";
+                output += "(" + temp.passID + "; ";
                 output += temp.wasFired + "; ";
                 output += temp.hit + "; ";
                 output += temp.projFireTime + "; ";
-                output += temp.totalPassTime + ")";
+                output += temp.projFireTime + "; ";
+                output += temp.totalPassTime + "; ";
+                output += temp.minProjCoordX + "; ";
+                output += temp.minProjCoordY + "; ";
+                output += temp.minAsCoordX + "; ";
+                output += temp.minAsCoordY + ")";
             }
-            return output ;
+            return output;
         }
     }
 }

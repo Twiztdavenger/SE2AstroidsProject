@@ -21,8 +21,8 @@ GameObject:
   - component: {fileID: 4702204234134170}
   - component: {fileID: 212734744896023012}
   - component: {fileID: 50013121593918270}
-  - component: {fileID: 61648316769539760}
   - component: {fileID: 114729271465257946}
+  - component: {fileID: 61045594676257390}
   m_Layer: 0
   m_Name: missile
   m_TagString: Untagged
@@ -37,7 +37,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1701654778135870}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.006, y: -0.581, z: 0}
+  m_LocalPosition: {x: -5.472914, y: -0.2571754, z: 0}
   m_LocalScale: {x: 0.06, y: 0.06, z: 0.05}
   m_Children: []
   m_Father: {fileID: 0}
@@ -63,7 +63,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!61 &61648316769539760
+--- !u!61 &61045594676257390
 BoxCollider2D:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -103,6 +103,8 @@ MonoBehaviour:
   distance: 10000
   asteroid: {fileID: 1659785828572672, guid: 7ea208e93106ff646bb259504240fe90, type: 2}
   thisProjectile: {fileID: 1701654778135870}
+  trialController: {fileID: 1852379855389894, guid: f199e974c5482c44683a059987d5dd74,
+    type: 2}
 --- !u!212 &212734744896023012
 SpriteRenderer:
   m_ObjectHideFlags: 1

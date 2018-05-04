@@ -36,7 +36,7 @@ public class TrialController : MonoBehaviour {
 
     // list of data models to load the xml data into
     Queue<TrialDataModel> trialQueue = new Queue<TrialDataModel>();
-    Queue<String> dataOutput = new Queue<String>();
+    Queue<String> dataOutputQueue = new Queue<String>();
 
     public GameObject shipPrefab;
     public GameObject asteroidPrefab;
@@ -52,6 +52,9 @@ public class TrialController : MonoBehaviour {
     //BUTTONS FOR ENDTRIAL WINDOW
     public Button MainMenu;
     public Button Restart;
+
+    public Vector2 minProjCoordinates = new Vector2();
+    public Vector2 minAstCoordinates = new Vector2();
 
     // Use this for initialization
     void Start () {
@@ -84,7 +87,8 @@ public class TrialController : MonoBehaviour {
                 changeCanvasText("RESET");
 
                 endWindow.SetActive(true);
-                Debug.Log(outputData.getTrialOutput());
+
+                outputData.getTrialOutput();
 
             }
             // "Press Z to start trial"
@@ -92,8 +96,6 @@ public class TrialController : MonoBehaviour {
             {
                 trialStart = true;
                 trialModel = trialQueue.Dequeue();
-
-                
 
                 changeCanvasText("RESET");
 
@@ -121,13 +123,9 @@ public class TrialController : MonoBehaviour {
 
                 var createShip = Instantiate(shipPrefab, shipSpawnVector, transform.rotation);
                 createShip.transform.parent = gameObject.transform;
-
-
             }
         } catch(Exception e)
         {
-            Debug.Log(outputData.getTrialOutput());
-
             Debug.Log(e);
         }
     }
@@ -137,13 +135,19 @@ public class TrialController : MonoBehaviour {
         bool wasFired = GameObject.FindWithTag("Ship").GetComponent<PlayerMovement>().wasFired;
         float fireTime = GameObject.FindWithTag("Ship").GetComponent<PlayerMovement>().timeFired;
 
-        trialModel.addPass(passID, wasFired, hit, fireTime, totalPassTime);
+        float pX = minProjCoordinates.x;
+        float pY = minProjCoordinates.x;
+
+        float aX = minProjCoordinates.x;
+        float aY = minProjCoordinates.x;
+
+        trialModel.addPass(passID, wasFired, hit, fireTime, totalPassTime, pX, pY, aX, aY);
+
+        minProjCoordinates = Vector2.zero;
+        minAstCoordinates = Vector2.zero;
 
         GameObject.FindWithTag("Ship").GetComponent<PlayerMovement>().wasFired = false;
-        //GameObject.FindWithTag("Ship").GetComponent<PlayerMovement>().timeFired = 0f;
-
-
-        
+        GameObject.FindWithTag("Ship").GetComponent<PlayerMovement>().timeFired = 0f;
 
         if (hit)
         {
@@ -200,21 +204,31 @@ public class TrialController : MonoBehaviour {
         SceneManager.LoadScene("Client");
     }
 
+    public void LogCoord(Vector2 minProj, Vector2 minAst)
+    {
+        minProjCoordinates = minProj;
+        minAstCoordinates = minAst;
+    }
     // Builds the strings to send to the .CSV file
     void dataCollection()
     {
-        String output = "";
+        OutputTrialModel tempOutputModel = new OutputTrialModel();
 
-        // Output Format (for now):
-        // TrialID, Passes, (PassID, If Proj Fired, If Proj Hit, ProjFireTime, PassTotalTime)
-        output += trialModel.TrialID + ", ";
-        output += trialModel.TotalNumPasses;
-        output += trialModel.returnPassData();
+        tempOutputModel.TrialID = trialModel.TrialID;
+        tempOutputModel.ExperimentName = "Test Name";
+        tempOutputModel.PracticeRound = false;
+        tempOutputModel.TotalNumPasses = trialModel.TotalNumPasses;
+        tempOutputModel.DelayTime = trialModel.SpawnDelayTime;
 
-        outputData.finTrialQueue.Enqueue(trialModel);
+        string passData = trialModel.returnPassData();
 
-        Debug.Log(output);
+        tempOutputModel.passData = passData;
+
+
+        outputData.OutputTrialQueue.Enqueue(tempOutputModel);
     }
+
+    
 }
 
 
