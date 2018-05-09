@@ -56,6 +56,23 @@ public class TrialController : MonoBehaviour {
     public Vector2 minProjCoordinates = new Vector2();
     public Vector2 minAstCoordinates = new Vector2();
 
+    //OBSERVER PATTERN
+
+    private static TrialController _instance;
+    public static TrialController Instance;
+
+    public delegate void TrialStages(TrialDataModel data);
+    public static event TrialStages BeginTrial;
+    public static event TrialStages PracticeTrial;
+
+    public delegate void TrialUI();
+    public static event TrialUI StartTrial;
+
+    private void Awake()
+    {
+        _instance = this;
+    }
+
     // Use this for initialization
     void Start () {
         trialQueue = xmlData.TrialQueue;
@@ -64,8 +81,8 @@ public class TrialController : MonoBehaviour {
         Button btn = MainMenu.GetComponent<Button>();
         btn.onClick.AddListener(GoToMainMenu);
 
-        btn = Restart.GetComponent<Button>();
-        btn.onClick.AddListener(restartTrials);
+        //btn = Restart.GetComponent<Button>();
+        //btn.onClick.AddListener(restartTrials);
 
         trialStart = false;
         endOfExperiment = false;
@@ -84,7 +101,7 @@ public class TrialController : MonoBehaviour {
             {
                 endOfExperiment = true;
                 trialStart = false;
-                changeCanvasText("RESET");
+                //changeCanvasText("RESET");
 
                 endWindow.SetActive(true);
 
@@ -97,32 +114,8 @@ public class TrialController : MonoBehaviour {
                 trialStart = true;
                 trialModel = trialQueue.Dequeue();
 
-                changeCanvasText("RESET");
-
-                // Load Asteroid 
-                asteroidPrefab.GetComponent<Asteroid>().rotation = true;
-                asteroidPrefab.GetComponent<Asteroid>().rotationSpeed = trialModel.AsteroidRotation;
-                asteroidPrefab.GetComponent<Asteroid>().movementSpeedX = trialModel.AsteroidMovementX;
-                asteroidPrefab.GetComponent<Asteroid>().movementSpeedY = trialModel.AsteroidMovementY;
-                asteroidPrefab.GetComponent<Asteroid>().spawnPoint = new Vector3(trialModel.AsteroidSpawnX, trialModel.AsteroidSpawnY, 0);
-
-
-                // Load Ship
-                shipPrefab.GetComponent<PlayerMovement>().canMove = trialModel.ShipMove;
-                shipPrefab.GetComponent<PlayerMovement>().canRotate = trialModel.ShipRotate;
-                shipPrefab.GetComponent<PlayerMovement>().maxSpeed = trialModel.ShipMoveSpeed;
-                shipPrefab.GetComponent<PlayerMovement>().rotSpeed = trialModel.ShipRotateSpeed;
-
-                //Instantiate GameObjects
-                Vector3 asteroidSpawnVector = new Vector3(trialModel.AsteroidSpawnX, trialModel.AsteroidSpawnY, 0);
-
-                var createAsteroid = Instantiate(asteroidPrefab, asteroidSpawnVector, transform.rotation);
-                createAsteroid.transform.parent = gameObject.transform;
-
-                Vector3 shipSpawnVector = new Vector3(trialModel.ShipSpawnX, trialModel.ShipSpawnY, 0);
-
-                var createShip = Instantiate(shipPrefab, shipSpawnVector, transform.rotation);
-                createShip.transform.parent = gameObject.transform;
+                BeginTrial(trialModel);
+                StartTrial();
             }
         } catch(Exception e)
         {
@@ -132,7 +125,8 @@ public class TrialController : MonoBehaviour {
 
     public void trialPass(int passID, bool hit, float totalPassTime)
     {
-        bool wasFired = GameObject.FindWithTag("Ship").GetComponent<PlayerMovement>().wasFired;
+        bool wasFired = false;
+
         float fireTime = GameObject.FindWithTag("Ship").GetComponent<PlayerMovement>().timeFired;
 
         Debug.Log(DistanceInfo.projMinX);
@@ -149,18 +143,17 @@ public class TrialController : MonoBehaviour {
         minProjCoordinates = Vector2.zero;
         minAstCoordinates = Vector2.zero;
 
-        GameObject.FindWithTag("Ship").GetComponent<PlayerMovement>().wasFired = false;
         GameObject.FindWithTag("Ship").GetComponent<PlayerMovement>().timeFired = 0f;
 
         if (hit)
         {
-            changeCanvasText("PRETRIAL");
+            //changeCanvasText("PRETRIAL");
             trialStart = false;
 
             Destroy(GameObject.FindWithTag("Ship"));
             Destroy(GameObject.FindWithTag("Asteroid"));
 
-            trialText.GetComponent<Text>().text = trialModel.trialName;
+            trialText.GetComponent<Text>().text = "Trial " + trialModel.TrialID.ToString();
 
             dataCollection();
         }
@@ -171,31 +164,6 @@ public class TrialController : MonoBehaviour {
         SceneManager.LoadScene("Menu");
     }
 
-    public void changeCanvasText(string gameState)
-    {
-        string content = "";
-
-        switch(gameState)
-        {
-            case "PRETRIAL":
-                content = "Press 'Z' to Start Trial";
-                break;
-            case "MISS":
-                content = "Miss!";
-                break;
-            case "HIT":
-                content = "You Did It!";
-                break;
-            case "END":
-                content = "End of Trials";
-                break;
-            case "RESET":
-                content = "";
-                break;
-        }
-
-        canvasText.GetComponent<Text>().text = content;
-    }
 
     public void GoToMainMenu()
     {
@@ -217,7 +185,7 @@ public class TrialController : MonoBehaviour {
     {
         OutputTrialModel tempOutputModel = new OutputTrialModel();
 
-        tempOutputModel.trialName = trialModel.trialName;
+        tempOutputModel.TrialID = trialModel.TrialID;
         tempOutputModel.ExperimentName = "Experiment Data";
         tempOutputModel.PracticeRound = false;
         tempOutputModel.TotalNumPasses = trialModel.TotalNumPasses;
@@ -230,8 +198,6 @@ public class TrialController : MonoBehaviour {
 
         outputData.OutputTrialQueue.Enqueue(tempOutputModel);
     }
-
-    
 }
 
 

@@ -22,10 +22,15 @@ public class PlayerMovement : MonoBehaviour {
 
     // Projectile we will be firing
     public GameObject missilePrefab;
-    public bool wasFired;
     public float timeFired = 0f;
 
-	void Update () {
+    private void Awake()
+    {
+        PassManager.Shoot += Fire;
+    }
+
+    void Update () {
+        PassManager.Shoot += Fire;
 
         timeFired += Time.deltaTime;
 
@@ -92,22 +97,18 @@ public class PlayerMovement : MonoBehaviour {
             // Change our position based upon the changes we made to pos
             transform.position = pos;
         }
+
         
-        // SHOOTING
 
-        // If we are pressing a fire button and bool didFire was false
-        if(Input.GetButton("Fire1") && !wasFired)
-        {
-            missilePrefab.GetComponent<Projectile>().maxSpeed = projSpeed;
+    }
 
-            // Set a spawn point to our objects rotation * .35 pixels above our origin point
-            Vector3 offset = transform.rotation * new Vector3(0, .70f, 0);
-            var projectile = Instantiate(missilePrefab, transform.position + offset, transform.rotation);
+    void Fire()
+    {
+        missilePrefab.GetComponent<Projectile>().maxSpeed = projSpeed;
 
-            // DATA COLLECTION
-            wasFired = true;
-
-        }
+        // Set a spawn point to our objects rotation * .35 pixels above our origin point
+        Vector3 offset = transform.rotation * new Vector3(0, .70f, 0);
+        var projectile = Instantiate(missilePrefab, transform.position + offset, transform.rotation);
 
     }
 

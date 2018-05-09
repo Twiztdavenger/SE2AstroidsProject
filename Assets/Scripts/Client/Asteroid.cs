@@ -67,6 +67,9 @@ public class Asteroid : MonoBehaviour {
 
     public Vector3 spawnPoint;
 
+    public delegate void AsteroidPass();
+    public static event AsteroidPass OutOfBounds;
+
     void Update () {
 
         passTimer += Time.deltaTime;
@@ -89,24 +92,14 @@ public class Asteroid : MonoBehaviour {
         float screenRatio = (float) Screen.width / (float) Screen.height;
         float widthOrtho = Camera.main.orthographicSize * screenRatio;
 
-        if (pos.x - 1f > widthOrtho) {
+        if (pos.x - 1f > widthOrtho || pos.y - 1f > Camera.main.orthographicSize) {
             pos = spawnPoint;
             // START NEW PASS FOR DATA COLLECTION
-            gameObject.transform.parent.GetComponent<TrialController>()
-                .trialPass(numPasses, hit, passTimer);
-            numPasses++;
+            OutOfBounds();
 
-            // If asteroid reaches end of screen, it was not hit
-            hit = false;
 
-            // Resets the time for the next pass
-            passTimer = 0;
-        } else if(pos.y - 1f > Camera.main.orthographicSize)
-        {
-            pos = spawnPoint;
-            // START NEW PASS FOR DATA COLLECTION
-            gameObject.transform.parent.GetComponent<TrialController>()
-                .trialPass(numPasses, hit, passTimer);
+            //gameObject.transform.parent.GetComponent<TrialController>()
+            //    .trialPass(numPasses, hit, passTimer);
             numPasses++;
 
             // If asteroid reaches end of screen, it was not hit
@@ -115,7 +108,6 @@ public class Asteroid : MonoBehaviour {
             // Resets the time for the next pass
             passTimer = 0;
         }
-
         transform.position = pos;
     }
 
@@ -136,5 +128,6 @@ public class Asteroid : MonoBehaviour {
 
 
     }
+
 
 }

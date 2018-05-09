@@ -47,18 +47,19 @@ public class Projectile : MonoBehaviour {
 
         tempDistance = Vector2.Distance(asteroid.transform.position, transform.position);
 
-        if(tempDistance < distance)
-        {
-            distance = tempDistance;
+        //if(tempDistance < distance)
+        //{
+        //    distance = tempDistance;
 
-            projCloseCoordinates = transform.position;
-            astCloseCoordinates = GameObject.FindGameObjectWithTag("Asteroid").transform.position;
-        }
+        //    projCloseCoordinates = transform.position;
+        //    astCloseCoordinates = GameObject.FindGameObjectWithTag("Asteroid").transform.position;
+        //}
        
     }
 
     void OnTriggerEnter2D()
     {
+        /*
         GameObject.FindGameObjectWithTag("TrialController").GetComponent<TrialController>().LogCoord(projCloseCoordinates, astCloseCoordinates);
 
         DistanceInfo.projMinX = projCloseCoordinates.x;
@@ -66,6 +67,7 @@ public class Projectile : MonoBehaviour {
 
         DistanceInfo.astMinX = astCloseCoordinates.x;
         DistanceInfo.astMinY = astCloseCoordinates.y;
+        */
         // When we enter a collision (astroid), destroy this projectile
         Destroy(gameObject);
     }
