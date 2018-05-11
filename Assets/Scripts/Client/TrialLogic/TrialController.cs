@@ -57,13 +57,14 @@ public class TrialController : MonoBehaviour {
     public Vector2 minAstCoordinates = new Vector2();
 
     //OBSERVER PATTERN
-
     private static TrialController _instance;
     public static TrialController Instance;
 
-    public delegate void TrialStages(TrialDataModel data);
-    public static event TrialStages BeginTrial;
-    public static event TrialStages PracticeTrial;
+    public delegate void NextTrial(TrialDataModel data);
+    public static event NextTrial BeginTrial;
+
+    public delegate void TrialStages();
+    public static event TrialStages TrialsEnd;
 
     public delegate void TrialUI();
     public static event TrialUI StartTrial;
@@ -81,13 +82,12 @@ public class TrialController : MonoBehaviour {
         Button btn = MainMenu.GetComponent<Button>();
         btn.onClick.AddListener(GoToMainMenu);
 
-        //btn = Restart.GetComponent<Button>();
-        //btn.onClick.AddListener(restartTrials);
-
         trialStart = false;
         endOfExperiment = false;
 
         trialText.GetComponent<Text>().text = "Trial " + trialQueue.Count.ToString();
+
+        Instructions.ReadyForNextTrial += onNextTrial;
     }
 
     // Our current trial
@@ -99,13 +99,13 @@ public class TrialController : MonoBehaviour {
         {
             if(trialQueue.Count == 0 && !endOfExperiment && !trialStart)
             {
+                TrialsEnd();
                 endOfExperiment = true;
                 trialStart = false;
-                //changeCanvasText("RESET");
 
                 endWindow.SetActive(true);
 
-                outputData.getTrialOutput();
+                //outputData.getTrialOutput();
 
             }
             // "Press Z to start trial"
@@ -121,6 +121,12 @@ public class TrialController : MonoBehaviour {
         {
             Debug.Log(e);
         }
+    }
+
+    void onNextTrial()
+    {
+        trialStart = false;
+        trialText.GetComponent<Text>().text = "Trial " + trialQueue.Count.ToString();
     }
 
     public void trialPass(int passID, bool hit, float totalPassTime)
@@ -197,6 +203,11 @@ public class TrialController : MonoBehaviour {
 
 
         outputData.OutputTrialQueue.Enqueue(tempOutputModel);
+    }
+
+    private void OnDisable()
+    {
+        Instructions.ReadyForNextTrial -= onNextTrial;
     }
 }
 

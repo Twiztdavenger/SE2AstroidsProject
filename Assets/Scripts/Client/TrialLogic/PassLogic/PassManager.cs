@@ -26,12 +26,15 @@ public class PassManager : MonoBehaviour{
     // Use this for initialization
     void Start () {
         TrialController.BeginTrial += onBeginTrial;
+        Asteroid.Hit += onEndTrial;
 
         Asteroid.OutOfBounds += onNextPass;
 	}
 
     void onBeginTrial(TrialDataModel trialModel)
     {
+        wasFired = false;
+
         // Load Asteroid 
         asteroidPrefab.GetComponent<Asteroid>().rotation = true;
         asteroidPrefab.GetComponent<Asteroid>().rotationSpeed = trialModel.AsteroidRotation;
@@ -56,6 +59,14 @@ public class PassManager : MonoBehaviour{
 
         var createShip = Instantiate(shipPrefab, shipSpawnVector, transform.rotation);
         createShip.transform.parent = gameObject.transform;
+
+        
+    }
+
+    void onEndTrial()
+    {
+        Destroy(GameObject.FindGameObjectWithTag("Asteroid"));
+        Destroy(GameObject.FindGameObjectWithTag("Ship"));
     }
 	
 	// Update is called once per frame
@@ -74,12 +85,13 @@ public class PassManager : MonoBehaviour{
     void onNextPass()
     {
         Debug.Log("Next Pass Started");
+        wasFired = false;
     }
 
     private void OnDisable()
     {
         TrialController.BeginTrial -= onBeginTrial;
-
         Asteroid.OutOfBounds -= onNextPass;
+        Asteroid.Hit -= onEndTrial;
     }
 }

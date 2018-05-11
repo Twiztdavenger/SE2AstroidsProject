@@ -30,8 +30,6 @@ public class PlayerMovement : MonoBehaviour {
     }
 
     void Update () {
-        PassManager.Shoot += Fire;
-
         timeFired += Time.deltaTime;
 
         // ROTATATION
@@ -110,6 +108,11 @@ public class PlayerMovement : MonoBehaviour {
         Vector3 offset = transform.rotation * new Vector3(0, .70f, 0);
         var projectile = Instantiate(missilePrefab, transform.position + offset, transform.rotation);
 
+    }
+
+    private void OnDisable()
+    {
+        PassManager.Shoot -= Fire;
     }
 
 }

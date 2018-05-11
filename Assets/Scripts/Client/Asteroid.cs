@@ -69,6 +69,7 @@ public class Asteroid : MonoBehaviour {
 
     public delegate void AsteroidPass();
     public static event AsteroidPass OutOfBounds;
+    public static event AsteroidPass Hit;
 
     void Update () {
 
@@ -116,15 +117,18 @@ public class Asteroid : MonoBehaviour {
         // When we enter a collision with missile, destroy this asteroid
         if (col.gameObject.name == "missile(Clone)") {
             hit = true;
-            finishAsteroid();
+            Hit();
+            //finishAsteroid();
         }
     }
 
     void finishAsteroid()
     {
+        Hit();
+
         Destroy(gameObject);
 
-        gameObject.transform.parent.GetComponent<TrialController>().trialPass(numPasses, hit, Time.deltaTime * 60);
+        //gameObject.transform.parent.GetComponent<TrialController>().trialPass(numPasses, hit, Time.deltaTime * 60);
 
 
     }
