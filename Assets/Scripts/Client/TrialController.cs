@@ -160,7 +160,7 @@ public class TrialController : MonoBehaviour {
             Destroy(GameObject.FindWithTag("Ship"));
             Destroy(GameObject.FindWithTag("Asteroid"));
 
-            trialText.GetComponent<Text>().text = trialModel.trialName;
+            trialText.GetComponent<Text>().text = "Trial " + trialModel.TrialID;
 
             dataCollection();
         }
@@ -217,7 +217,7 @@ public class TrialController : MonoBehaviour {
     {
         OutputTrialModel tempOutputModel = new OutputTrialModel();
 
-        tempOutputModel.trialName = trialModel.trialName;
+        tempOutputModel.TrialID = trialModel.TrialID;
         tempOutputModel.ExperimentName = "Experiment Data";
         tempOutputModel.PracticeRound = false;
         tempOutputModel.TotalNumPasses = trialModel.TotalNumPasses;
