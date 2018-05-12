@@ -70,10 +70,15 @@ public class PassManager : MonoBehaviour{
 
     void onEndTrial()
     {
-        Destroy(GameObject.FindGameObjectWithTag("Asteroid"));
+        
+        //Destroy(GameObject.FindGameObjectWithTag("Asteroid"));
+        StartCoroutine("DestroyDelay");
+    }
+
+    IEnumerator DestroyDelay()
+    {
+        yield return new WaitForSeconds(2f);
         Destroy(GameObject.FindGameObjectWithTag("Ship"));
-
-
     }
 	
 	// Update is called once per frame

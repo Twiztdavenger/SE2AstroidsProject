@@ -16,6 +16,8 @@ public class Projectile : MonoBehaviour {
 
     public GameObject trialController;
 
+    public GameObject ExplosionGO;
+
     private Vector2 projCloseCoordinates = new Vector2();
     private Vector2 astCloseCoordinates = new Vector2();
 
@@ -69,6 +71,9 @@ public class Projectile : MonoBehaviour {
         DistanceInfo.astMinY = astCloseCoordinates.y;
         */
         // When we enter a collision (astroid), destroy this projectile
+        
+        GameObject explosion = (GameObject)Instantiate(ExplosionGO);
+        explosion.transform.position = transform.position;
         Destroy(gameObject);
     }
 

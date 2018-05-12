@@ -130,15 +130,22 @@ public class TrialController : MonoBehaviour {
 
     void onNextTrial()
     {
-        if (trialQueue.Count == 1)
+        try
         {
-            onLastTrial = true;
-        }
-        trialStart = false;
-        trialModel = trialQueue.Dequeue();
-        trialName = trialModel.TrialName;
+            if (trialQueue.Count == 1)
+            {
+                onLastTrial = true;
+            }
+            trialStart = false;
+            trialModel = trialQueue.Dequeue();
+            trialName = trialModel.TrialName;
 
-        trialText.GetComponent<Text>().text = trialName;
+            trialText.GetComponent<Text>().text = trialName;
+        } catch(Exception e)
+        {
+            Debug.Log(e);
+        }
+        
     }
 
     public void trialPass(int passID, bool hit, float totalPassTime)

@@ -71,6 +71,8 @@ public class Asteroid : MonoBehaviour {
     public static event AsteroidPass OutOfBounds;
     public static event AsteroidPass Hit;
 
+    public GameObject AsteroidAnim;
+
     void Update () {
 
         passTimer += Time.deltaTime;
@@ -113,22 +115,32 @@ public class Asteroid : MonoBehaviour {
     }
 
     
-    void OnTriggerEnter2D (Collider2D col) {
+    void OnTriggerEnter2D(Collider2D col)
+    {
+        Debug.Log("Collision Enter");
+
         // When we enter a collision with missile, destroy this asteroid
-        if (col.gameObject.name == "missile(Clone)") {
+        if (col.gameObject.tag == "Projectile") {
+            GameObject explosion = (GameObject)Instantiate(AsteroidAnim);
+            explosion.transform.localScale += new Vector3(0.2F, 0.2F, 0);
+            explosion.transform.position = transform.position;
+
+            Debug.Log(-col.GetComponent<Rigidbody2D>().velocity.normalized);
+            explosion.GetComponent<Rigidbody2D>().AddForce(-col.GetComponent<Rigidbody2D>().velocity.normalized * 5000, ForceMode2D.Impulse);
+
+
             hit = true;
             Hit();
-            //finishAsteroid();
+
+            Destroy(gameObject);
         }
     }
 
     void finishAsteroid()
     {
+        
         Destroy(gameObject);
-
         //gameObject.transform.parent.GetComponent<TrialController>().trialPass(numPasses, hit, Time.deltaTime * 60);
-
-
     }
 
 

@@ -8,6 +8,7 @@ TagManager:
   - Asteroid
   - MainMenuButton
   - TrialController
+  - Projectile
   layers:
   - Default
   - TransparentFX
