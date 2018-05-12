@@ -49,13 +49,18 @@ public class PassManager : MonoBehaviour{
         shipPrefab.GetComponent<PlayerMovement>().maxSpeed = trialModel.ShipMoveSpeed;
         shipPrefab.GetComponent<PlayerMovement>().rotSpeed = trialModel.ShipRotateSpeed;
 
+
         //Instantiate GameObjects
         Vector3 asteroidSpawnVector = new Vector3(trialModel.AsteroidSpawnX, trialModel.AsteroidSpawnY, 0);
+
+        Debug.Log(asteroidSpawnVector);
 
         var createAsteroid = Instantiate(asteroidPrefab, asteroidSpawnVector, transform.rotation);
         createAsteroid.transform.parent = gameObject.transform;
 
         Vector3 shipSpawnVector = new Vector3(trialModel.ShipSpawnX, trialModel.ShipSpawnY, 0);
+
+        Debug.Log(shipSpawnVector);
 
         var createShip = Instantiate(shipPrefab, shipSpawnVector, transform.rotation);
         createShip.transform.parent = gameObject.transform;
@@ -67,6 +72,8 @@ public class PassManager : MonoBehaviour{
     {
         Destroy(GameObject.FindGameObjectWithTag("Asteroid"));
         Destroy(GameObject.FindGameObjectWithTag("Ship"));
+
+
     }
 	
 	// Update is called once per frame
@@ -78,8 +85,6 @@ public class PassManager : MonoBehaviour{
             Shoot();
             wasFired = true;
         }
-
-        
     }
 
     void onNextPass()

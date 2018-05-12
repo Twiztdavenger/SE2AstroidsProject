@@ -27,6 +27,8 @@ public class Instructions : MonoBehaviour {
         TrialController.TrialsEnd += onEndTrials;
         Asteroid.Hit += HitMessage;
         Asteroid.OutOfBounds += MissMessage;
+
+        ReadyForNextTrial();
 	}
 
     void onBeginTrial()

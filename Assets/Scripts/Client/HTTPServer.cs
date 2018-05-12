@@ -53,6 +53,7 @@ public class HTTPServer : MonoBehaviour
                 XmlNodeList xmlTrials = doc.SelectNodes("/experiment/trial");
                 foreach (XmlNode xmlTrial in xmlTrials)
                 {
+                    string trialName = xmlTrial.Attributes["name"].InnerText;
 
                     // LOAD XML DOCUMENT 
                     XmlNode ship = xmlTrial.SelectSingleNode("ship");
@@ -84,6 +85,8 @@ public class HTTPServer : MonoBehaviour
                     // Trial
                     TrialDataModel tempTrial = new TrialDataModel();
 
+                    tempTrial.TrialName = trialName;
+
                     // Trial Ship
                     tempTrial.ShipSpawnX = shipSpawnX;
                     tempTrial.ShipSpawnY = shipSpawnY;
@@ -103,8 +106,6 @@ public class HTTPServer : MonoBehaviour
 
                     tempTrial.AsteroidRotation = asteroidRotSpeed;
 
-                    // Trial Specific Information
-                    tempTrial.TrialID = trialCount;
                     trialCount++;
 
                     // Add TrialDataModel To List

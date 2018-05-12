@@ -124,8 +124,6 @@ public class Asteroid : MonoBehaviour {
 
     void finishAsteroid()
     {
-        Hit();
-
         Destroy(gameObject);
 
         //gameObject.transform.parent.GetComponent<TrialController>().trialPass(numPasses, hit, Time.deltaTime * 60);

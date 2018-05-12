@@ -47,7 +47,7 @@ public class TrialController : MonoBehaviour {
     public GameObject trialText;
 
     public bool trialStart = false;
-    public bool endOfExperiment = false;
+    public bool onLastTrial = false;
 
     //BUTTONS FOR ENDTRIAL WINDOW
     public Button MainMenu;
@@ -83,25 +83,25 @@ public class TrialController : MonoBehaviour {
         btn.onClick.AddListener(GoToMainMenu);
 
         trialStart = false;
-        endOfExperiment = false;
-
-        trialText.GetComponent<Text>().text = "Trial " + trialQueue.Count.ToString();
+        onLastTrial = false;
 
         Instructions.ReadyForNextTrial += onNextTrial;
     }
 
     // Our current trial
     TrialDataModel trialModel = new TrialDataModel();
+    private string trialName = "";
     
 
     void Update () {
         try
         {
-            if(trialQueue.Count == 0 && !endOfExperiment && !trialStart)
+            if(trialQueue.Count == 0 && !onLastTrial && !trialStart)
             {
                 TrialsEnd();
-                endOfExperiment = true;
                 trialStart = false;
+
+                trialName = "";
 
                 endWindow.SetActive(true);
 
@@ -109,10 +109,15 @@ public class TrialController : MonoBehaviour {
 
             }
             // "Press Z to start trial"
-            else if (Input.GetKeyDown(KeyCode.Z) == true && !trialStart && !endOfExperiment)
+            else if (Input.GetKeyDown(KeyCode.Z) == true && !trialStart)
             {
+                if(onLastTrial)
+                {
+                    onLastTrial = false;
+                }
                 trialStart = true;
-                trialModel = trialQueue.Dequeue();
+
+                Debug.Log(trialModel.TrialName);
 
                 BeginTrial(trialModel);
                 StartTrial();
@@ -125,8 +130,15 @@ public class TrialController : MonoBehaviour {
 
     void onNextTrial()
     {
+        if (trialQueue.Count == 1)
+        {
+            onLastTrial = true;
+        }
         trialStart = false;
-        trialText.GetComponent<Text>().text = "Trial " + trialQueue.Count.ToString();
+        trialModel = trialQueue.Dequeue();
+        trialName = trialModel.TrialName;
+
+        trialText.GetComponent<Text>().text = trialName;
     }
 
     public void trialPass(int passID, bool hit, float totalPassTime)
@@ -159,7 +171,7 @@ public class TrialController : MonoBehaviour {
             Destroy(GameObject.FindWithTag("Ship"));
             Destroy(GameObject.FindWithTag("Asteroid"));
 
-            trialText.GetComponent<Text>().text = "Trial " + trialModel.TrialID.ToString();
+            //trialText.GetComponent<Text>().text = "Trial " + trialModel.TrialID.ToString();
 
             dataCollection();
         }
@@ -189,20 +201,20 @@ public class TrialController : MonoBehaviour {
     // Builds the strings to send to the .CSV file
     void dataCollection()
     {
-        OutputTrialModel tempOutputModel = new OutputTrialModel();
+        //OutputTrialModel tempOutputModel = new OutputTrialModel();
 
-        tempOutputModel.TrialID = trialModel.TrialID;
-        tempOutputModel.ExperimentName = "Experiment Data";
-        tempOutputModel.PracticeRound = false;
-        tempOutputModel.TotalNumPasses = trialModel.TotalNumPasses;
-        tempOutputModel.DelayTime = trialModel.SpawnDelayTime;
+        //tempOutputModel.TrialID = trialModel.TrialID;
+        //tempOutputModel.ExperimentName = "Experiment Data";
+        //tempOutputModel.PracticeRound = false;
+        //tempOutputModel.TotalNumPasses = trialModel.TotalNumPasses;
+        //tempOutputModel.DelayTime = trialModel.SpawnDelayTime;
 
-        string passData = trialModel.returnPassData();
+        //string passData = trialModel.returnPassData();
 
-        tempOutputModel.passData = passData;
+        //tempOutputModel.passData = passData;
 
 
-        outputData.OutputTrialQueue.Enqueue(tempOutputModel);
+        //outputData.OutputTrialQueue.Enqueue(tempOutputModel);
     }
 
     private void OnDisable()
