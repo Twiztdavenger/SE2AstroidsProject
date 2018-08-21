@@ -58,14 +58,17 @@ public class Asteroid : MonoBehaviour {
     public float movementSpeedX= 1.5f;
     public float movementSpeedY = 1.5f;
 
-    public int numPasses = 0;
-    public int totalPasses = 5;
-
     public bool hit = false;
 
     public float passTimer = 0f;
 
     public Vector3 spawnPoint;
+
+    public delegate void AsteroidPass();
+    public static event AsteroidPass OutOfBounds;
+    public static event AsteroidPass Hit;
+
+    public GameObject AsteroidAnim;
 
     void Update () {
 
@@ -89,25 +92,14 @@ public class Asteroid : MonoBehaviour {
         float screenRatio = (float) Screen.width / (float) Screen.height;
         float widthOrtho = Camera.main.orthographicSize * screenRatio;
 
-        if (pos.x - 1f > widthOrtho) {
+        if (pos.x - 1f > widthOrtho || pos.y - 1f > Camera.main.orthographicSize) {
             pos = spawnPoint;
             // START NEW PASS FOR DATA COLLECTION
-            gameObject.transform.parent.GetComponent<TrialController>()
-                .trialPass(numPasses, hit, passTimer);
-            numPasses++;
+            OutOfBounds();
 
-            // If asteroid reaches end of screen, it was not hit
-            hit = false;
 
-            // Resets the time for the next pass
-            passTimer = 0;
-        } else if(pos.y - 1f > Camera.main.orthographicSize)
-        {
-            pos = spawnPoint;
-            // START NEW PASS FOR DATA COLLECTION
-            gameObject.transform.parent.GetComponent<TrialController>()
-                .trialPass(numPasses, hit, passTimer);
-            numPasses++;
+            //gameObject.transform.parent.GetComponent<TrialController>()
+            //    .trialPass(numPasses, hit, passTimer);
 
             // If asteroid reaches end of screen, it was not hit
             hit = false;
@@ -115,26 +107,37 @@ public class Asteroid : MonoBehaviour {
             // Resets the time for the next pass
             passTimer = 0;
         }
-
         transform.position = pos;
     }
 
     
-    void OnTriggerEnter2D (Collider2D col) {
+    void OnTriggerEnter2D(Collider2D col)
+    {
+        Debug.Log("Collision Enter");
+
         // When we enter a collision with missile, destroy this asteroid
-        if (col.gameObject.name == "missile(Clone)") {
+        if (col.gameObject.tag == "Projectile") {
+            GameObject explosion = (GameObject)Instantiate(AsteroidAnim);
+            explosion.transform.localScale += new Vector3(0.2F, 0.2F, 0);
+            explosion.transform.position = transform.position;
+
+            Debug.Log(-col.GetComponent<Rigidbody2D>().velocity.normalized);
+            explosion.GetComponent<Rigidbody2D>().AddForce(-col.GetComponent<Rigidbody2D>().velocity.normalized * 5000, ForceMode2D.Impulse);
+
+
             hit = true;
-            finishAsteroid();
+            Hit();
+
+            Destroy(gameObject);
         }
     }
 
     void finishAsteroid()
     {
+        
         Destroy(gameObject);
-
-        gameObject.transform.parent.GetComponent<TrialController>().trialPass(numPasses, hit, Time.deltaTime * 60);
-
-
+        //gameObject.transform.parent.GetComponent<TrialController>().trialPass(numPasses, hit, Time.deltaTime * 60);
     }
+
 
 }

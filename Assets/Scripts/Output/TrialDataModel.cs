@@ -26,7 +26,7 @@ namespace Assets.Scripts.Output
         
 
 
-        public int TrialID { get; set; }
+        public string TrialName { get; set; }
         public int ParticipantID { get; set; }
         public string RoundStatus { get; set; }
         public int TotalNumPasses { get; set; }

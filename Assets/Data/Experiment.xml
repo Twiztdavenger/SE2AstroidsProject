@@ -1,35 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <experiment name="Experiment Example">
-  <trial name="Diagonal Trial"
+  <trial name="Fast Trial"
   practiceRound="False">
     <ship
-    canMove="False"
-    canRotate="False"
-    moveSpeed="0"
-    rotationSpeed="0"
-    projectileSpeed="5">
+      canMove="False"
+      canRotate="False"
+      moveSpeed="0"
+      rotationSpeed="0"
+      projectileSpeed="5">
       <spawn x="0" y="-3.5" z="0" />
     </ship>
-    <asteroid movementX="3"
-              movementY="1.5"
-              rotationSpeed="90">
+    <asteroid
+      movementX="3"
+      movementY="0"
+      rotationSpeed="90">
       <spawn x="-7" y="-1" z="0" />
     </asteroid>
   </trial>
-  <trial name="Fast Trial"
- practiceRound="False">
+  <trial name="Diagonal Trial"
+  practiceRound="False">
     <ship
-    canMove="False"
-    canRotate="False"
-    moveSpeed="0"
-    rotationSpeed="0"
-    projectileSpeed="5">
+      canMove="False"
+      canRotate="False"
+      moveSpeed="0"
+      rotationSpeed="0"
+      projectileSpeed="5">
       <spawn x="0" y="-3.5" z="0" />
     </ship>
-    <asteroid movementX="6"
-              movementY="0"
-              rotationSpeed="90">
-      <spawn x="-7" y="0" z="0" />
+    <asteroid
+      movementX="3"
+      movementY="1.5"
+      rotationSpeed="90">
+      <spawn x="-7" y="-1" z="0" />
     </asteroid>
   </trial>
 </experiment>

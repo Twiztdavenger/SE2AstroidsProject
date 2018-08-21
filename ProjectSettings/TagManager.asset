@@ -8,6 +8,9 @@ TagManager:
   - Asteroid
   - MainMenuButton
   - TrialController
+  - Projectile
+  - EnterPartID
+  - EnterAccessCode
   layers:
   - Default
   - TransparentFX

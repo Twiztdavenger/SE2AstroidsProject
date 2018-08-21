@@ -23,6 +23,15 @@ public class TrialMenu : MonoBehaviour
     public Button startExperiment;
     public Button quit;
 
+    public Button nextWindow;
+    public Button back;
+
+    public GameObject PartIDWindow;
+    public GameObject AccessCodeWindow;
+
+    public Text PartIDText;
+    public Text AccessCodeText;
+
     public GameObject httpServer;
     
 
@@ -38,7 +47,50 @@ public class TrialMenu : MonoBehaviour
 
         btn = startExperiment.GetComponent<Button>();
         btn.onClick.AddListener(StartExperiment);
+
+        btn = nextWindow.GetComponent<Button>();
+        btn.onClick.AddListener(EnterPartID);
+
+        btn = nextWindow.GetComponent<Button>();
+        btn.onClick.AddListener(Back);
     }
+
+    
+
+    // Boolean to check if coroutine is still running
+    private bool startCo = true;
+
+    void EnterPartID()
+    {
+        StartCoroutine("WindowTransition");
+        
+    }
+
+    void Back()
+    {
+        StartCoroutine("WindowTransition");
+        StopCoroutine("WindowTransition");
+    }
+
+    IEnumerator WindowTransition()
+    {
+        yield return new WaitForSeconds(.3f);
+        PartIDWindow.SetActive(!PartIDWindow.activeInHierarchy);
+        AccessCodeWindow.SetActive(!AccessCodeWindow.activeInHierarchy);
+
+        Debug.Log("Coroutine is Working");
+        if (PartIDText.text != "")
+        {
+            PartIDWindow.SetActive(!PartIDWindow.activeInHierarchy);
+            AccessCodeWindow.SetActive(!AccessCodeWindow.activeInHierarchy);
+        } else
+        {
+            Debug.Log("There is nothing in the Participant ID Text Field");
+        }
+        
+    }
+
+    
 
     void LoadXML()
     {
@@ -84,6 +136,8 @@ public class TrialMenu : MonoBehaviour
             //Debug.Log("Data for Access code: " + accessCode + response.ToString());
         }
     }
+
+
     
     void QuitExperiment()
     {

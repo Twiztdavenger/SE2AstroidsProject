@@ -20,9 +20,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4060700944065020}
   - component: {fileID: 212594297243159850}
-  - component: {fileID: 50809177764250090}
   - component: {fileID: 114519241192997030}
-  - component: {fileID: 61177963395942330}
+  - component: {fileID: 61913984035295038}
+  - component: {fileID: 50769796678809970}
   m_Layer: 0
   m_Name: Asteroid Large
   m_TagString: Asteroid
@@ -43,7 +43,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!50 &50809177764250090
+--- !u!50 &50769796678809970
 Rigidbody2D:
   serializedVersion: 4
   m_ObjectHideFlags: 1
@@ -54,7 +54,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1.6384
+  m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 0
@@ -63,7 +63,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!61 &61177963395942330
+--- !u!61 &61913984035295038
 BoxCollider2D:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -100,14 +100,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotation: 1
-  rotationSpeed: 180
-  movementSpeedX: 4
+  rotationSpeed: 90
+  movementSpeedX: 6
   movementSpeedY: 0
   numPasses: 0
   totalPasses: 5
   hit: 0
   passTimer: 0
-  spawnPoint: {x: -5, y: 1, z: 0}
+  spawnPoint: {x: -7, y: -1, z: 0}
+  AsteroidAnim: {fileID: 1451875960060518, guid: f60d5e9532f0b3c4fa2cb91bc27ff1b8,
+    type: 2}
 --- !u!212 &212594297243159850
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -121,6 +123,7 @@ SpriteRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RenderingLayerMask: 4294967295
   m_Materials:
   - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
