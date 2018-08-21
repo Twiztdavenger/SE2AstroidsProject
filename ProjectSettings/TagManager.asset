@@ -9,6 +9,8 @@ TagManager:
   - MainMenuButton
   - TrialController
   - Projectile
+  - EnterPartID
+  - EnterAccessCode
   layers:
   - Default
   - TransparentFX
