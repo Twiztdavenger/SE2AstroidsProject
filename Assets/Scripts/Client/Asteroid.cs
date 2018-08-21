@@ -58,6 +58,9 @@ public class Asteroid : MonoBehaviour {
     public float movementSpeedX= 1.5f;
     public float movementSpeedY = 1.5f;
 
+    public int numPasses = 0;
+    public int totalPasses = 5;
+
     public bool hit = false;
 
     public float passTimer = 0f;
@@ -100,6 +103,7 @@ public class Asteroid : MonoBehaviour {
 
             //gameObject.transform.parent.GetComponent<TrialController>()
             //    .trialPass(numPasses, hit, passTimer);
+            numPasses++;
 
             // If asteroid reaches end of screen, it was not hit
             hit = false;
