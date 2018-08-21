@@ -73,6 +73,7 @@ public class PassManager : MonoBehaviour{
         
         //Destroy(GameObject.FindGameObjectWithTag("Asteroid"));
         StartCoroutine("DestroyDelay");
+        DataCollection();
     }
 
     IEnumerator DestroyDelay()
@@ -80,9 +81,9 @@ public class PassManager : MonoBehaviour{
         yield return new WaitForSeconds(2f);
         Destroy(GameObject.FindGameObjectWithTag("Ship"));
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    void Update () {
         // SHOOTING
         // If we are pressing a fire button and bool did Fire was false
         if (Input.GetButton("Fire1") && !wasFired)
@@ -96,6 +97,11 @@ public class PassManager : MonoBehaviour{
     {
         Debug.Log("Next Pass Started");
         wasFired = false;
+    }
+
+    void DataCollection()
+    {
+
     }
 
     private void OnDisable()
