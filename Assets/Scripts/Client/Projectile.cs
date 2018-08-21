@@ -61,25 +61,10 @@ public class Projectile : MonoBehaviour {
 
     void OnTriggerEnter2D()
     {
-<<<<<<< HEAD
-        
-        //GameObject.FindGameObjectWithTag("TrialController").GetComponent<TrialController>().LogCoord(projCloseCoordinates, astCloseCoordinates);
-=======
-        /*
-        GameObject.FindGameObjectWithTag("TrialController").GetComponent<TrialController>().LogCoord(projCloseCoordinates, astCloseCoordinates);
->>>>>>> NewEventSystem
 
-        //DistanceInfo.projMinX = projCloseCoordinates.x;
-        //DistanceInfo.projMinY = projCloseCoordinates.y;
-
-<<<<<<< HEAD
-        //DistanceInfo.astMinX = astCloseCoordinates.x;
-        //DistanceInfo.astMinY = astCloseCoordinates.y;
-=======
         DistanceInfo.astMinX = astCloseCoordinates.x;
         DistanceInfo.astMinY = astCloseCoordinates.y;
-        */
->>>>>>> NewEventSystem
+
         // When we enter a collision (astroid), destroy this projectile
         
         GameObject explosion = (GameObject)Instantiate(ExplosionGO);

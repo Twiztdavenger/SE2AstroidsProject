@@ -178,11 +178,8 @@ public class TrialController : MonoBehaviour {
             Destroy(GameObject.FindWithTag("Ship"));
             Destroy(GameObject.FindWithTag("Asteroid"));
 
-<<<<<<< HEAD:Assets/Scripts/Client/TrialController.cs
-            trialText.GetComponent<Text>().text = "Trial " + trialModel.TrialID;
-=======
-            //trialText.GetComponent<Text>().text = "Trial " + trialModel.TrialID.ToString();
->>>>>>> NewEventSystem:Assets/Scripts/Client/TrialLogic/TrialController.cs
+            //trialText.GetComponent<Text>().text = "Trial " + trialModel.TrialID;
+
 
             dataCollection();
         }
@@ -214,19 +211,18 @@ public class TrialController : MonoBehaviour {
     {
         //OutputTrialModel tempOutputModel = new OutputTrialModel();
 
-<<<<<<< HEAD:Assets/Scripts/Client/TrialController.cs
-        tempOutputModel.TrialID = trialModel.TrialID;
-        tempOutputModel.ExperimentName = "Experiment Data";
-        tempOutputModel.PracticeRound = false;
-        tempOutputModel.TotalNumPasses = trialModel.TotalNumPasses;
-        tempOutputModel.DelayTime = trialModel.SpawnDelayTime;
-=======
+
         //tempOutputModel.TrialID = trialModel.TrialID;
         //tempOutputModel.ExperimentName = "Experiment Data";
         //tempOutputModel.PracticeRound = false;
         //tempOutputModel.TotalNumPasses = trialModel.TotalNumPasses;
         //tempOutputModel.DelayTime = trialModel.SpawnDelayTime;
->>>>>>> NewEventSystem:Assets/Scripts/Client/TrialLogic/TrialController.cs
+
+        //tempOutputModel.TrialID = trialModel.TrialID;
+        //tempOutputModel.ExperimentName = "Experiment Data";
+        //tempOutputModel.PracticeRound = false;
+        //tempOutputModel.TotalNumPasses = trialModel.TotalNumPasses;
+        //tempOutputModel.DelayTime = trialModel.SpawnDelayTime;
 
         //string passData = trialModel.returnPassData();
 
