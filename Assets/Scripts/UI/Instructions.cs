@@ -23,8 +23,8 @@ public class Instructions : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        TrialController.StartTrial += onBeginTrial;
-        TrialController.TrialsEnd += onEndTrials;
+        TrialController.BeginNextTrialUI += onBeginTrial;
+        TrialController.EndExperiment += onEndExperiment;
         Asteroid.Hit += HitMessage;
         Asteroid.OutOfBounds += MissMessage;
 
@@ -41,7 +41,7 @@ public class Instructions : MonoBehaviour {
         this.gameObject.GetComponent<Text>();
     }
 
-    void onEndTrials()
+    void onEndExperiment()
     {
         this.gameObject.GetComponent<Text>().text = "No More Trials";
         StartCoroutine("EndWindow");
@@ -88,8 +88,8 @@ public class Instructions : MonoBehaviour {
 
     private void OnDisable()
     {
-        TrialController.StartTrial -= onBeginTrial;
-        TrialController.TrialsEnd -= onEndTrials;
+        TrialController.BeginNextTrialUI -= onBeginTrial;
+        TrialController.EndExperiment -= onEndExperiment;
         Asteroid.Hit -= HitMessage;
         Asteroid.OutOfBounds -= MissMessage;
     }

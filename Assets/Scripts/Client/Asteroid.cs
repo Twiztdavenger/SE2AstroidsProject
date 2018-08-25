@@ -64,6 +64,7 @@ public class Asteroid : MonoBehaviour {
 
     public Vector3 spawnPoint;
 
+    //Listeners
     public delegate void AsteroidPass();
     public static event AsteroidPass OutOfBounds;
     public static event AsteroidPass Hit;

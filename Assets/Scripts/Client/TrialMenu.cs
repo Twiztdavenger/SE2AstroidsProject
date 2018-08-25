@@ -96,7 +96,7 @@ public class TrialMenu : MonoBehaviour
     {
         try
         {
-            trialQueue = xmlData.TrialQueue;
+            trialQueue = InputDataHolder.TrialQueue;
 
             var doc = new XmlDocument();
             doc.Load(XML_FILE_PATH);

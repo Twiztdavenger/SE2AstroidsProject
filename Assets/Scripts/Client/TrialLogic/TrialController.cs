@@ -46,7 +46,7 @@ public class TrialController : MonoBehaviour {
     public GameObject canvasText;
     public GameObject trialText;
 
-    public bool trialStart = false;
+    public bool trialRunning = false;
     public bool onLastTrial = false;
 
     //BUTTONS FOR ENDTRIAL WINDOW
@@ -60,14 +60,14 @@ public class TrialController : MonoBehaviour {
     private static TrialController _instance;
     public static TrialController Instance;
 
-    public delegate void NextTrial(TrialDataModel data);
-    public static event NextTrial BeginTrial;
-
-    public delegate void TrialStages();
-    public static event TrialStages TrialsEnd;
+    public delegate void TrialStagesNextTrial(TrialDataModel data);
+    public static event TrialStagesNextTrial BeginNextTrial;
 
     public delegate void TrialUI();
-    public static event TrialUI StartTrial;
+    public static event TrialUI BeginNextTrialUI;
+
+    public delegate void TrialStagesEndTrials();
+    public static event TrialStagesEndTrials EndExperiment;
 
     private void Awake()
     {
@@ -76,13 +76,13 @@ public class TrialController : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        trialQueue = xmlData.TrialQueue;
+        trialQueue = InputDataHolder.TrialQueue;
         endWindow.SetActive(false);
 
         Button btn = MainMenu.GetComponent<Button>();
         btn.onClick.AddListener(GoToMainMenu);
 
-        trialStart = false;
+        trialRunning= false;
         onLastTrial = false;
 
         Instructions.ReadyForNextTrial += onNextTrial;
@@ -96,10 +96,11 @@ public class TrialController : MonoBehaviour {
     void Update () {
         try
         {
-            if(trialQueue.Count == 0 && !onLastTrial && !trialStart)
+            //If there  is nothing in the queue, we arent 
+            if(trialQueue.Count == 0 && !onLastTrial && !trialRunning)
             {
-                TrialsEnd();
-                trialStart = false;
+                EndExperiment();
+                trialRunning = false;
 
                 trialName = "";
 
@@ -109,18 +110,18 @@ public class TrialController : MonoBehaviour {
 
             }
             // "Press Z to start trial"
-            else if (Input.GetKeyDown(KeyCode.Z) == true && !trialStart)
+            else if (Input.GetKeyDown(KeyCode.Z) == true && !trialRunning)
             {
                 if(onLastTrial)
                 {
                     onLastTrial = false;
                 }
-                trialStart = true;
+                trialRunning = true;
 
                 Debug.Log(trialModel.TrialName);
 
-                BeginTrial(trialModel);
-                StartTrial();
+                BeginNextTrial(trialModel);
+                BeginNextTrialUI();
             }
         } catch(Exception e)
         {
@@ -136,7 +137,7 @@ public class TrialController : MonoBehaviour {
             {
                 onLastTrial = true;
             }
-            trialStart = false;
+            trialRunning = false;
             trialModel = trialQueue.Dequeue();
             trialName = trialModel.TrialName;
 
@@ -152,7 +153,7 @@ public class TrialController : MonoBehaviour {
     {
         bool wasFired = false;
 
-        float fireTime = GameObject.FindWithTag("Ship").GetComponent<PlayerMovement>().timeFired;
+        float fireTime = GameObject.FindWithTag("Ship").GetComponent<Ship>().timeFired;
 
         Debug.Log(DistanceInfo.projMinX);
         Debug.Log(DistanceInfo.projMinY);
@@ -168,12 +169,11 @@ public class TrialController : MonoBehaviour {
         minProjCoordinates = Vector2.zero;
         minAstCoordinates = Vector2.zero;
 
-        GameObject.FindWithTag("Ship").GetComponent<PlayerMovement>().timeFired = 0f;
+        GameObject.FindWithTag("Ship").GetComponent<Ship>().timeFired = 0f;
 
         if (hit)
         {
-            //changeCanvasText("PRETRIAL");
-            trialStart = false;
+            trialRunning = false;
 
             Destroy(GameObject.FindWithTag("Ship"));
             Destroy(GameObject.FindWithTag("Asteroid"));

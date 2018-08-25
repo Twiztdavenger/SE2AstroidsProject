@@ -110,7 +110,7 @@ public class HTTPServer : MonoBehaviour
 
                     // Add TrialDataModel To List
                     //trialQueue.Enqueue(tempTrial);
-                    xmlData.TrialQueue.Enqueue(tempTrial);
+                    InputDataHolder.TrialQueue.Enqueue(tempTrial);
                 }
             }
             else

@@ -10,4 +10,6 @@ public class OutputTrialModel{
     public float DelayTime { get; set; }
 
     public string passData { get; set; }
+
+    public ArrayList OutputPassDataList { get; set; }
 }

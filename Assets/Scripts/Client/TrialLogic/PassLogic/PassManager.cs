@@ -25,13 +25,13 @@ public class PassManager : MonoBehaviour{
 
     // Use this for initialization
     void Start () {
-        TrialController.BeginTrial += onBeginTrial;
+        TrialController.BeginNextTrial += onBeginNextTrial;
         Asteroid.Hit += onEndTrial;
 
         Asteroid.OutOfBounds += onNextPass;
 	}
 
-    void onBeginTrial(TrialDataModel trialModel)
+    void onBeginNextTrial(TrialDataModel trialModel)
     {
         wasFired = false;
 
@@ -44,10 +44,10 @@ public class PassManager : MonoBehaviour{
 
 
         // Load Ship
-        shipPrefab.GetComponent<PlayerMovement>().canMove = trialModel.ShipMove;
-        shipPrefab.GetComponent<PlayerMovement>().canRotate = trialModel.ShipRotate;
-        shipPrefab.GetComponent<PlayerMovement>().maxSpeed = trialModel.ShipMoveSpeed;
-        shipPrefab.GetComponent<PlayerMovement>().rotSpeed = trialModel.ShipRotateSpeed;
+        shipPrefab.GetComponent<Ship>().canMove = trialModel.ShipMove;
+        shipPrefab.GetComponent<Ship>().canRotate = trialModel.ShipRotate;
+        shipPrefab.GetComponent<Ship>().maxSpeed = trialModel.ShipMoveSpeed;
+        shipPrefab.GetComponent<Ship>().rotSpeed = trialModel.ShipRotateSpeed;
 
 
         //Instantiate GameObjects
@@ -99,6 +99,11 @@ public class PassManager : MonoBehaviour{
         wasFired = false;
     }
 
+    void onPlayerFire()
+    {
+        wasFired = true;
+    }
+
     void DataCollection()
     {
 
@@ -106,7 +111,7 @@ public class PassManager : MonoBehaviour{
 
     private void OnDisable()
     {
-        TrialController.BeginTrial -= onBeginTrial;
+        TrialController.BeginNextTrial -= onBeginNextTrial;
         Asteroid.OutOfBounds -= onNextPass;
         Asteroid.Hit -= onEndTrial;
     }
