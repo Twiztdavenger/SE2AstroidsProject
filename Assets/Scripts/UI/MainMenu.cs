@@ -13,6 +13,7 @@ public class MainMenu : MonoBehaviour {
 
     public GameObject httpServer;
     public GameObject trialIDInput;
+    public GameObject partIDInput;
 
     // Use this for initialization
     void Start () {
@@ -25,14 +26,14 @@ public class MainMenu : MonoBehaviour {
         btn.onClick.AddListener(StartExperiment);
     }
 
-    //TODO: HANDLE INVALID ACCESS CODES CORRECTLY
+    //TODO: HANDLE INVALID ACCESS CODES CORRECTLY AND DONT LET START EXPERIMENT UNTIL BOTH FIELDS ARE ENTERED
     void StartExperiment()
     {
-        string participantID = "";
+        string participantID = partIDInput.GetComponent<Text>().text;
         int accessCode;
         if (int.TryParse(trialIDInput.GetComponent<Text>().text, out accessCode))
         {
-            StartCoroutine(httpServer.GetComponent<HTTPServer>().GetText(accessCode, () => {
+            StartCoroutine(httpServer.GetComponent<HTTPServer>().GetText(accessCode, participantID, () => {
                 if (httpServer.GetComponent<HTTPServer>().invalidAccessCode == false)
                 {
                     SceneManager.LoadScene("Client");

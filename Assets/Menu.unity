@@ -129,11 +129,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4f8111c5c08608479467a7cdec70a3e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startExperiment: {fileID: 0}
-  quit: {fileID: 0}
-  ErrorText: {fileID: 0}
-  httpServer: {fileID: 0}
-  trialIDInput: {fileID: 0}
+  startExperiment: {fileID: 1229490396}
+  quit: {fileID: 1624259937}
+  ErrorText: {fileID: 186719557}
+  httpServer: {fileID: 31041363}
+  trialIDInput: {fileID: 1363054193}
+  partIDInput: {fileID: 0}
 --- !u!1001 &31041362
 Prefab:
   m_ObjectHideFlags: 0
@@ -192,6 +193,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cbbb42d030d35742ad67f0f826324f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  participantID: 
   invalidAccessCode: 0
 --- !u!1 &127886224
 GameObject:

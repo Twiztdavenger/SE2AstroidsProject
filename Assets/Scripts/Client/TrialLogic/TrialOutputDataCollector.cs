@@ -52,12 +52,13 @@ public class TrialOutputDataCollector : MonoBehaviour {
         //Debug.Log("How many passes were in this trial: " + PassOutputDataList.Count);
     }
 
-    public void setTrialData(int trialID, string trialName, string experimentName)
+    public void setTrialData(int trialID, string trialName, string experimentName, string partID)
     {
         OutputTrialModel temp = new OutputTrialModel
         {
             TrialID = trialID,
             TrialName = trialName,
+            ParticipantID = partID
             //ExperimentName = experimentName,
         };
 

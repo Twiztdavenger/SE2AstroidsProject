@@ -4,8 +4,8 @@ using System.Collections.Generic;
 
 public class OutputTrialModel{
     public int TrialID { get; set; }
+    public string ParticipantID { get; set; }
     public string TrialName { get; set; }
-    //public string ExperimentName { get; set; }
     public bool PracticeRound { get; set; } //Not implemented yet
     public int TotalNumPasses { get; set; } //Not implemented yet
     public float DelayTime { get; set; } //Not implemented yet

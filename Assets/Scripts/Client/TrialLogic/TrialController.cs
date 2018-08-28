@@ -86,6 +86,7 @@ public class TrialController : MonoBehaviour {
         onLastTrial = false;
 
         Instructions.ReadyForNextTrial += onNextTrial;
+        
     }
 
     // Our current trial
@@ -100,10 +101,8 @@ public class TrialController : MonoBehaviour {
             if(trialQueue.Count == 0 && !onLastTrial && !trialRunning)
             {
                 EndExperiment();
-                trialRunning = false;
                 trialName = "";
-
-                endWindow.SetActive(true);
+            endWindow.SetActive(true);
             }
             // "Press Z to start trial"
             else if (Input.GetKeyDown(KeyCode.Z) == true && !trialRunning)
@@ -117,7 +116,7 @@ public class TrialController : MonoBehaviour {
                 BeginTrial(trialModel);
                 var createTrialOutputDataCollector = Instantiate(TrialOutputDataCollector);
 
-                GameObject.FindGameObjectWithTag("TrialOutputDataCollector").GetComponent<TrialOutputDataCollector>().setTrialData(1, trialModel.TrialName, "Testing Output");
+                GameObject.FindGameObjectWithTag("TrialOutputDataCollector").GetComponent<TrialOutputDataCollector>().setTrialData(1, trialModel.TrialName, "Testing Output", trialModel.ParticipantID);
                 //BeginNextTrialUI();
             }
         
@@ -167,31 +166,6 @@ public class TrialController : MonoBehaviour {
         minAstCoordinates = minAst;
     }
     // Builds the strings to send to the .CSV file
-    void dataCollection()
-    {
-        //OutputTrialModel tempOutputModel = new OutputTrialModel();
-
-
-        //tempOutputModel.TrialID = trialModel.TrialID;
-        //tempOutputModel.ExperimentName = "Experiment Data";
-        //tempOutputModel.PracticeRound = false;
-        //tempOutputModel.TotalNumPasses = trialModel.TotalNumPasses;
-        //tempOutputModel.DelayTime = trialModel.SpawnDelayTime;
-
-        //tempOutputModel.TrialID = trialModel.TrialID;
-        //tempOutputModel.ExperimentName = "Experiment Data";
-        //tempOutputModel.PracticeRound = false;
-        //tempOutputModel.TotalNumPasses = trialModel.TotalNumPasses;
-        //tempOutputModel.DelayTime = trialModel.SpawnDelayTime;
-
-        //string passData = trialModel.returnPassData();
-
-        //tempOutputModel.passData = passData;
-
-
-        //outputData.OutputTrialQueue.Enqueue(tempOutputModel);
-    }
-
     private void OnDisable()
     {
         Instructions.ReadyForNextTrial -= onNextTrial;

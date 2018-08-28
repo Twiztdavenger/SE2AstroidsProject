@@ -13,6 +13,8 @@ public class HTTPServer : MonoBehaviour
 
     Queue<TrialDataModel> trialQueue = new Queue<TrialDataModel>();
 
+    public string participantID = "";
+
     public bool invalidAccessCode = false;
 
     // Use this for initialization
@@ -21,7 +23,7 @@ public class HTTPServer : MonoBehaviour
 
     }
 
-    public IEnumerator GetText(int accessCode, Action callback)
+    public IEnumerator GetText(int accessCode, string partID, Action callback)
     {
         Debug.Log("Recieving HTTP Request");
         UnityWebRequest www = UnityWebRequest.Get("http://astralqueen.bw.edu/hci/experimentData.php?id=" + accessCode);
@@ -40,16 +42,18 @@ public class HTTPServer : MonoBehaviour
         {
             invalidAccessCode = false;
             trialQueue = new Queue<TrialDataModel>();
+            participantID = partID;
             Debug.Log(www.downloadHandler.text);
-            parseXML(www.downloadHandler.text);
+            parseXML(www.downloadHandler.text, participantID);
             callback.Invoke();
         }
     }
 
-    private void parseXML(string xml)
+    private void parseXML(string xml, string partID)
     {
         try
         {
+            Debug.Log(partID);
             if(xml != "-1")
             {
                 invalidAccessCode = false;
@@ -112,6 +116,8 @@ public class HTTPServer : MonoBehaviour
 
                     tempTrial.AsteroidRotation = asteroidRotSpeed;
 
+                    tempTrial.ParticipantID = partID;
+
                     trialCount++;
 
                     // Add TrialDataModel To List
@@ -122,6 +128,7 @@ public class HTTPServer : MonoBehaviour
             else
             {
                 invalidAccessCode = true;
+                Debug.Log("Invalid Access Code");
             }
 
         }
