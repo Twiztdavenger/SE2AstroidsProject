@@ -9,15 +9,24 @@ public class PassManager : MonoBehaviour{
     public static PassManager instance;
 
     public delegate void PassStages();
+    public static event PassStages BeginPass;
     public static event PassStages Shoot;
-    public static event PassStages EndPass;
     public static event PassStages ProjHit;
+    public static event PassStages EndOfTrial;
 
     public GameObject shipPrefab;
     public GameObject asteroidPrefab;
 
-    private bool wasFired = false;
+    private Vector3 AsteroidSpawnVector;
 
+    public GameObject PassOutputDataCollector;
+
+    private bool wasFired = false;
+    private bool trialRunning = false;
+
+    private float passTimer = 0f;
+    private float timePlayerShotThisPass = 0f;
+    
     private void Awake()
     {
         instance = this;
@@ -25,14 +34,16 @@ public class PassManager : MonoBehaviour{
 
     // Use this for initialization
     void Start () {
-        TrialController.BeginNextTrial += onBeginNextTrial;
-        Asteroid.Hit += onEndTrial;
+        TrialController.BeginTrial += BeginTrial;
+        Asteroid.EndOfPass += EndPass;
 
-        Asteroid.OutOfBounds += onNextPass;
+        Instructions.CountdownOver += StartPass;
 	}
 
-    void onBeginNextTrial(TrialDataModel trialModel)
+    void BeginTrial(TrialDataModel trialModel)
     {
+        passTimer = 0f;
+        trialRunning = true;
         wasFired = false;
 
         // Load Asteroid 
@@ -51,68 +62,71 @@ public class PassManager : MonoBehaviour{
 
 
         //Instantiate GameObjects
-        Vector3 asteroidSpawnVector = new Vector3(trialModel.AsteroidSpawnX, trialModel.AsteroidSpawnY, 0);
-
-        Debug.Log(asteroidSpawnVector);
-
-        var createAsteroid = Instantiate(asteroidPrefab, asteroidSpawnVector, transform.rotation);
-        createAsteroid.transform.parent = gameObject.transform;
+        AsteroidSpawnVector = new Vector3(trialModel.AsteroidSpawnX, trialModel.AsteroidSpawnY, 0);
 
         Vector3 shipSpawnVector = new Vector3(trialModel.ShipSpawnX, trialModel.ShipSpawnY, 0);
-
-        Debug.Log(shipSpawnVector);
 
         var createShip = Instantiate(shipPrefab, shipSpawnVector, transform.rotation);
         createShip.transform.parent = gameObject.transform;
 
-        
+        BeginPass(); //Instructions.cs starts countdown, when countdown is over, run StartPass()
     }
 
-    void onEndTrial()
+    //TODO: Move Asteroid respawn logic here as well
+    void StartPass()
     {
+        wasFired = false;
+        SpawnAsteroid();
+        var spawnOutputDataCollector = Instantiate(PassOutputDataCollector);
+    }
+
+    void SpawnAsteroid()
+    {
+         var createAsteroid = Instantiate(asteroidPrefab, AsteroidSpawnVector, transform.rotation);
+         createAsteroid.transform.parent = gameObject.transform;
+    }
+
+    void EndPass(bool wasAsteroidHit)
+    {
+        if(wasAsteroidHit)
+        {
+            trialRunning = false;
+            EndOfTrial();
+            StartCoroutine("DestroyDelay");
+        } else
+        {
+            Debug.Log("Pass has ended");
+            //Keeps us from firing during the countdown 
+            wasFired = true;
+            Destroy(GameObject.FindGameObjectWithTag("PassOutputDataCollector"));
+        }
         
-        //Destroy(GameObject.FindGameObjectWithTag("Asteroid"));
-        StartCoroutine("DestroyDelay");
-        DataCollection();
     }
 
     IEnumerator DestroyDelay()
     {
         yield return new WaitForSeconds(2f);
         Destroy(GameObject.FindGameObjectWithTag("Ship"));
+        Destroy(GameObject.FindGameObjectWithTag("PassOutputDataCollector"));
+        Destroy(GameObject.FindGameObjectWithTag("TrialOutputDataCollector"));
     }
 
-    // Update is called once per frame
     void Update () {
+        passTimer += Time.deltaTime;
+
         // SHOOTING
         // If we are pressing a fire button and bool did Fire was false
-        if (Input.GetButton("Fire1") && !wasFired)
+        if (Input.GetButton("Fire1") && !wasFired && trialRunning)
         {
             Shoot();
             wasFired = true;
+            timePlayerShotThisPass = passTimer;
         }
-    }
-
-    void onNextPass()
-    {
-        Debug.Log("Next Pass Started");
-        wasFired = false;
-    }
-
-    void onPlayerFire()
-    {
-        wasFired = true;
-    }
-
-    void DataCollection()
-    {
-
-    }
+        
+    } 
 
     private void OnDisable()
     {
-        TrialController.BeginNextTrial -= onBeginNextTrial;
-        Asteroid.OutOfBounds -= onNextPass;
-        Asteroid.Hit -= onEndTrial;
+
     }
 }

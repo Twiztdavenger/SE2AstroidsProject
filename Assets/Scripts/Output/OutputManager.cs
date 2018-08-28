@@ -1,35 +1,39 @@
-﻿using Assets.Scripts.Output;
-using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using UnityEngine;
 
-public static class outputData
-{
+public class OutputManager : MonoBehaviour {
+
     public static Queue<OutputTrialModel> OutputTrialQueue = new Queue<OutputTrialModel>();
 
     private static List<string[]> rowData = new List<string[]>();
-
     public static string _CSV_DATA_PATH_ = @"Assets/Output";
 
-    public static Queue<OutputTrialModel> TrialQueue
+	// Use this for initialization
+
+    //TODO: Keep track of participant ID 
+	void Start () {
+        TrialOutputDataCollector.ReturnTrialOutputData += AddTrialModel;
+        TrialController.EndExperiment += getTrialOutput;
+	}
+
+    void AddTrialModel(OutputTrialModel output)
     {
-        set
-        {
-            OutputTrialQueue = value;
-        }
+        OutputTrialQueue.Enqueue(output);
+        Debug.Log("Added Trial: " + output.TrialID + " " + output.TrialName);
     }
+    
 
     static public void getTrialOutput()
     {
-        string[] rowDataTemp = new string[6];
+        TrialController.EndExperiment -= getTrialOutput;
+        string[] rowDataTemp = new string[4];
         rowDataTemp[0] = "Experiment Name";
         rowDataTemp[1] = "Trial Id";
-        rowDataTemp[2] = "Practice Round";
-        rowDataTemp[3] = "Pass Count";
-        rowDataTemp[4] = "Spawn Delay Time";
-        //rowDataTemp[5] = "passData";
+        rowDataTemp[2] = "Trial Name";
+        rowDataTemp[3] = "Pass Data";
 
         rowData.Add(rowDataTemp);
         // TODO: Work on finding a way to output all trial data at once
@@ -37,13 +41,12 @@ public static class outputData
         {
             OutputTrialModel tempTrial = OutputTrialQueue.Dequeue();
 
-            rowDataTemp = new string[6];
+            rowDataTemp = new string[4];
             rowDataTemp[0] = "Experiment";
-            rowDataTemp[1] = tempTrial.TrialID.ToString(); // ID
-            rowDataTemp[2] = tempTrial.PracticeRound.ToString();
-            rowDataTemp[3] = tempTrial.TotalNumPasses.ToString(); // ID
-            rowDataTemp[4] = tempTrial.DelayTime.ToString(); // ID
-            //rowDataTemp[5] = tempTrial.passData; // ID
+            rowDataTemp[1] = tempTrial.TrialID.ToString();
+            rowDataTemp[2] = tempTrial.TrialName.ToString();
+            rowDataTemp[3] = tempTrial.returnPassData();
+            //rowDataTemp[3] = "TempPassData";
             rowData.Add(rowDataTemp);
         }
 
@@ -70,6 +73,11 @@ public static class outputData
 
     }
 
+
+
+
+    // Update is called once per frame
+    void Update () {
+		
+	}
 }
-
-

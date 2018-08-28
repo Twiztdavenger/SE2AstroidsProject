@@ -306,6 +306,8 @@ MonoBehaviour:
   shipPrefab: {fileID: 1518773236984966, guid: 1dca91303cb327546958ec3d1ab9087a, type: 2}
   asteroidPrefab: {fileID: 1659785828572672, guid: 7ea208e93106ff646bb259504240fe90,
     type: 2}
+  PassOutputDataCollector: {fileID: 1769397823421342, guid: 09ba1ac27107ad842bd244fc0b96318f,
+    type: 2}
 --- !u!1001 &676625905
 Prefab:
   m_ObjectHideFlags: 0
@@ -423,9 +425,31 @@ Prefab:
       propertyPath: MainMenu
       value: 
       objectReference: {fileID: 955371927}
+    - target: {fileID: 114139576635426414, guid: f199e974c5482c44683a059987d5dd74,
+        type: 2}
+      propertyPath: TrialOutputDataCollector
+      value: 
+      objectReference: {fileID: 1638044903507156, guid: 66938b46e62009046b2a6d4b0fd8fc5a,
+        type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f199e974c5482c44683a059987d5dd74, type: 2}
   m_IsPrefabAsset: 0
+--- !u!1 &676625906 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1852379855389894, guid: f199e974c5482c44683a059987d5dd74,
+    type: 2}
+  m_PrefabInternal: {fileID: 676625905}
+--- !u!114 &676625907
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 676625906}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 511b8a7ecd3fbe841a363de6330991c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &685287944
 GameObject:
   m_ObjectHideFlags: 0
@@ -1155,7 +1179,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: -136.81732}
+  m_SizeDelta: {x: 0, y: -137.24127}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1533201553
 MonoBehaviour:

@@ -50,9 +50,6 @@ public class TrialMenu : MonoBehaviour
 
         btn = nextWindow.GetComponent<Button>();
         btn.onClick.AddListener(EnterPartID);
-
-        btn = nextWindow.GetComponent<Button>();
-        btn.onClick.AddListener(Back);
     }
 
     
@@ -63,30 +60,6 @@ public class TrialMenu : MonoBehaviour
     void EnterPartID()
     {
         StartCoroutine("WindowTransition");
-        
-    }
-
-    void Back()
-    {
-        StartCoroutine("WindowTransition");
-        StopCoroutine("WindowTransition");
-    }
-
-    IEnumerator WindowTransition()
-    {
-        yield return new WaitForSeconds(.3f);
-        PartIDWindow.SetActive(!PartIDWindow.activeInHierarchy);
-        AccessCodeWindow.SetActive(!AccessCodeWindow.activeInHierarchy);
-
-        Debug.Log("Coroutine is Working");
-        if (PartIDText.text != "")
-        {
-            PartIDWindow.SetActive(!PartIDWindow.activeInHierarchy);
-            AccessCodeWindow.SetActive(!AccessCodeWindow.activeInHierarchy);
-        } else
-        {
-            Debug.Log("There is nothing in the Participant ID Text Field");
-        }
         
     }
 

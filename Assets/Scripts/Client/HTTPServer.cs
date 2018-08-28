@@ -29,10 +29,16 @@ public class HTTPServer : MonoBehaviour
 
         if (www.isNetworkError || www.isHttpError)
         {
-            Debug.Log(www.error);
+            invalidAccessCode = true;
+        }
+        else if(www.downloadHandler.text == "-1")
+        {
+            //TODO: Handle invalid xml documents using an xmlSchema
+            invalidAccessCode = true;
         }
         else
         {
+            invalidAccessCode = false;
             trialQueue = new Queue<TrialDataModel>();
             Debug.Log(www.downloadHandler.text);
             parseXML(www.downloadHandler.text);

@@ -1,2 +1,4 @@
-Experiment Name,Trial Id,Practice Round,Pass Count,Spawn Delay Time,passData
+Experiment Name,Trial Id,Trial Name,Pass Data
+Testing Output,1,Diagonal Trial,(1; 1; 1.85511; 1.222797), (2; 1; 1.258488; 1.295651)
+Testing Output,1,Diagonal Trial,(1; 1; 1.258488; 1.295651)
 

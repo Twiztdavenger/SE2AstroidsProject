@@ -38,13 +38,12 @@ public class TrialController : MonoBehaviour {
     Queue<TrialDataModel> trialQueue = new Queue<TrialDataModel>();
     Queue<String> dataOutputQueue = new Queue<String>();
 
-    public GameObject shipPrefab;
-    public GameObject asteroidPrefab;
-
     public GameObject endWindow;
 
     public GameObject canvasText;
     public GameObject trialText;
+
+    public GameObject TrialOutputDataCollector;
 
     public bool trialRunning = false;
     public bool onLastTrial = false;
@@ -61,13 +60,14 @@ public class TrialController : MonoBehaviour {
     public static TrialController Instance;
 
     public delegate void TrialStagesNextTrial(TrialDataModel data);
-    public static event TrialStagesNextTrial BeginNextTrial;
+    public static event TrialStagesNextTrial BeginTrial;
 
     public delegate void TrialUI();
     public static event TrialUI BeginNextTrialUI;
 
-    public delegate void TrialStagesEndTrials();
-    public static event TrialStagesEndTrials EndExperiment;
+    public delegate void TrialStages();
+    //public static event TrialStages BeginTrial;
+    public static event TrialStages EndExperiment;
 
     private void Awake()
     {
@@ -91,23 +91,19 @@ public class TrialController : MonoBehaviour {
     // Our current trial
     TrialDataModel trialModel = new TrialDataModel();
     private string trialName = "";
+    private string experimentName = "";
     
 
     void Update () {
-        try
-        {
-            //If there  is nothing in the queue, we arent 
+            //FIX: THIS IF CONDITIONAL STATEMENT IS ALWAYS LOOPING DUE TO ALL CONDITIONS BEING MET AT END OF TRIALS
+            //THIS IS REALLY BAD I SHOULD REALLY FIX THIS
             if(trialQueue.Count == 0 && !onLastTrial && !trialRunning)
             {
                 EndExperiment();
                 trialRunning = false;
-
                 trialName = "";
 
                 endWindow.SetActive(true);
-
-                //outputData.getTrialOutput();
-
             }
             // "Press Z to start trial"
             else if (Input.GetKeyDown(KeyCode.Z) == true && !trialRunning)
@@ -118,15 +114,13 @@ public class TrialController : MonoBehaviour {
                 }
                 trialRunning = true;
 
-                Debug.Log(trialModel.TrialName);
+                BeginTrial(trialModel);
+                var createTrialOutputDataCollector = Instantiate(TrialOutputDataCollector);
 
-                BeginNextTrial(trialModel);
-                BeginNextTrialUI();
+                GameObject.FindGameObjectWithTag("TrialOutputDataCollector").GetComponent<TrialOutputDataCollector>().setTrialData(1, trialModel.TrialName, "Testing Output");
+                //BeginNextTrialUI();
             }
-        } catch(Exception e)
-        {
-            Debug.Log(e);
-        }
+        
     }
 
     void onNextTrial()
@@ -140,7 +134,7 @@ public class TrialController : MonoBehaviour {
             trialRunning = false;
             trialModel = trialQueue.Dequeue();
             trialName = trialModel.TrialName;
-
+            
             trialText.GetComponent<Text>().text = trialName;
         } catch(Exception e)
         {
@@ -149,41 +143,7 @@ public class TrialController : MonoBehaviour {
         
     }
 
-    public void trialPass(int passID, bool hit, float totalPassTime)
-    {
-        bool wasFired = false;
-
-        float fireTime = GameObject.FindWithTag("Ship").GetComponent<Ship>().timeFired;
-
-        Debug.Log(DistanceInfo.projMinX);
-        Debug.Log(DistanceInfo.projMinY);
-
-        float pX = DistanceInfo.projMinX;
-        float pY = DistanceInfo.projMinY;
-
-        float aX = DistanceInfo.astMinX;
-        float aY = DistanceInfo.astMinY;
-
-        trialModel.addPass(passID, wasFired, hit, fireTime, totalPassTime, pX, pY, aX, aY);
-
-        minProjCoordinates = Vector2.zero;
-        minAstCoordinates = Vector2.zero;
-
-        GameObject.FindWithTag("Ship").GetComponent<Ship>().timeFired = 0f;
-
-        if (hit)
-        {
-            trialRunning = false;
-
-            Destroy(GameObject.FindWithTag("Ship"));
-            Destroy(GameObject.FindWithTag("Asteroid"));
-
-            //trialText.GetComponent<Text>().text = "Trial " + trialModel.TrialID;
-
-
-            dataCollection();
-        }
-    }
+    
 
     public void ClickMainMenu()
     {
@@ -235,6 +195,7 @@ public class TrialController : MonoBehaviour {
     private void OnDisable()
     {
         Instructions.ReadyForNextTrial -= onNextTrial;
+
     }
 }
 

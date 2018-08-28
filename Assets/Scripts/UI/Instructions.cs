@@ -9,9 +9,16 @@ public class Instructions : MonoBehaviour {
 
     public delegate void TrialUIEvents();
     public static event TrialUIEvents ReadyForNextTrial;
+    public static event TrialUIEvents BeginTrial;
     public static event TrialUIEvents EndOfTrials;
+    public static event TrialUIEvents CountdownOver;
+
+    
 
     public GameObject endWindow;
+
+    public float time = 3f;
+    private int countdownTime = 3;
 
     private void Awake()
     {
@@ -23,17 +30,16 @@ public class Instructions : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        TrialController.BeginNextTrialUI += onBeginTrial;
+        PassManager.BeginPass += onBeginPass;
         TrialController.EndExperiment += onEndExperiment;
-        Asteroid.Hit += HitMessage;
-        Asteroid.OutOfBounds += MissMessage;
-
+        Asteroid.EndOfPass += EndOfPassMessage;
         ReadyForNextTrial();
 	}
 
-    void onBeginTrial()
+    void onBeginPass()
     {
         this.gameObject.GetComponent<Text>().text = "";
+        StartCoroutine("PassCountdown");
     }
 
     void onPracticeTrial()
@@ -47,18 +53,30 @@ public class Instructions : MonoBehaviour {
         StartCoroutine("EndWindow");
     }
 
-    void HitMessage()
+    void EndOfPassMessage(bool wasAsteroidHit)
     {
-        this.gameObject.GetComponent<Text>().text = "Hit!";
-        StartCoroutine("NextTrial");
-    }
-    void MissMessage()
-    {
-        this.gameObject.GetComponent<Text>().text = "Miss!";
-        StartCoroutine("MissNextPassMessage");
+        if(wasAsteroidHit)
+        {
+            this.gameObject.GetComponent<Text>().text = "Hit!";
+            StartCoroutine("NextTrial");
+        } else
+        {
+            this.gameObject.GetComponent<Text>().text = "Miss!";
+            StartCoroutine("MissNextPassMessage");
+        }
     }
 
-    public float time = 3f;
+    IEnumerator PassCountdown()
+    {
+        this.gameObject.GetComponent<Text>().text = "3";
+        yield return new WaitForSeconds(1);
+        this.gameObject.GetComponent<Text>().text = "2";
+        yield return new WaitForSeconds(1);
+        this.gameObject.GetComponent<Text>().text = "1";
+        yield return new WaitForSeconds(1);
+        this.gameObject.GetComponent<Text>().text = "";
+        CountdownOver();
+    }
 
     IEnumerator EndMessage()
     {
@@ -69,7 +87,7 @@ public class Instructions : MonoBehaviour {
     IEnumerator MissNextPassMessage()
     {
         yield return new WaitForSeconds(1f);
-        this.gameObject.GetComponent<Text>().text = "";
+        onBeginPass();
     }
 
     IEnumerator NextTrial()
@@ -88,9 +106,9 @@ public class Instructions : MonoBehaviour {
 
     private void OnDisable()
     {
-        TrialController.BeginNextTrialUI -= onBeginTrial;
+        //TrialController.BeginNextTrialUI -= onBeginTrial;
         TrialController.EndExperiment -= onEndExperiment;
-        Asteroid.Hit -= HitMessage;
-        Asteroid.OutOfBounds -= MissMessage;
+        //Asteroid.Hit -= HitMessage;
+        //Asteroid.OutOfBounds -= MissMessage;
     }
 }

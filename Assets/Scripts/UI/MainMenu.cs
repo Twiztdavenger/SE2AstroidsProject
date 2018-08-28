@@ -9,6 +9,8 @@ public class MainMenu : MonoBehaviour {
     public Button startExperiment;
     public Button quit;
 
+    public GameObject ErrorText;
+
     public GameObject httpServer;
     public GameObject trialIDInput;
 
@@ -23,8 +25,10 @@ public class MainMenu : MonoBehaviour {
         btn.onClick.AddListener(StartExperiment);
     }
 
+    //TODO: HANDLE INVALID ACCESS CODES CORRECTLY
     void StartExperiment()
     {
+        string participantID = "";
         int accessCode;
         if (int.TryParse(trialIDInput.GetComponent<Text>().text, out accessCode))
         {
@@ -35,7 +39,7 @@ public class MainMenu : MonoBehaviour {
                 }
                 else
                 {
-                    Debug.Log("That was an invalid access code");
+                    InvalidAccessCode();
                 }
 
             }));
@@ -54,7 +58,11 @@ public class MainMenu : MonoBehaviour {
         {
             Application.Quit();
         }
+    }
 
-
+    void InvalidAccessCode()
+    {
+        ErrorText.SetActive(true);
+        ErrorText.GetComponent<Text>().text = "Error: Invalid Access Code";
     }
 }

@@ -17,10 +17,6 @@ public class CameraResetAspectRatio : MonoBehaviour {
         // current viewport height should be scaled by this amount
         float scaleheight = windowaspect / targetaspect;
 
-        Debug.Log(scaleheight);
-        Debug.Log(Screen.width);
-        Debug.Log(Screen.height);
-
         // obtain camera component so we can modify its viewport
         Camera camera = GetComponent<Camera>();
 

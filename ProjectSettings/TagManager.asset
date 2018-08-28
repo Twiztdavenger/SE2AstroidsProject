@@ -11,6 +11,8 @@ TagManager:
   - Projectile
   - EnterPartID
   - EnterAccessCode
+  - PassOutputDataCollector
+  - TrialOutputDataCollector
   layers:
   - Default
   - TransparentFX

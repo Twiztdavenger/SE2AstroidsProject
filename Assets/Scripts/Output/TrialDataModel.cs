@@ -23,9 +23,6 @@ namespace Assets.Scripts.Output
         /// </summary>
         public Queue<PassDataModel> passList = new Queue<PassDataModel>();
 
-        
-
-
         public string TrialName { get; set; }
         public int ParticipantID { get; set; }
         public string RoundStatus { get; set; }

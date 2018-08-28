@@ -2,18 +2,14 @@
 using System.Collections.Generic;
 
 public class OutputPassModel{
-    public int passNum;
-    public bool wasFired;
-    public float timeProjFired; //relative to beginning of pass
-    public int timeOfPass; //Do we really need this?
-    public float minDistance;
+    public int PassID { get; set; }
+    public bool IfShipFired { get; set; }
+    public float TimePlayerShotInSeconds { get; set; }
+    public float ProjAsteroidMinDistance { get; set; }
 
-    public OutputPassModel(int passNum, bool wasFired, float timeProjFired, int timeOfPass, float minDistance)
+    public override string ToString()
     {
-        this.passNum = passNum;
-        this.wasFired = wasFired;
-        this.timeProjFired = timeProjFired;
-        this.timeOfPass = timeOfPass;
-        this.minDistance = minDistance;
+        int ifShipFired = IfShipFired ? 1 : 0;
+        return "(" + PassID + "; " + ifShipFired + "; " + TimePlayerShotInSeconds + "; " + ProjAsteroidMinDistance + ")";
     }
 }
