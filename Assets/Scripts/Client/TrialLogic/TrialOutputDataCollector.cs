@@ -10,6 +10,8 @@ public class TrialOutputDataCollector : MonoBehaviour {
     private int TotalNumPasses; //Not Implemented Yet
     private float DelayTime; //Not Implemented Yet
 
+    private bool canAddPass = true;
+
     public OutputTrialModel TrialOutputModel;
 
     public ArrayList PassOutputDataList = new ArrayList();
@@ -31,19 +33,23 @@ public class TrialOutputDataCollector : MonoBehaviour {
 
     }
 
-    void addPassOutputDataModel(bool ifShipFired, float timePlayerShotInSeconds, float projAsteroidMinDistance)
+    void addPassOutputDataModel(bool ifShipFired, bool ifAsteroidHit, float timePlayerShotInSeconds, float projAsteroidMinDistance)
     {
-        PassNumID++;
-        OutputPassModel temp = new OutputPassModel()
+        if(canAddPass)
         {
-            PassID = PassNumID,
-            IfShipFired = ifShipFired,
-            TimePlayerShotInSeconds = timePlayerShotInSeconds,
-            ProjAsteroidMinDistance = projAsteroidMinDistance
-            
-        };
-        //Debug.Log("Adding pass data: " + PassNumID + " " + ifShipFired + " " + timePlayerShotInSeconds + " " + projAsteroidMinDistance);
-        PassOutputDataList.Add(temp);
+            PassNumID++;
+            OutputPassModel temp = new OutputPassModel()
+            {
+                PassID = PassNumID,
+                IfShipFired = ifShipFired,
+                TimePlayerShotInSeconds = timePlayerShotInSeconds,
+                ProjAsteroidMinDistance = projAsteroidMinDistance,
+                IfAsteroidWasHit = ifAsteroidHit
+            };
+            //Debug.Log("Adding pass data: " + PassNumID + " " + ifShipFired + " " + timePlayerShotInSeconds + " " + projAsteroidMinDistance);
+            PassOutputDataList.Add(temp);
+        }
+        
     }
 
     void addPassListToTrial()
@@ -68,6 +74,9 @@ public class TrialOutputDataCollector : MonoBehaviour {
     private void OnDestroy()
     {
         ReturnTrialOutputData(TrialOutputModel);
+        PassOutputDataCollector.ReturnPassOutputData -= addPassOutputDataModel;
+        PassManager.EndOfTrial -= addPassListToTrial;
+        canAddPass = false;
     }
 
 }

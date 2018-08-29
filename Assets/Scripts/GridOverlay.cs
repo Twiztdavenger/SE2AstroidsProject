@@ -25,6 +25,14 @@ public class GridOverlay : MonoBehaviour
     public Color mainColor = new Color(0f, 1f, 0f, 1f);
     public Color subColor = new Color(0f, 0.5f, 0f, 1f);
 
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.G))
+        {
+            gameObject.SetActive(!gameObject.activeSelf);
+        }
+    }
+
     void CreateLineMaterial()
     {
         if (!lineMaterial)

@@ -6,6 +6,7 @@ public class OutputTrialModel{
     public int TrialID { get; set; }
     public string ParticipantID { get; set; }
     public string TrialName { get; set; }
+
     public bool PracticeRound { get; set; } //Not implemented yet
     public int TotalNumPasses { get; set; } //Not implemented yet
     public float DelayTime { get; set; } //Not implemented yet
@@ -19,9 +20,8 @@ public class OutputTrialModel{
         {
             foreach (OutputPassModel pass in OutputPassDataList)
             {
-                passOutput += pass.ToString() + ", ";
+                passOutput += pass.ToString() + " ";
             }
-            passOutput = passOutput.Substring(0, passOutput.Length - 2);
         } else
         {
             passOutput = "No Pass Data";

@@ -97,10 +97,6 @@ public class Asteroid : MonoBehaviour {
             // START NEW PASS FOR DATA COLLECTION
             EndOfPass(false);
 
-
-            //gameObject.transform.parent.GetComponent<TrialController>()
-            //    .trialPass(numPasses, hit, passTimer);
-
             // If asteroid reaches end of screen, it was not hit
             hit = false;
 
@@ -122,7 +118,6 @@ public class Asteroid : MonoBehaviour {
             explosion.transform.position = transform.position;
 
             explosion.GetComponent<Rigidbody2D>().AddForce(-col.GetComponent<Rigidbody2D>().velocity.normalized * 5000, ForceMode2D.Impulse);
-
 
             hit = true;
             EndOfPass(true);

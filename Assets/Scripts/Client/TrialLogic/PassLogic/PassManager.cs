@@ -21,7 +21,7 @@ public class PassManager : MonoBehaviour{
 
     public GameObject PassOutputDataCollector;
 
-    private bool wasFired = false;
+    private bool canFire = false;
     private bool trialRunning = false;
 
     private float passTimer = 0f;
@@ -36,7 +36,6 @@ public class PassManager : MonoBehaviour{
     void Start () {
         TrialController.BeginTrial += BeginTrial;
         Asteroid.EndOfPass += EndPass;
-
         Instructions.CountdownOver += StartPass;
 	}
 
@@ -44,7 +43,6 @@ public class PassManager : MonoBehaviour{
     {
         passTimer = 0f;
         trialRunning = true;
-        wasFired = false;
 
         // Load Asteroid 
         asteroidPrefab.GetComponent<Asteroid>().rotation = true;
@@ -75,7 +73,7 @@ public class PassManager : MonoBehaviour{
     //TODO: Move Asteroid respawn logic here as well
     void StartPass()
     {
-        wasFired = false;
+        canFire = true;
         SpawnAsteroid();
         var spawnOutputDataCollector = Instantiate(PassOutputDataCollector);
     }
@@ -91,13 +89,14 @@ public class PassManager : MonoBehaviour{
         if(wasAsteroidHit)
         {
             trialRunning = false;
+            canFire = false;
             EndOfTrial();
             StartCoroutine("DestroyDelay");
         } else
         {
             Debug.Log("Pass has ended");
             //Keeps us from firing during the countdown 
-            wasFired = true;
+            canFire = false;
             Destroy(GameObject.FindGameObjectWithTag("PassOutputDataCollector"));
         }
         
@@ -116,21 +115,18 @@ public class PassManager : MonoBehaviour{
 
         // SHOOTING
         // If we are pressing a fire button and bool did Fire was false
-        if (Input.GetButton("Fire1") && !wasFired && trialRunning)
+        if (Input.GetButton("Fire1") && canFire && trialRunning)
         {
             Shoot();
-            wasFired = true;
+            canFire = false;
             timePlayerShotThisPass = passTimer;
-        }
-        
-        
+        } 
     } 
 
     private void OnDestroy()
     {
         TrialController.BeginTrial -= BeginTrial;
         Asteroid.EndOfPass -= EndPass;
-
         Instructions.CountdownOver -= StartPass;
     }
 }

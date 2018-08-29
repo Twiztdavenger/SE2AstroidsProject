@@ -58,6 +58,18 @@ public class Projectile : MonoBehaviour {
 
         if(asteroid != null && !foundMinDistance)
         {
+            GameObject localAsteroid = GameObject.FindGameObjectWithTag("Asteroid");
+            GameObject localProjectile = gameObject;
+
+            Collider2D asteroidCol = localAsteroid.GetComponent<BoxCollider2D>();
+
+            Collider2D projectileCol = localProjectile.GetComponent<BoxCollider2D>();
+
+            Vector2 asteroidClosestPoint = asteroidCol.Distance(projectileCol).pointA;
+            Vector2 projectileClosestPoint = asteroidCol.Distance(projectileCol).pointB;
+
+            currentDistanceFromAsteroid = Vector2.Distance(asteroidClosestPoint, projectileClosestPoint);
+
             currentDistanceFromAsteroid = Vector3.Distance(gameObject.transform.position, asteroid.transform.position);
 
             if(currentDistanceFromAsteroid < minDistanceFromAsteroid)
@@ -65,17 +77,6 @@ public class Projectile : MonoBehaviour {
                 minDistanceFromAsteroid = currentDistanceFromAsteroid;
             }
         }
-
-        //tempDistance = Vector2.Distance(asteroid.transform.position, transform.position);
-
-        //if(tempDistance < distance)
-        //{
-        //    distance = tempDistance;
-
-        //    projCloseCoordinates = transform.position;
-        //    astCloseCoordinates = GameObject.FindGameObjectWithTag("Asteroid").transform.position;
-        //}
-       
     }
 
     void OnTriggerEnter2D()

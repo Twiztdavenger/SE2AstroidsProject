@@ -102,7 +102,7 @@ public class TrialController : MonoBehaviour {
             {
                 EndExperiment();
                 trialName = "";
-            endWindow.SetActive(true);
+                
             }
             // "Press Z to start trial"
             else if (Input.GetKeyDown(KeyCode.Z) == true && !trialRunning)
@@ -117,7 +117,6 @@ public class TrialController : MonoBehaviour {
                 var createTrialOutputDataCollector = Instantiate(TrialOutputDataCollector);
 
                 GameObject.FindGameObjectWithTag("TrialOutputDataCollector").GetComponent<TrialOutputDataCollector>().setTrialData(1, trialModel.TrialName, "Testing Output", trialModel.ParticipantID);
-                //BeginNextTrialUI();
             }
         
     }
@@ -166,10 +165,9 @@ public class TrialController : MonoBehaviour {
         minAstCoordinates = minAst;
     }
     // Builds the strings to send to the .CSV file
-    private void OnDisable()
+    private void OnDestroy()
     {
         Instructions.ReadyForNextTrial -= onNextTrial;
-
     }
 }
 

@@ -12,8 +12,7 @@ public class Instructions : MonoBehaviour {
     public static event TrialUIEvents BeginTrial;
     public static event TrialUIEvents EndOfTrials;
     public static event TrialUIEvents CountdownOver;
-
-    
+    public static event TrialUIEvents OutputManagerDoneWriting;
 
     public GameObject endWindow;
 
@@ -31,8 +30,10 @@ public class Instructions : MonoBehaviour {
     // Use this for initialization
     void Start () {
         PassManager.BeginPass += onBeginPass;
-        TrialController.EndExperiment += onEndExperiment;
         Asteroid.EndOfPass += EndOfPassMessage;
+        TrialController.EndExperiment += DisplayWritingDataText;
+        OutputManager.DoneWritingData += DisplayEndWindow;
+
         ReadyForNextTrial();
 	}
 
@@ -47,12 +48,6 @@ public class Instructions : MonoBehaviour {
         this.gameObject.GetComponent<Text>();
     }
 
-    void onEndExperiment()
-    {
-        this.gameObject.GetComponent<Text>().text = "No More Trials";
-        StartCoroutine("EndWindow");
-    }
-
     void EndOfPassMessage(bool wasAsteroidHit)
     {
         if(wasAsteroidHit)
@@ -64,6 +59,16 @@ public class Instructions : MonoBehaviour {
             this.gameObject.GetComponent<Text>().text = "Miss!";
             StartCoroutine("MissNextPassMessage");
         }
+    }
+
+    void DisplayWritingDataText()
+    {
+        this.gameObject.GetComponent<Text>().text = "End of Trials, writing data...";
+    }
+
+    void DisplayEndWindow()
+    {
+        StartCoroutine("EndWindow");
     }
 
     IEnumerator PassCountdown()
@@ -100,6 +105,7 @@ public class Instructions : MonoBehaviour {
     IEnumerator EndWindow()
     {
         yield return new WaitForSeconds(time);
+        this.gameObject.GetComponent<Text>().text = "No More Trials";
         this.gameObject.GetComponent<Text>().text = "";
         endWindow.SetActive(true);
     }
@@ -107,7 +113,8 @@ public class Instructions : MonoBehaviour {
     private void OnDestroy()
     {
         PassManager.BeginPass -= onBeginPass;
-        TrialController.EndExperiment -= onEndExperiment;
+        TrialController.EndExperiment -= DisplayEndWindow;
         Asteroid.EndOfPass -= EndOfPassMessage;
+        OutputManager.DoneWritingData -= DisplayEndWindow;
     }
 }
