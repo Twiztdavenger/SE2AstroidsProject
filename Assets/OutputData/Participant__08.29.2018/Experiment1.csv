@@ -1,0 +1,4 @@
+Trial Name,Asteroid Speed (grid unit per second on x axis),Asteroid Slope,Pass Data (PassID; If Player Fired; Time Player Fired; Min Distance Proj and Asteroid)
+Diagonal Trial,3,0,(1; 1; 1; 1.954901; 0) 
+Diagonal Trial,3,0.5,(1; 1; 1; 1.159667; 0) 
+
