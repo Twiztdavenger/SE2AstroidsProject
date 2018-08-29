@@ -14,6 +14,8 @@ public class PassManager : MonoBehaviour{
     public static event PassStages ProjHit;
     public static event PassStages EndOfTrial;
 
+    public bool ifFirstPass = true;
+
     public GameObject shipPrefab;
     public GameObject asteroidPrefab;
 

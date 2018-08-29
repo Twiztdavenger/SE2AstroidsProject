@@ -14,7 +14,7 @@ public class OutputManager : MonoBehaviour {
 
     public static string participantID = "";
 
-    public delegate void OutputEvent();
+    public delegate void OutputEvent(string path);
     public static event OutputEvent DoneWritingData;
 
 	// Use this for initialization
@@ -46,9 +46,9 @@ public class OutputManager : MonoBehaviour {
             participantID = OutputTrialQueue.Peek().ParticipantID;
             TrialController.EndExperiment -= getTrialOutput;
             string[] rowDataTemp = new string[4];
-            rowDataTemp[0] = "Experiment Name";
-            rowDataTemp[1] = "Trial Id";
-            rowDataTemp[2] = "Trial Name";
+            rowDataTemp[0] = "Trial Name";
+            rowDataTemp[1] = "Asteroid Speed (grid unit per second on x axis)";
+            rowDataTemp[2] = "Asteroid Slope";
             rowDataTemp[3] = "Pass Data (PassID; If Player Fired; Time Player Fired; Min Distance Proj and Asteroid)";
 
             rowData.Add(rowDataTemp);
@@ -57,9 +57,9 @@ public class OutputManager : MonoBehaviour {
                 OutputTrialModel tempTrial = OutputTrialQueue.Dequeue();
 
                 rowDataTemp = new string[4];
-                rowDataTemp[0] = "Experiment";
-                rowDataTemp[1] = tempTrial.TrialID.ToString();
-                rowDataTemp[2] = tempTrial.TrialName.ToString();
+                rowDataTemp[0] = tempTrial.TrialName.ToString();
+                rowDataTemp[1] = tempTrial.AsteroidSpeed.ToString();
+                rowDataTemp[2] = tempTrial.AsteroidSlope.ToString();
                 rowDataTemp[3] = tempTrial.returnPassData();
                 rowData.Add(rowDataTemp);
             }
@@ -81,7 +81,7 @@ public class OutputManager : MonoBehaviour {
 
             DateTime today = DateTime.Now;
 
-            _CSV_DATA_PATH_ += "/OutputData/" + "/Participant_" + participantID + "_" + today.ToString("dd.MM.yyyy");
+            _CSV_DATA_PATH_ += "/OutputData/" + "/Participant_" + participantID + "_" + today.ToString("MM.dd.yyyy");
             Directory.CreateDirectory(_CSV_DATA_PATH_);
             string _CSV_DATA_PATH_FINAL = _CSV_DATA_PATH_ + "/Experiment1" + ".csv";
 
@@ -100,7 +100,7 @@ public class OutputManager : MonoBehaviour {
             StreamWriter outStream = System.IO.File.CreateText(_CSV_DATA_PATH_FINAL);
             outStream.WriteLine(sb);
             outStream.Close();
-            DoneWritingData();
+            DoneWritingData(_CSV_DATA_PATH_FINAL);
 
         } else
         {

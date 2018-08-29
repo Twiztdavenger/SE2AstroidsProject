@@ -116,7 +116,9 @@ public class TrialController : MonoBehaviour {
                 BeginTrial(trialModel);
                 var createTrialOutputDataCollector = Instantiate(TrialOutputDataCollector);
 
-                GameObject.FindGameObjectWithTag("TrialOutputDataCollector").GetComponent<TrialOutputDataCollector>().setTrialData(1, trialModel.TrialName, "Testing Output", trialModel.ParticipantID);
+                float asteroidSlope = trialModel.AsteroidMovementY / trialModel.AsteroidMovementX;
+
+                GameObject.FindGameObjectWithTag("TrialOutputDataCollector").GetComponent<TrialOutputDataCollector>().setTrialData(1, trialModel.TrialName, "Testing Output", trialModel.ParticipantID, trialModel.AsteroidMovementX, asteroidSlope);
             }
         
     }

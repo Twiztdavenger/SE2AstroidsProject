@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,7 +15,11 @@ public class Instructions : MonoBehaviour {
     public static event TrialUIEvents CountdownOver;
     public static event TrialUIEvents OutputManagerDoneWriting;
 
+    public string filePath = "";
+
     public GameObject endWindow;
+
+    public GameObject openFileButton;
 
     public float time = 3f;
     private int countdownTime = 3;
@@ -33,6 +38,9 @@ public class Instructions : MonoBehaviour {
         Asteroid.EndOfPass += EndOfPassMessage;
         TrialController.EndExperiment += DisplayWritingDataText;
         OutputManager.DoneWritingData += DisplayEndWindow;
+
+        Button btn = openFileButton.GetComponent<Button>();
+        btn.onClick.AddListener(OpenFile);
 
         ReadyForNextTrial();
 	}
@@ -66,9 +74,15 @@ public class Instructions : MonoBehaviour {
         this.gameObject.GetComponent<Text>().text = "End of Trials, writing data...";
     }
 
-    void DisplayEndWindow()
+    void DisplayEndWindow(string path)
     {
+        filePath = path;
         StartCoroutine("EndWindow");
+    }
+
+    void OpenFile()
+    {
+        File.Open(filePath, FileMode.Open);
     }
 
     IEnumerator PassCountdown()
@@ -113,7 +127,6 @@ public class Instructions : MonoBehaviour {
     private void OnDestroy()
     {
         PassManager.BeginPass -= onBeginPass;
-        TrialController.EndExperiment -= DisplayEndWindow;
         Asteroid.EndOfPass -= EndOfPassMessage;
         OutputManager.DoneWritingData -= DisplayEndWindow;
     }

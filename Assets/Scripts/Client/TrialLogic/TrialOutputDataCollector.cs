@@ -10,6 +10,8 @@ public class TrialOutputDataCollector : MonoBehaviour {
     private int TotalNumPasses; //Not Implemented Yet
     private float DelayTime; //Not Implemented Yet
 
+    private float AsteroidSpeed;
+
     private bool canAddPass = true;
 
     public OutputTrialModel TrialOutputModel;
@@ -32,7 +34,6 @@ public class TrialOutputDataCollector : MonoBehaviour {
     {
 
     }
-
     void addPassOutputDataModel(bool ifShipFired, bool ifAsteroidHit, float timePlayerShotInSeconds, float projAsteroidMinDistance)
     {
         if(canAddPass)
@@ -58,13 +59,15 @@ public class TrialOutputDataCollector : MonoBehaviour {
         //Debug.Log("How many passes were in this trial: " + PassOutputDataList.Count);
     }
 
-    public void setTrialData(int trialID, string trialName, string experimentName, string partID)
+    public void setTrialData(int trialID, string trialName, string experimentName, string partID, float asteroidSpeed, float asteroidSlope)
     {
         OutputTrialModel temp = new OutputTrialModel
         {
             TrialID = trialID,
             TrialName = trialName,
-            ParticipantID = partID
+            ParticipantID = partID,
+            AsteroidSpeed = asteroidSpeed,
+            AsteroidSlope = asteroidSlope
             //ExperimentName = experimentName,
         };
 
