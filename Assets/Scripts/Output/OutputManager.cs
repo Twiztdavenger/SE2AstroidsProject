@@ -46,7 +46,6 @@ public class OutputManager : MonoBehaviour {
             rowDataTemp[3] = "Pass Data";
 
             rowData.Add(rowDataTemp);
-            // TODO: Work on finding a way to output all trial data at once
             while (OutputTrialQueue.Count > 0)
             {
                 OutputTrialModel tempTrial = OutputTrialQueue.Dequeue();
@@ -56,7 +55,6 @@ public class OutputManager : MonoBehaviour {
                 rowDataTemp[1] = tempTrial.TrialID.ToString();
                 rowDataTemp[2] = tempTrial.TrialName.ToString();
                 rowDataTemp[3] = tempTrial.returnPassData();
-                //rowDataTemp[3] = "TempPassData";
                 rowData.Add(rowDataTemp);
             }
 
@@ -75,7 +73,7 @@ public class OutputManager : MonoBehaviour {
             for (int index = 0; index < length; index++)
                 sb.AppendLine(string.Join(delimiter, output[index]));
 
-            _CSV_DATA_PATH_ = @"Assets/Output" + "/CSV/" + "Participant" + participantID + "Output" + ".csv";
+            _CSV_DATA_PATH_ = @"Assets/Output" + "/CSV/" + "Participant_" + participantID + "_Output" + ".csv";
 
             StreamWriter outStream = System.IO.File.CreateText(_CSV_DATA_PATH_);
             outStream.WriteLine(sb);

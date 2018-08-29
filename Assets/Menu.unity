@@ -134,7 +134,7 @@ MonoBehaviour:
   ErrorText: {fileID: 186719557}
   httpServer: {fileID: 31041363}
   trialIDInput: {fileID: 1363054193}
-  partIDInput: {fileID: 0}
+  partIDInput: {fileID: 1137680781}
 --- !u!1001 &31041362
 Prefab:
   m_ObjectHideFlags: 0
@@ -1850,64 +1850,53 @@ Prefab:
       propertyPath: m_RootOrder
       value: 4
       objectReference: {fileID: 0}
-    - target: {fileID: 114922241059981942, guid: c6da86d523ad1ba4c86f2eee26328562,
-        type: 2}
+    - target: {fileID: 0}
       propertyPath: trialsText
       value: 
       objectReference: {fileID: 0}
-    - target: {fileID: 114922241059981942, guid: c6da86d523ad1ba4c86f2eee26328562,
-        type: 2}
+    - target: {fileID: 0}
       propertyPath: loadData
       value: 
       objectReference: {fileID: 0}
-    - target: {fileID: 114922241059981942, guid: c6da86d523ad1ba4c86f2eee26328562,
-        type: 2}
+    - target: {fileID: 0}
       propertyPath: startExperiment
       value: 
       objectReference: {fileID: 0}
-    - target: {fileID: 114922241059981942, guid: c6da86d523ad1ba4c86f2eee26328562,
-        type: 2}
+    - target: {fileID: 0}
       propertyPath: httpServer
       value: 
       objectReference: {fileID: 31041363}
-    - target: {fileID: 114922241059981942, guid: c6da86d523ad1ba4c86f2eee26328562,
-        type: 2}
+    - target: {fileID: 0}
       propertyPath: quit
       value: 
       objectReference: {fileID: 0}
-    - target: {fileID: 114922241059981942, guid: c6da86d523ad1ba4c86f2eee26328562,
-        type: 2}
+    - target: {fileID: 0}
       propertyPath: nextWindow
       value: 
       objectReference: {fileID: 0}
-    - target: {fileID: 114922241059981942, guid: c6da86d523ad1ba4c86f2eee26328562,
-        type: 2}
+    - target: {fileID: 0}
       propertyPath: back
       value: 
       objectReference: {fileID: 0}
-    - target: {fileID: 114922241059981942, guid: c6da86d523ad1ba4c86f2eee26328562,
-        type: 2}
+    - target: {fileID: 0}
       propertyPath: PartIDWindow
       value: 
       objectReference: {fileID: 0}
-    - target: {fileID: 114922241059981942, guid: c6da86d523ad1ba4c86f2eee26328562,
-        type: 2}
+    - target: {fileID: 0}
       propertyPath: AccessCodeWindow
       value: 
       objectReference: {fileID: 0}
-    - target: {fileID: 114922241059981942, guid: c6da86d523ad1ba4c86f2eee26328562,
-        type: 2}
+    - target: {fileID: 0}
       propertyPath: PartIDText
       value: 
       objectReference: {fileID: 0}
-    - target: {fileID: 114922241059981942, guid: c6da86d523ad1ba4c86f2eee26328562,
-        type: 2}
+    - target: {fileID: 0}
       propertyPath: AccessCodeText
       value: 
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 114494450268372168, guid: c6da86d523ad1ba4c86f2eee26328562, type: 2}
-    - {fileID: 114922241059981942, guid: c6da86d523ad1ba4c86f2eee26328562, type: 2}
+    - {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: c6da86d523ad1ba4c86f2eee26328562, type: 2}
   m_IsPrefabAsset: 0
 --- !u!1 &1909066204

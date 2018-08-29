@@ -8,18 +8,17 @@ Prefab:
     m_TransformParent: {fileID: 0}
     m_Modifications: []
     m_RemovedComponents: []
-  m_ParentPrefab: {fileID: 0}
+  m_SourcePrefab: {fileID: 0}
   m_RootGameObject: {fileID: 1991833147903998}
-  m_IsPrefabParent: 1
+  m_IsPrefabAsset: 1
 --- !u!1 &1991833147903998
 GameObject:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 5
+  serializedVersion: 6
   m_Component:
   - component: {fileID: 4833235363276252}
-  - component: {fileID: 114922241059981942}
   - component: {fileID: 114494450268372168}
   m_Layer: 0
   m_Name: TrialMenu
@@ -31,7 +30,7 @@ GameObject:
 --- !u!4 &4833235363276252
 Transform:
   m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1991833147903998}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -44,7 +43,7 @@ Transform:
 --- !u!114 &114494450268372168
 MonoBehaviour:
   m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1991833147903998}
   m_Enabled: 1
@@ -52,17 +51,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cbbb42d030d35742ad67f0f826324f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &114922241059981942
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1991833147903998}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 749a0bf0f3a633043aa6e3a8d987433c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  trialsText: {fileID: 0}
-  loadData: {fileID: 0}
-  startExperiment: {fileID: 0}
+  participantID: 
+  invalidAccessCode: 0

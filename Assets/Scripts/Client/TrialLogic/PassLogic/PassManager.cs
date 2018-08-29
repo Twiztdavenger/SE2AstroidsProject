@@ -123,10 +123,14 @@ public class PassManager : MonoBehaviour{
             timePlayerShotThisPass = passTimer;
         }
         
+        
     } 
 
-    private void OnDisable()
+    private void OnDestroy()
     {
+        TrialController.BeginTrial -= BeginTrial;
+        Asteroid.EndOfPass -= EndPass;
 
+        Instructions.CountdownOver -= StartPass;
     }
 }

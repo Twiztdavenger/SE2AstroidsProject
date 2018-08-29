@@ -104,11 +104,10 @@ public class Instructions : MonoBehaviour {
         endWindow.SetActive(true);
     }
 
-    private void OnDisable()
+    private void OnDestroy()
     {
-        //TrialController.BeginNextTrialUI -= onBeginTrial;
+        PassManager.BeginPass -= onBeginPass;
         TrialController.EndExperiment -= onEndExperiment;
-        //Asteroid.Hit -= HitMessage;
-        //Asteroid.OutOfBounds -= MissMessage;
+        Asteroid.EndOfPass -= EndOfPassMessage;
     }
 }
