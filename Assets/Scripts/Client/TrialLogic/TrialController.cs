@@ -38,15 +38,14 @@ public class TrialController : MonoBehaviour {
     Queue<TrialDataModel> trialQueue = new Queue<TrialDataModel>();
     Queue<String> dataOutputQueue = new Queue<String>();
 
-    public GameObject shipPrefab;
-    public GameObject asteroidPrefab;
-
     public GameObject endWindow;
 
     public GameObject canvasText;
     public GameObject trialText;
 
-    public bool trialStart = false;
+    public GameObject TrialOutputDataCollector;
+
+    public bool trialRunning = false;
     public bool onLastTrial = false;
 
     //BUTTONS FOR ENDTRIAL WINDOW
@@ -60,14 +59,15 @@ public class TrialController : MonoBehaviour {
     private static TrialController _instance;
     public static TrialController Instance;
 
-    public delegate void NextTrial(TrialDataModel data);
-    public static event NextTrial BeginTrial;
-
-    public delegate void TrialStages();
-    public static event TrialStages TrialsEnd;
+    public delegate void TrialStagesNextTrial(TrialDataModel data);
+    public static event TrialStagesNextTrial BeginTrial;
 
     public delegate void TrialUI();
-    public static event TrialUI StartTrial;
+    public static event TrialUI BeginNextTrialUI;
+
+    public delegate void TrialStages();
+    //public static event TrialStages BeginTrial;
+    public static event TrialStages EndExperiment;
 
     private void Awake()
     {
@@ -76,56 +76,49 @@ public class TrialController : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        trialQueue = xmlData.TrialQueue;
+        trialQueue = InputDataHolder.TrialQueue;
         endWindow.SetActive(false);
 
         Button btn = MainMenu.GetComponent<Button>();
         btn.onClick.AddListener(GoToMainMenu);
 
-        trialStart = false;
+        trialRunning= false;
         onLastTrial = false;
 
         Instructions.ReadyForNextTrial += onNextTrial;
+        
     }
 
     // Our current trial
     TrialDataModel trialModel = new TrialDataModel();
     private string trialName = "";
+    private string experimentName = "";
     
 
     void Update () {
-        try
-        {
-            if(trialQueue.Count == 0 && !onLastTrial && !trialStart)
+            //FIX: THIS IF CONDITIONAL STATEMENT IS ALWAYS LOOPING DUE TO ALL CONDITIONS BEING MET AT END OF TRIALS
+            //THIS IS REALLY BAD I SHOULD REALLY FIX THIS
+            if(trialQueue.Count == 0 && !onLastTrial && !trialRunning)
             {
-                TrialsEnd();
-                trialStart = false;
-
+                EndExperiment();
                 trialName = "";
-
-                endWindow.SetActive(true);
-
-                //outputData.getTrialOutput();
-
+                
             }
             // "Press Z to start trial"
-            else if (Input.GetKeyDown(KeyCode.Z) == true && !trialStart)
+            else if (Input.GetKeyDown(KeyCode.Z) == true && !trialRunning)
             {
                 if(onLastTrial)
                 {
                     onLastTrial = false;
                 }
-                trialStart = true;
-
-                Debug.Log(trialModel.TrialName);
+                trialRunning = true;
 
                 BeginTrial(trialModel);
-                StartTrial();
+                var createTrialOutputDataCollector = Instantiate(TrialOutputDataCollector);
+
+                GameObject.FindGameObjectWithTag("TrialOutputDataCollector").GetComponent<TrialOutputDataCollector>().setTrialData(1, trialModel.TrialName, "Testing Output", trialModel.ParticipantID);
             }
-        } catch(Exception e)
-        {
-            Debug.Log(e);
-        }
+        
     }
 
     void onNextTrial()
@@ -136,10 +129,10 @@ public class TrialController : MonoBehaviour {
             {
                 onLastTrial = true;
             }
-            trialStart = false;
+            trialRunning = false;
             trialModel = trialQueue.Dequeue();
             trialName = trialModel.TrialName;
-
+            
             trialText.GetComponent<Text>().text = trialName;
         } catch(Exception e)
         {
@@ -148,42 +141,7 @@ public class TrialController : MonoBehaviour {
         
     }
 
-    public void trialPass(int passID, bool hit, float totalPassTime)
-    {
-        bool wasFired = false;
-
-        float fireTime = GameObject.FindWithTag("Ship").GetComponent<PlayerMovement>().timeFired;
-
-        Debug.Log(DistanceInfo.projMinX);
-        Debug.Log(DistanceInfo.projMinY);
-
-        float pX = DistanceInfo.projMinX;
-        float pY = DistanceInfo.projMinY;
-
-        float aX = DistanceInfo.astMinX;
-        float aY = DistanceInfo.astMinY;
-
-        trialModel.addPass(passID, wasFired, hit, fireTime, totalPassTime, pX, pY, aX, aY);
-
-        minProjCoordinates = Vector2.zero;
-        minAstCoordinates = Vector2.zero;
-
-        GameObject.FindWithTag("Ship").GetComponent<PlayerMovement>().timeFired = 0f;
-
-        if (hit)
-        {
-            //changeCanvasText("PRETRIAL");
-            trialStart = false;
-
-            Destroy(GameObject.FindWithTag("Ship"));
-            Destroy(GameObject.FindWithTag("Asteroid"));
-
-            //trialText.GetComponent<Text>().text = "Trial " + trialModel.TrialID;
-
-
-            dataCollection();
-        }
-    }
+    
 
     public void ClickMainMenu()
     {
@@ -207,32 +165,7 @@ public class TrialController : MonoBehaviour {
         minAstCoordinates = minAst;
     }
     // Builds the strings to send to the .CSV file
-    void dataCollection()
-    {
-        //OutputTrialModel tempOutputModel = new OutputTrialModel();
-
-
-        //tempOutputModel.TrialID = trialModel.TrialID;
-        //tempOutputModel.ExperimentName = "Experiment Data";
-        //tempOutputModel.PracticeRound = false;
-        //tempOutputModel.TotalNumPasses = trialModel.TotalNumPasses;
-        //tempOutputModel.DelayTime = trialModel.SpawnDelayTime;
-
-        //tempOutputModel.TrialID = trialModel.TrialID;
-        //tempOutputModel.ExperimentName = "Experiment Data";
-        //tempOutputModel.PracticeRound = false;
-        //tempOutputModel.TotalNumPasses = trialModel.TotalNumPasses;
-        //tempOutputModel.DelayTime = trialModel.SpawnDelayTime;
-
-        //string passData = trialModel.returnPassData();
-
-        //tempOutputModel.passData = passData;
-
-
-        //outputData.OutputTrialQueue.Enqueue(tempOutputModel);
-    }
-
-    private void OnDisable()
+    private void OnDestroy()
     {
         Instructions.ReadyForNextTrial -= onNextTrial;
     }

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,6 +12,11 @@ public class Projectile : MonoBehaviour {
     public float distance = 10000f;
     float tempDistance;
 
+    public float minDistanceFromAsteroid = 9999f;
+    private float currentDistanceFromAsteroid;
+
+    private bool foundMinDistance = false;
+
     public GameObject asteroid;
     public GameObject thisProjectile;
 
@@ -21,19 +27,22 @@ public class Projectile : MonoBehaviour {
     private Vector2 projCloseCoordinates = new Vector2();
     private Vector2 astCloseCoordinates = new Vector2();
 
+    public delegate void ProjData(float MinDistance);
+    public static event ProjData FindProjAsteroidMinDistance;
+
 
     void Start () {
-        
-
         // This destroys the projectile after 'timer' amount of seconds
         Destroy(gameObject, timer);
 
-        DistanceInfo.projMinX = 0f;
-        DistanceInfo.projMinY = 0f;
-
-        DistanceInfo.astMinX = 0f;
-        DistanceInfo.astMinY = 0f;
-
+        try
+        {
+            asteroid = GameObject.FindGameObjectWithTag("Asteroid");
+        } catch(Exception e)
+        {
+            Debug.Log("No Asteroid found");
+        }
+        
     }
 
     void Update()
@@ -47,24 +56,31 @@ public class Projectile : MonoBehaviour {
 
         transform.position = pos;
 
-        //tempDistance = Vector2.Distance(asteroid.transform.position, transform.position);
+        if(asteroid != null && !foundMinDistance)
+        {
+            GameObject localAsteroid = GameObject.FindGameObjectWithTag("Asteroid");
+            GameObject localProjectile = gameObject;
 
-        //if(tempDistance < distance)
-        //{
-        //    distance = tempDistance;
+            Collider2D asteroidCol = localAsteroid.GetComponent<BoxCollider2D>();
 
-        //    projCloseCoordinates = transform.position;
-        //    astCloseCoordinates = GameObject.FindGameObjectWithTag("Asteroid").transform.position;
-        //}
-       
+            Collider2D projectileCol = localProjectile.GetComponent<BoxCollider2D>();
+
+            Vector2 asteroidClosestPoint = asteroidCol.Distance(projectileCol).pointA;
+            Vector2 projectileClosestPoint = asteroidCol.Distance(projectileCol).pointB;
+
+            currentDistanceFromAsteroid = Vector2.Distance(asteroidClosestPoint, projectileClosestPoint);
+
+            currentDistanceFromAsteroid = Vector3.Distance(gameObject.transform.position, asteroid.transform.position);
+
+            if(currentDistanceFromAsteroid < minDistanceFromAsteroid)
+            {
+                minDistanceFromAsteroid = currentDistanceFromAsteroid;
+            }
+        }
     }
 
     void OnTriggerEnter2D()
     {
-
-        DistanceInfo.astMinX = astCloseCoordinates.x;
-        DistanceInfo.astMinY = astCloseCoordinates.y;
-
         // When we enter a collision (astroid), destroy this projectile
         
         GameObject explosion = (GameObject)Instantiate(ExplosionGO);
@@ -73,5 +89,8 @@ public class Projectile : MonoBehaviour {
     }
 
     // Update is called once per frame
-
+    private void OnDestroy()
+    {
+        FindProjAsteroidMinDistance(minDistanceFromAsteroid);
+    }
 }

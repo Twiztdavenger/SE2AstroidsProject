@@ -22,12 +22,9 @@ namespace Assets.Scripts.Output
         ///     into the scene and grab data from it (Do we control trial object HERE or in trialController?)
         /// </summary>
         public Queue<PassDataModel> passList = new Queue<PassDataModel>();
-
         
-
-
         public string TrialName { get; set; }
-        public int ParticipantID { get; set; }
+        public string ParticipantID { get; set; }
         public string RoundStatus { get; set; }
         public int TotalNumPasses { get; set; }
 

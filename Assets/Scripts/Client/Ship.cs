@@ -2,22 +2,22 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMovement : MonoBehaviour {
+public class Ship : MonoBehaviour {
 
     // Variables for speed
-    public float maxSpeed = 3.5f;
-    public float rotSpeed = 180f;
-    public float projSpeed = 5f;
+    public float maxSpeed = 0f;
+    public float rotSpeed = 0f;
+    public float projSpeed = 0f;
 
     // Float for determining if ship is out of bounds or not
-    float shipBoundaryRadius = 0.152f;
+    float shipBoundaryRadius = 0f;
 
     // Booleans to determine if the ship can rotate/move or not
     public bool canRotate = false;
     public bool canMove = false;
 
     // Floats to control fire delay
-    private float fireDelay = 0.25f;
+    private float fireDelay = 0f;
     float coolDownTimer = 0;
 
     // Projectile we will be firing

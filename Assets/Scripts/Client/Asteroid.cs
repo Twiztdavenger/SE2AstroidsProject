@@ -64,14 +64,15 @@ public class Asteroid : MonoBehaviour {
 
     public Vector3 spawnPoint;
 
-    public delegate void AsteroidPass();
-    public static event AsteroidPass OutOfBounds;
-    public static event AsteroidPass Hit;
+    //Listeners
+    public delegate void AsteroidPass(bool ifHit);
+    public static event AsteroidPass EndOfPass;
 
     public GameObject AsteroidAnim;
 
     void Update () {
 
+        //TODO: Move all asteroid physics logic to PassManager?
         passTimer += Time.deltaTime;
 
         // MOVEMENT
@@ -93,19 +94,16 @@ public class Asteroid : MonoBehaviour {
         float widthOrtho = Camera.main.orthographicSize * screenRatio;
 
         if (pos.x - 1f > widthOrtho || pos.y - 1f > Camera.main.orthographicSize) {
-            pos = spawnPoint;
             // START NEW PASS FOR DATA COLLECTION
-            OutOfBounds();
-
-
-            //gameObject.transform.parent.GetComponent<TrialController>()
-            //    .trialPass(numPasses, hit, passTimer);
+            EndOfPass(false);
 
             // If asteroid reaches end of screen, it was not hit
             hit = false;
 
             // Resets the time for the next pass
             passTimer = 0;
+
+            finishAsteroid();
         }
         transform.position = pos;
     }
@@ -113,20 +111,16 @@ public class Asteroid : MonoBehaviour {
     
     void OnTriggerEnter2D(Collider2D col)
     {
-        Debug.Log("Collision Enter");
-
         // When we enter a collision with missile, destroy this asteroid
         if (col.gameObject.tag == "Projectile") {
             GameObject explosion = (GameObject)Instantiate(AsteroidAnim);
             explosion.transform.localScale += new Vector3(0.2F, 0.2F, 0);
             explosion.transform.position = transform.position;
 
-            Debug.Log(-col.GetComponent<Rigidbody2D>().velocity.normalized);
             explosion.GetComponent<Rigidbody2D>().AddForce(-col.GetComponent<Rigidbody2D>().velocity.normalized * 5000, ForceMode2D.Impulse);
 
-
             hit = true;
-            Hit();
+            EndOfPass(true);
 
             Destroy(gameObject);
         }
