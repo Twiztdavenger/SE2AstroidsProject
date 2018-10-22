@@ -24,6 +24,8 @@ public class MainMenu : MonoBehaviour {
 
         btn = startExperiment.GetComponent<Button>();
         btn.onClick.AddListener(StartExperiment);
+
+        HTTPServer.InvalidAccessCode += InvalidAccessCode;
     }
 
     //TODO: HANDLE INVALID ACCESS CODES CORRECTLY AND DONT LET START EXPERIMENT UNTIL BOTH FIELDS ARE ENTERED
@@ -34,17 +36,13 @@ public class MainMenu : MonoBehaviour {
         if (int.TryParse(trialIDInput.GetComponent<Text>().text, out accessCode))
         {
             StartCoroutine(httpServer.GetComponent<HTTPServer>().GetText(accessCode, participantID, () => {
-                if (httpServer.GetComponent<HTTPServer>().invalidAccessCode == false)
-                {
-                    SceneManager.LoadScene("Client");
-                }
-                else
-                {
-                    InvalidAccessCode();
-                }
+                SceneManager.LoadScene("Client");
 
             }));
             //Debug.Log("Data for Access code: " + accessCode + response.ToString());
+        } else
+        {
+            InvalidAccessCode("Enter a valid access code");
         }
     }
 
@@ -57,13 +55,13 @@ public class MainMenu : MonoBehaviour {
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            Application.Quit();
+            QuitExperiment();
         }
     }
 
-    void InvalidAccessCode()
+    void InvalidAccessCode(string errorText)
     {
         ErrorText.SetActive(true);
-        ErrorText.GetComponent<Text>().text = "Error: Invalid Access Code";
+        ErrorText.GetComponent<Text>().text = errorText;
     }
 }

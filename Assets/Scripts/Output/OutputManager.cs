@@ -13,6 +13,7 @@ public class OutputManager : MonoBehaviour {
     public static string _CSV_DATA_PATH_ = "";
 
     public static string participantID = "";
+    public static int trialID;
 
     public delegate void OutputEvent(string path);
     public static event OutputEvent DoneWritingData;
@@ -33,23 +34,18 @@ public class OutputManager : MonoBehaviour {
         Debug.Log("Added Trial: " + output.TrialID + " " + output.TrialName);
     }
 
-    void populatePartID(string partID)
-    {
-        participantID = partID;
-    }
-    
-
     static public void getTrialOutput()
     {
         if(OutputTrialQueue.Count > 0)
         {
             participantID = OutputTrialQueue.Peek().ParticipantID;
+            trialID = OutputTrialQueue.Peek().TrialID;
             TrialController.EndExperiment -= getTrialOutput;
             string[] rowDataTemp = new string[4];
             rowDataTemp[0] = "Trial Name";
             rowDataTemp[1] = "Asteroid Speed (grid unit per second on x axis)";
             rowDataTemp[2] = "Asteroid Slope";
-            rowDataTemp[3] = "Pass Data (PassID; If Player Fired; Time Player Fired; Min Distance Proj and Asteroid)";
+            rowDataTemp[3] = "Pass Data (PassID; If Player Fired; Time Player Fired; If Asteroid Hit; Min Distance Proj and Asteroid)";
 
             rowData.Add(rowDataTemp);
             while (OutputTrialQueue.Count > 0)
@@ -83,16 +79,16 @@ public class OutputManager : MonoBehaviour {
 
             _CSV_DATA_PATH_ += "/OutputData/" + "/Participant_" + participantID + "_" + today.ToString("MM.dd.yyyy");
             Directory.CreateDirectory(_CSV_DATA_PATH_);
-            string _CSV_DATA_PATH_FINAL = _CSV_DATA_PATH_ + "/Experiment1" + ".csv";
+            string _CSV_DATA_PATH_FINAL = _CSV_DATA_PATH_ + "/Experiment" + trialID.ToString() + "_1" + ".csv";
 
             if (File.Exists(_CSV_DATA_PATH_FINAL))
             {
                 bool ifFileExists = true;
-                int experimentID = 1;
+                int fileIdentifier = 1;
                 while(ifFileExists)
                 {
-                    experimentID++;
-                    _CSV_DATA_PATH_FINAL = _CSV_DATA_PATH_ + "/Experiment" + experimentID + ".csv";
+                    fileIdentifier++;
+                    _CSV_DATA_PATH_FINAL = _CSV_DATA_PATH_ + "/Experiment" + trialID.ToString() + "_" + fileIdentifier + ".csv";
                     ifFileExists = false;
                 }
             }

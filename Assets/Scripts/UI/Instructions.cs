@@ -19,7 +19,7 @@ public class Instructions : MonoBehaviour {
 
     public GameObject endWindow;
 
-    public GameObject openFileButton;
+    public GameObject quitButton;
 
     public float time = 3f;
     private int countdownTime = 3;
@@ -39,11 +39,19 @@ public class Instructions : MonoBehaviour {
         TrialController.EndExperiment += DisplayWritingDataText;
         OutputManager.DoneWritingData += DisplayEndWindow;
 
-        Button btn = openFileButton.GetComponent<Button>();
-        btn.onClick.AddListener(OpenFile);
+        Button btn = quitButton.GetComponent<Button>();
+        btn.onClick.AddListener(quitExperiment);
 
         ReadyForNextTrial();
 	}
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
+    }
 
     void onBeginPass()
     {
@@ -80,9 +88,9 @@ public class Instructions : MonoBehaviour {
         StartCoroutine("EndWindow");
     }
 
-    void OpenFile()
+    void quitExperiment()
     {
-        File.Open(filePath, FileMode.Open);
+        Application.Quit();
     }
 
     IEnumerator PassCountdown()

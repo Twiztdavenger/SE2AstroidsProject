@@ -29,11 +29,6 @@ public class TrialOutputDataCollector : MonoBehaviour {
 
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
     void addPassOutputDataModel(bool ifShipFired, bool ifAsteroidHit, float timePlayerShotInSeconds, float projAsteroidMinDistance)
     {
         if(canAddPass)

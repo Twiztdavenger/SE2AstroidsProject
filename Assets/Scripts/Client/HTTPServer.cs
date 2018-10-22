@@ -15,7 +15,10 @@ public class HTTPServer : MonoBehaviour
 
     public string participantID = "";
 
-    public bool invalidAccessCode = false;
+    public int trialID;
+
+    public delegate void HTTPServerError(string errorText);
+    public static event HTTPServerError InvalidAccessCode;
 
     // Use this for initialization
     void Start()
@@ -31,18 +34,22 @@ public class HTTPServer : MonoBehaviour
 
         if (www.isNetworkError || www.isHttpError)
         {
-            invalidAccessCode = true;
+            InvalidAccessCode("Network Error");
         }
         else if(www.downloadHandler.text == "-1")
         {
             //TODO: Handle invalid xml documents using an xmlSchema
-            invalidAccessCode = true;
+            InvalidAccessCode("Invalid Access Code");
+        }
+        else if(partID == "")
+        {
+            InvalidAccessCode("Enter a Participant ID");
         }
         else
         {
-            invalidAccessCode = false;
             trialQueue = new Queue<TrialDataModel>();
             participantID = partID;
+            trialID = accessCode;
             Debug.Log(www.downloadHandler.text);
             parseXML(www.downloadHandler.text, participantID);
             callback.Invoke();
@@ -54,83 +61,74 @@ public class HTTPServer : MonoBehaviour
         try
         {
             Debug.Log(partID);
-            if(xml != "-1")
+            int trialCount = 1;
+            var doc = new XmlDocument();
+            doc.LoadXml(xml);
+            XmlNodeList xmlTrials = doc.SelectNodes("/experiment/trial");
+            foreach (XmlNode xmlTrial in xmlTrials)
             {
-                invalidAccessCode = false;
-                int trialCount = 1;
-                var doc = new XmlDocument();
-                doc.LoadXml(xml);
-                XmlNodeList xmlTrials = doc.SelectNodes("/experiment/trial");
-                foreach (XmlNode xmlTrial in xmlTrials)
-                {
-                    string trialName = xmlTrial.Attributes["name"].InnerText;
+                string trialName = xmlTrial.Attributes["name"].InnerText;
 
-                    // LOAD XML DOCUMENT 
-                    XmlNode ship = xmlTrial.SelectSingleNode("ship");
-                    XmlNode asteroid = xmlTrial.SelectSingleNode("asteroid");
+                // LOAD XML DOCUMENT 
+                XmlNode ship = xmlTrial.SelectSingleNode("ship");
+                XmlNode asteroid = xmlTrial.SelectSingleNode("asteroid");
 
-                    // Ship
-                    float shipSpawnX = float.Parse(ship.SelectSingleNode("spawn").Attributes["x"].InnerText);
-                    float shipSpawnY = float.Parse(ship.SelectSingleNode("spawn").Attributes["y"].InnerText);
-                    float shipSpawnZ = float.Parse(ship.SelectSingleNode("spawn").Attributes["z"].InnerText);
+                // Ship
+                float shipSpawnX = float.Parse(ship.SelectSingleNode("spawn").Attributes["x"].InnerText);
+                float shipSpawnY = float.Parse(ship.SelectSingleNode("spawn").Attributes["y"].InnerText);
+                float shipSpawnZ = float.Parse(ship.SelectSingleNode("spawn").Attributes["z"].InnerText);
 
-                    bool shipCanMove = bool.Parse(ship.Attributes["canMove"].Value);
-                    bool shipCanRotate = bool.Parse(ship.Attributes["canRotate"].Value);
+                bool shipCanMove = bool.Parse(ship.Attributes["canMove"].Value);
+                bool shipCanRotate = bool.Parse(ship.Attributes["canRotate"].Value);
 
-                    float shipMoveSpeed = float.Parse(ship.Attributes["moveSpeed"].Value);
-                    float shipRotSpeed = float.Parse(ship.Attributes["rotationSpeed"].Value);
+                //XML DATA IS HAVING MOSESPEED TO "" MUST FIX
+                float shipMoveSpeed = 0;// float.Parse(ship.Attributes["moveSpeed"].Value);
+                float shipRotSpeed = 0; // float.Parse(ship.Attributes["rotationSpeed"].Value);
 
-                    // Asteroid
-                    XmlNode spawnPoint = asteroid.SelectSingleNode("spawn");
-                    float asteroidSpawnX = float.Parse(spawnPoint.Attributes["x"].InnerText);
-                    float asteroidSpawnY = float.Parse(spawnPoint.Attributes["y"].InnerText);
-                    float asteroidSpawnZ = float.Parse(spawnPoint.Attributes["z"].InnerText);
+                // Asteroid
+                XmlNode spawnPoint = asteroid.SelectSingleNode("spawn");
+                float asteroidSpawnX = float.Parse(spawnPoint.Attributes["x"].InnerText);
+                float asteroidSpawnY = float.Parse(spawnPoint.Attributes["y"].InnerText);
+                float asteroidSpawnZ = float.Parse(spawnPoint.Attributes["z"].InnerText);
 
-                    float asteroidMoveX = float.Parse(asteroid.Attributes["movementX"].Value);
-                    float asteroidMoveY = float.Parse(asteroid.Attributes["movementY"].Value);
+                float asteroidMoveX = float.Parse(asteroid.Attributes["movementX"].Value);
+                float asteroidMoveY = float.Parse(asteroid.Attributes["movementY"].Value);
 
-                    float asteroidRotSpeed = float.Parse(asteroid.Attributes["rotationSpeed"].Value);
+                //XML DATA IS SEEING THIS AS "" MUST FIX
+                float asteroidRotSpeed = 0; // float.Parse(asteroid.Attributes["rotationSpeed"].Value);
 
-                    // LOAD DATAMODELS WITH INFORMATION FROM XML
-                    // Trial
-                    TrialDataModel tempTrial = new TrialDataModel();
+                // LOAD DATAMODELS WITH INFORMATION FROM XML
+                // Trial
+                TrialDataModel tempTrial = new TrialDataModel();
 
-                    tempTrial.TrialName = trialName;
+                tempTrial.TrialName = trialName;
 
-                    // Trial Ship
-                    tempTrial.ShipSpawnX = shipSpawnX;
-                    tempTrial.ShipSpawnY = shipSpawnY;
+                // Trial Ship
+                tempTrial.ShipSpawnX = shipSpawnX;
+                tempTrial.ShipSpawnY = shipSpawnY;
 
-                    tempTrial.ShipMove = shipCanMove;
-                    tempTrial.ShipRotate = shipCanRotate;
+                tempTrial.ShipMove = shipCanMove;
+                tempTrial.ShipRotate = shipCanRotate;
 
-                    tempTrial.ShipMoveSpeed = shipMoveSpeed;
-                    tempTrial.ShipRotateSpeed = shipRotSpeed;
+                tempTrial.ShipMoveSpeed = shipMoveSpeed;
+                tempTrial.ShipRotateSpeed = shipRotSpeed;
 
-                    // Trial Asteroid
-                    tempTrial.AsteroidSpawnX = asteroidSpawnX;
-                    tempTrial.AsteroidSpawnY = asteroidSpawnY;
+                // Trial Asteroid
+                tempTrial.AsteroidSpawnX = asteroidSpawnX;
+                tempTrial.AsteroidSpawnY = asteroidSpawnY;
 
-                    tempTrial.AsteroidMovementX = asteroidMoveX;
-                    tempTrial.AsteroidMovementY = asteroidMoveY;
+                tempTrial.AsteroidMovementX = asteroidMoveX;
+                tempTrial.AsteroidMovementY = asteroidMoveY;
 
-                    tempTrial.AsteroidRotation = asteroidRotSpeed;
+                tempTrial.AsteroidRotation = asteroidRotSpeed;
 
-                    tempTrial.ParticipantID = partID;
+                tempTrial.ParticipantID = partID;
 
-                    trialCount++;
+                tempTrial.TrialID = trialID;
 
-                    // Add TrialDataModel To List
-                    //trialQueue.Enqueue(tempTrial);
-                    InputDataHolder.TrialQueue.Enqueue(tempTrial);
-                }
+                trialCount++;
+                InputDataHolder.TrialQueue.Enqueue(tempTrial);
             }
-            else
-            {
-                invalidAccessCode = true;
-                Debug.Log("Invalid Access Code");
-            }
-
         }
         catch (XmlException e)
         {

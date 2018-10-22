@@ -9,27 +9,10 @@ using System;
 using UnityEngine.SceneManagement;
 
 public class TrialController : MonoBehaviour {
+    
+    /// <summary>
     /// 
-    /// TrialController
-    /// 
-    /// Start():
-    ///     Loads XML document
-    ///     Grabs these loaded values and inserts them into TrialDataModel
-    /// 
-    /// Update():
-    ///     Checks if 'Z' is pressed and a trial is not started yet
-    ///         Dequeues TrialDataModel from TrialQueue
-    ///         Toggles "Press 'Z' to start" GUI message
-    ///         Loads Asteroid and Ship Prefabs based on dequeued TrialDataModel
-    ///         Instantiates Ship and Asteroid into scene
-    ///     
-    ///     Checks if AsteroidDone is true
-    ///         TrialStart becomes false
-    ///         Destroys gameobjects with tags "Ship" and "Asteroid"
-    ///         AsteroidDone becomes false
-    ///         
-    ///  trialPass():
-    ///     Called from Asteroid Object
+    /// </summary>
 
     private const string XML_FILE_PATH = @"Assets/Data/Experiment.xml";
 
@@ -37,6 +20,8 @@ public class TrialController : MonoBehaviour {
     // list of data models to load the xml data into
     Queue<TrialDataModel> trialQueue = new Queue<TrialDataModel>();
     Queue<String> dataOutputQueue = new Queue<String>();
+
+    public int trialCount = 0;
 
     public GameObject endWindow;
 
@@ -79,6 +64,8 @@ public class TrialController : MonoBehaviour {
         trialQueue = InputDataHolder.TrialQueue;
         endWindow.SetActive(false);
 
+        trialCount = trialQueue.Count;
+
         Button btn = MainMenu.GetComponent<Button>();
         btn.onClick.AddListener(GoToMainMenu);
 
@@ -86,7 +73,6 @@ public class TrialController : MonoBehaviour {
         onLastTrial = false;
 
         Instructions.ReadyForNextTrial += onNextTrial;
-        
     }
 
     // Our current trial
@@ -96,9 +82,7 @@ public class TrialController : MonoBehaviour {
     
 
     void Update () {
-            //FIX: THIS IF CONDITIONAL STATEMENT IS ALWAYS LOOPING DUE TO ALL CONDITIONS BEING MET AT END OF TRIALS
-            //THIS IS REALLY BAD I SHOULD REALLY FIX THIS
-            if(trialQueue.Count == 0 && !onLastTrial && !trialRunning)
+            if(trialCount == 0 && !trialRunning)
             {
                 EndExperiment();
                 trialName = "";
@@ -107,10 +91,7 @@ public class TrialController : MonoBehaviour {
             // "Press Z to start trial"
             else if (Input.GetKeyDown(KeyCode.Z) == true && !trialRunning)
             {
-                if(onLastTrial)
-                {
-                    onLastTrial = false;
-                }
+                trialCount--;
                 trialRunning = true;
 
                 BeginTrial(trialModel);
@@ -118,7 +99,7 @@ public class TrialController : MonoBehaviour {
 
                 float asteroidSlope = trialModel.AsteroidMovementY / trialModel.AsteroidMovementX;
 
-                GameObject.FindGameObjectWithTag("TrialOutputDataCollector").GetComponent<TrialOutputDataCollector>().setTrialData(1, trialModel.TrialName, "Testing Output", trialModel.ParticipantID, trialModel.AsteroidMovementX, asteroidSlope);
+                GameObject.FindGameObjectWithTag("TrialOutputDataCollector").GetComponent<TrialOutputDataCollector>().setTrialData(trialModel.TrialID, trialModel.TrialName, "Testing Output", trialModel.ParticipantID, trialModel.AsteroidMovementX, asteroidSlope);
             }
         
     }
@@ -127,10 +108,6 @@ public class TrialController : MonoBehaviour {
     {
         try
         {
-            if (trialQueue.Count == 1)
-            {
-                onLastTrial = true;
-            }
             trialRunning = false;
             trialModel = trialQueue.Dequeue();
             trialName = trialModel.TrialName;
@@ -140,7 +117,6 @@ public class TrialController : MonoBehaviour {
         {
             Debug.Log(e);
         }
-        
     }
 
     

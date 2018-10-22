@@ -8,7 +8,6 @@ public class Projectile : MonoBehaviour {
     public float maxSpeed = 5f;
     float timer = 1.5f;
 
-
     public float distance = 10000f;
     float tempDistance;
 
@@ -67,6 +66,8 @@ public class Projectile : MonoBehaviour {
 
             Vector2 asteroidClosestPoint = asteroidCol.Distance(projectileCol).pointA;
             Vector2 projectileClosestPoint = asteroidCol.Distance(projectileCol).pointB;
+
+            Debug.DrawRay(asteroidClosestPoint, projectileClosestPoint, Color.white);
 
             currentDistanceFromAsteroid = Vector2.Distance(asteroidClosestPoint, projectileClosestPoint);
 
